@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import config from '../config';
-import { proxyHttpCall as proxy } from '../http';
+import { proxyHttpCall } from '../http';
 
 function ptoProxy(ptoProxyUrl = config.PTO_PROXY_URL) {
     const router = Router();
@@ -15,7 +15,7 @@ function ptoProxy(ptoProxyUrl = config.PTO_PROXY_URL) {
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
-    router.get('/oppfolging', proxy(`${ptoProxyUrl}/veilarboppfolging/api/oppfolging`));
+    router.get('/oppfolging', proxyHttpCall(`${ptoProxyUrl}/veilarboppfolging/api/oppfolging`));
 
     /**
      * @openapi
@@ -28,7 +28,7 @@ function ptoProxy(ptoProxyUrl = config.PTO_PROXY_URL) {
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
-    router.get('/underoppfolging', proxy(`${ptoProxyUrl}/veilarboppfolging/api/niva3/underoppfolging`));
+    router.get('/underoppfolging', proxyHttpCall(`${ptoProxyUrl}/veilarboppfolging/api/niva3/underoppfolging`));
 
     /**
      * @openapi
@@ -41,7 +41,7 @@ function ptoProxy(ptoProxyUrl = config.PTO_PROXY_URL) {
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
-    router.get('/dialog/antallUleste', proxy(`${ptoProxyUrl}/veilarbdialog/api/dialog/antallUleste`));
+    router.get('/dialog/antallUleste', proxyHttpCall(`${ptoProxyUrl}/veilarbdialog/api/dialog/antallUleste`));
 
     /**
      * @openapi
@@ -54,7 +54,7 @@ function ptoProxy(ptoProxyUrl = config.PTO_PROXY_URL) {
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
-    router.post('/dialog', proxy(`${ptoProxyUrl}/veilarbdialog/api/dialog`));
+    router.post('/dialog', proxyHttpCall(`${ptoProxyUrl}/veilarbdialog/api/dialog`));
 
     /**
      * @openapi
@@ -68,7 +68,10 @@ function ptoProxy(ptoProxyUrl = config.PTO_PROXY_URL) {
      *         $ref: '#/components/schemas/Unauthorized'
      */
 
-    router.get('/vedtakinfo/besvarelse', proxy(`${ptoProxyUrl}/veilarbvedtakinfo/api/behovsvurdering/besvarelse`));
+    router.get(
+        '/vedtakinfo/besvarelse',
+        proxyHttpCall(`${ptoProxyUrl}/veilarbvedtakinfo/api/behovsvurdering/besvarelse`)
+    );
 
     /**
      * @openapi
@@ -81,7 +84,7 @@ function ptoProxy(ptoProxyUrl = config.PTO_PROXY_URL) {
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
-    router.get('/vedtakinfo/motestotte', proxy(`${ptoProxyUrl}/veilarbvedtakinfo/api/motestotte`));
+    router.get('/vedtakinfo/motestotte', proxyHttpCall(`${ptoProxyUrl}/veilarbvedtakinfo/api/motestotte`));
 
     return router;
 }

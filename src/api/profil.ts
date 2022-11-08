@@ -1,6 +1,4 @@
 import { Router } from 'express';
-import log from '../logger';
-import { getSubjectFromToken } from '../auth/tokenDings';
 import { ProfilRepository } from '../db/profilRepository';
 import logger from '../logger';
 
@@ -83,14 +81,8 @@ function profilRoutes(profilRepository: ProfilRepository) {
      *           type: string
      */
     router.get('/profil', async (req, res) => {
-        const ident = getSubjectFromToken(req);
-        if (!ident) {
-            log.error('fikk ikke hentet ident fra token');
-            return res.sendStatus(401);
-        }
-
         try {
-            const profil = await profilRepository.hentProfil(ident as string);
+            const profil = await profilRepository.hentProfil(res.locals.user as string);
 
             if (!profil) {
                 return res.sendStatus(204);
@@ -103,12 +95,6 @@ function profilRoutes(profilRepository: ProfilRepository) {
     });
 
     router.post('/profil', async (req, res) => {
-        const ident = getSubjectFromToken(req) as string;
-        if (!ident) {
-            log.error('fikk ikke hentet ident fra token');
-            return res.sendStatus(401);
-        }
-
         const profil = req.body;
 
         if (!profil) {
@@ -117,7 +103,7 @@ function profilRoutes(profilRepository: ProfilRepository) {
 
         try {
             const result = await profilRepository.lagreProfil({
-                bruker: ident,
+                bruker: res.locals.user,
                 profil,
             });
             return res.status(201).send(result.profil);

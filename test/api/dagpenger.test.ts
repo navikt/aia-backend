@@ -2,6 +2,7 @@ import express from 'express';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import dagpenger from '../../src/api/dagpenger';
+import { setTokenAndUserMock } from '../../src/middleware/set-token-and-user';
 
 jest.mock('../../src/config', () => {
     const config = jest.requireActual('../../src/config');
@@ -33,6 +34,7 @@ describe('dagpenger api', () => {
 
         const app = express();
         app.use(cookieParser());
+        app.use(setTokenAndUserMock);
         app.use(dagpenger(tokenDings, 'http://localhost:6667'));
 
         try {

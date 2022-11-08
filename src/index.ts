@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import cors from 'cors';
 import { pinoHttp } from 'pino-http';
+import setTokenAndUser from './middleware/set-token-and-user';
 import healhApi from './api/health';
 import unleashApi from './api/unleash';
 import ptoProxyApi from './api/ptoproxy';
@@ -46,6 +47,7 @@ app.use(
 app.use(helmet());
 app.use(cors());
 app.disable('x-powered-by');
+app.use(setTokenAndUser);
 
 async function setUpRoutes() {
     const { tokenDings, profilRepository, behovRepository } = createDependencies();

@@ -1,11 +1,10 @@
-import type { Request, RequestHandler } from 'express';
+import type { RequestHandler } from 'express';
 import { Issuer, TokenSet } from 'openid-client';
 import jwt from 'jsonwebtoken';
-import { createRemoteJWKSet, jwtVerify, decodeJwt } from 'jose';
+import { createRemoteJWKSet, jwtVerify } from 'jose';
 import { JWK } from 'node-jose';
 import { ulid } from 'ulid';
 import log from '../logger';
-import config from '../config';
 
 export interface ExchangeToken {
     (idPortenToken: string, targetApp: string): Promise<TokenSet>;
@@ -22,16 +21,6 @@ export interface TokenDingsOptions {
     tokenXTokenEndpoint: string;
     tokenXPrivateJwk: string;
     idportenJwksUri: string;
-}
-
-export function getTokenFromCookie(req: Request) {
-    return req.cookies && req.cookies[config.NAV_COOKIE_NAME];
-}
-
-export function getSubjectFromToken(req: Request) {
-    const idPortenToken = getTokenFromCookie(req);
-    const decodedToken = decodeJwt(idPortenToken);
-    return decodedToken.sub;
 }
 
 async function createClientAssertion(options: TokenDingsOptions): Promise<string> {
@@ -65,15 +54,9 @@ const createTokenDings = async (options: TokenDingsOptions): Promise<Auth> => {
     const idPortenJWKSet = createRemoteJWKSet(new URL(idportenJwksUri));
 
     return {
-        async verifyIDPortenToken(req, res, next) {
+        async verifyIDPortenToken(_, res, next) {
             try {
-                const idPortenToken = getTokenFromCookie(req);
-                if (!idPortenToken) {
-                    log.warn('Bearer token mangler');
-                    res.sendStatus(401);
-                    return;
-                }
-                const result = await jwtVerify(idPortenToken, idPortenJWKSet, {
+                const result = await jwtVerify(res.locals.token, idPortenJWKSet, {
                     algorithms: ['RS256'],
                 });
                 if (result.payload.acr !== 'Level4') {

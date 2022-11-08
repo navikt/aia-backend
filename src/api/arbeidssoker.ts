@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import config from '../config';
 import log from '../logger';
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, RawAxiosRequestHeaders } from 'axios';
 import { ParsedQs } from 'qs';
-import { getTokenFromCookie } from '../auth/tokenDings';
+import { getDefaultHeaders } from '../utils';
 
 interface Arbeidssokerperioder {
     status: number;
@@ -67,14 +67,10 @@ function arbeidssokerRoutes(
      *           type: boolean
      */
     router.get('/arbeidssoker', async (req, res) => {
-        const token = getTokenFromCookie(req);
+        const defaultHeaders = getDefaultHeaders(req);
 
-        if (!token) {
-            return res.status(401).end();
-        }
-
-        const arbeidssokerperioder = await hentArbeidssokerPerioder(token, req.query);
-        const underoppfolging = await hentUnderOppfolging(token);
+        const arbeidssokerperioder = await hentArbeidssokerPerioder(res.locals.token, req.query, defaultHeaders);
+        const underoppfolging = await hentUnderOppfolging(res.locals.token, defaultHeaders);
 
         return res.send({
             underoppfolging,
@@ -102,20 +98,20 @@ function arbeidssokerRoutes(
      *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/er-arbeidssoker', async (req, res) => {
-        const token = getTokenFromCookie(req);
+        const defaultHeaders = getDefaultHeaders(req);
 
-        if (!token) {
-            return res.status(401).end();
-        }
-
-        const perioder = await hentArbeidssokerPerioder(token, { fraOgMed: '2020-01-01' });
-        const underOppfolging = await hentUnderOppfolging(token);
+        const perioder = await hentArbeidssokerPerioder(res.locals.token, { fraOgMed: '2020-01-01' }, defaultHeaders);
+        const underOppfolging = await hentUnderOppfolging(res.locals.token, defaultHeaders);
         const erUnderOppfolging = underOppfolging.underoppfolging;
         const erArbeidssoker = erUnderOppfolging || perioder.arbeidssokerperioder.length > 0;
         return res.send({ erArbeidssoker });
     });
 
-    async function hentArbeidssokerPerioder(token: string, query: ParsedQs): Promise<Arbeidssokerperioder> {
+    async function hentArbeidssokerPerioder(
+        token: string,
+        query: ParsedQs,
+        defaultHeaders: RawAxiosRequestHeaders
+    ): Promise<Arbeidssokerperioder> {
         const fraOgMed = query.fraOgMed;
         const tilOgMed = query.tilOgMed;
         const url = `${veilarbregistreringGcpUrl}/veilarbregistrering/api/arbeidssoker/perioder/niva3?fraOgMed=${fraOgMed}${
@@ -125,9 +121,8 @@ function arbeidssokerRoutes(
         try {
             const { data, status } = await axios(url, {
                 headers: {
-                    'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`,
-                    [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
+                    ...defaultHeaders,
                 },
             });
             return {
@@ -143,13 +138,15 @@ function arbeidssokerRoutes(
         }
     }
 
-    async function hentUnderOppfolging(token: string): Promise<UnderOppfolging> {
+    async function hentUnderOppfolging(
+        token: string,
+        defaultHeaders: RawAxiosRequestHeaders
+    ): Promise<UnderOppfolging> {
         try {
             const { data, status } = await axios(`${ptoProxyUrl}/veilarboppfolging/api/niva3/underoppfolging`, {
                 headers: {
-                    'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`,
-                    [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
+                    ...defaultHeaders,
                 },
             });
             return {

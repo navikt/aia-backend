@@ -2,6 +2,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import meldekort from '../../src/api/meldekort';
 import request from 'supertest';
+import { setTokenAndUserMock } from '../../src/middleware/set-token-and-user';
 
 jest.mock('../../src/config', () => {
     const config = jest.requireActual('../../src/config');
@@ -35,6 +36,7 @@ describe('meldekort api', () => {
 
         const app = express();
         app.use(cookieParser());
+        app.use(setTokenAndUserMock);
         app.use(meldekort(tokenDings, 'http://localhost:6669'));
 
         try {

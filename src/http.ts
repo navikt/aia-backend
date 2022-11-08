@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
-import config from './config';
 import axios, { AxiosError } from 'axios';
 import log from './logger';
-import { getTokenFromCookie } from './auth/tokenDings';
+import { getDefaultHeaders } from './utils';
 
 interface ProxyOpts {
     headers?: Record<string, string | null>;
@@ -11,11 +10,6 @@ interface ProxyOpts {
 
 export function proxyHttpCall(url: string, opts?: ProxyOpts) {
     return async (req: Request, res: Response) => {
-        const token = getTokenFromCookie(req);
-
-        if (!token) {
-            return res.status(401).end();
-        }
         const method = opts?.overrideMethod || req.method;
 
         try {
@@ -24,13 +18,8 @@ export function proxyHttpCall(url: string, opts?: ProxyOpts) {
                 data: req.method === 'POST' ? req.body : undefined,
                 params: req.params,
                 headers: {
-                    'Content-Type': req.header('Content-Type') || 'application/json',
-                    ...(req.header('Nav-Call-Id') ? { 'Nav-Call-Id': req.header('Nav-Call-Id') } : {}),
-                    ...(req.header('NAV_CSRF_PROTECTION')
-                        ? { NAV_CSRF_PROTECTION: req.header('NAV_CSRF_PROTECTION') }
-                        : {}),
-                    Authorization: `Bearer ${token}`,
-                    [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
+                    Authorization: `Bearer ${res.locals.token}`,
+                    ...getDefaultHeaders(req),
                     ...opts?.headers,
                 },
                 responseType: 'stream',

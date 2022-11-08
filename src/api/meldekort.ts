@@ -1,6 +1,6 @@
-import { Auth, getTokenFromCookie } from '../auth/tokenDings';
-import config from '../config';
 import { Request, Response, Router } from 'express';
+import { Auth } from '../auth/tokenDings';
+import config from '../config';
 import { proxyHttpCall } from '../http';
 import logger from '../logger';
 
@@ -8,8 +8,7 @@ function meldekortRoutes(tokenDings: Auth, meldekortUrl: string = config.MELDEKO
     const router = Router();
     const MELDEKORT_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:meldekort:${config.MELDEKORT_APP_NAME}`;
 
-    const getTokenXHeaders = async (req: Request) => {
-        const idPortenToken = getTokenFromCookie(req);
+    const getTokenXHeaders = async (idPortenToken: string) => {
         const tokenSet = await tokenDings.exchangeIDPortenToken(idPortenToken, MELDEKORT_CLIENT_ID);
         const token = tokenSet.access_token;
         return { Authorization: null, TokenXAuthorization: `Bearer ${token}` };
@@ -19,7 +18,7 @@ function meldekortRoutes(tokenDings: Auth, meldekortUrl: string = config.MELDEKO
         return async (req: Request, res: Response) => {
             try {
                 await proxyHttpCall(url, {
-                    headers: await getTokenXHeaders(req),
+                    headers: await getTokenXHeaders(res.locals.token),
                 })(req, res);
             } catch (err) {
                 logger.error(`Feil med meldekort kall: ${err}`);

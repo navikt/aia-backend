@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import log from '../logger';
-import { getSubjectFromToken } from '../auth/tokenDings';
 import { BehovRepository } from '../db/behovForVeiledningRepository';
 
 function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository) {
@@ -55,15 +54,9 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
      *         dialogId:
      *           type: string
      */
-    router.get('/behov-for-veiledning', async (req, res) => {
-        const ident = getSubjectFromToken(req);
-        if (!ident) {
-            log.error('fikk ikke hentet ident fra token');
-            return res.sendStatus(401);
-        }
-
+    router.get('/behov-for-veiledning', async (_, res) => {
         try {
-            const behov = await behovForVeiledningRepository.hentBehov(ident as string);
+            const behov = await behovForVeiledningRepository.hentBehov(res.locals.user as string);
 
             if (!behov) {
                 return res.sendStatus(204);
@@ -77,12 +70,6 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
     });
 
     router.post('/behov-for-veiledning', async (req, res) => {
-        const ident = getSubjectFromToken(req) as string;
-        if (!ident) {
-            log.error('fikk ikke hentet ident fra token');
-            return res.sendStatus(401);
-        }
-
         const { oppfolging, dialogId } = req.body;
 
         if (!oppfolging) {
@@ -92,7 +79,7 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
 
         try {
             const result = await behovForVeiledningRepository.lagreBehov({
-                bruker: ident,
+                bruker: res.locals.user,
                 oppfolging: oppfolging,
                 dialogId,
             });

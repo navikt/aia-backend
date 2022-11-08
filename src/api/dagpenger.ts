@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import config from '../config';
-import { Auth, getTokenFromCookie } from '../auth/tokenDings';
+import { Auth } from '../auth/tokenDings';
 import { proxyHttpCall } from '../http';
 import logger from '../logger';
 
@@ -12,8 +12,7 @@ function dagpengerRoutes(tokenDings: Auth, dagpengerInnsynUrl = config.DAGPENGER
 
     const router = Router();
 
-    const getTokenXHeaders = async (req: Request) => {
-        const idPortenToken = getTokenFromCookie(req);
+    const getTokenXHeaders = async (idPortenToken: string) => {
         const tokenSet = await tokenDings.exchangeIDPortenToken(idPortenToken, DP_INNSYN_CLIENT_ID);
         const token = tokenSet.access_token;
         return { Authorization: `Bearer ${token}`, TokenXAuthorization: `Bearer ${token}` };
@@ -23,7 +22,7 @@ function dagpengerRoutes(tokenDings: Auth, dagpengerInnsynUrl = config.DAGPENGER
         return async (req: Request, res: Response) => {
             try {
                 await proxyHttpCall(url, {
-                    headers: await getTokenXHeaders(req),
+                    headers: await getTokenXHeaders(res.locals.token),
                 })(req, res);
             } catch (err) {
                 logger.error(`Feil med dagpenger kall: ${err}`);

@@ -3,6 +3,7 @@ import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import arbeidssoker from '../../src/api/arbeidssoker';
+import { setTokenAndUserMock } from '../../src/middleware/set-token-and-user';
 
 function getProxyServer() {
     const proxyServer = express();
@@ -28,6 +29,7 @@ describe('arbeidssoker api', () => {
         it('returnerer 401 når token mangler', (done) => {
             const app = express();
             app.use(cookieParser());
+            app.use(setTokenAndUserMock);
             app.use(arbeidssoker('http://localhost:7666', 'http://localhost:7666'));
 
             request(app).get('/arbeidssoker').expect(401, done);
@@ -40,6 +42,7 @@ describe('arbeidssoker api', () => {
             const app = express();
             app.use(cookieParser());
             app.use(bodyParser.json());
+            app.use(setTokenAndUserMock);
             app.use(arbeidssoker('http://localhost:7666', 'http://localhost:7666'));
 
             try {
@@ -67,6 +70,7 @@ describe('arbeidssoker api', () => {
         it('returnerer 401 når token mangler', (done) => {
             const app = express();
             app.use(cookieParser());
+            app.use(setTokenAndUserMock);
             app.use(arbeidssoker('http://localhost:7666', 'http://localhost:7666'));
 
             request(app).get('/er-arbeidssoker').expect(401, done);
@@ -79,6 +83,7 @@ describe('arbeidssoker api', () => {
             const app = express();
             app.use(cookieParser());
             app.use(bodyParser.json());
+            app.use(setTokenAndUserMock);
             app.use(arbeidssoker('http://localhost:7666', 'http://localhost:7666'));
 
             try {

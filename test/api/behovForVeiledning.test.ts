@@ -1,14 +1,10 @@
 import request from 'supertest';
 import express from 'express';
 import cookieParser from 'cookie-parser';
+import { setTokenAndUserMock } from '../../src/middleware/set-token-and-user';
 import behovForVeiledning from '../../src/api/behovForVeiledning';
 import bodyParser from 'body-parser';
 
-jest.mock('../../src/auth/tokenDings', () => {
-    return {
-        getSubjectFromToken: jest.fn().mockReturnValue('test-ident'),
-    };
-});
 describe('behovForVeiledning API', () => {
     let app: any;
 
@@ -16,6 +12,7 @@ describe('behovForVeiledning API', () => {
         app = express();
         app.use(cookieParser());
         app.use(bodyParser.json());
+        app.use(setTokenAndUserMock);
     });
 
     describe('GET', () => {
