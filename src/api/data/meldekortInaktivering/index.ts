@@ -14,7 +14,7 @@ function meldekortInaktivering(veilarbregistreringGcpUrl = config.VEILARBREGISTR
             const meldekort = await axios<MeldekortDto[]>(
                 `${veilarbregistreringGcpUrl}/veilarbregistrering/api/arbeidssoker/meldekort`,
                 {
-                    headers: getDefaultHeaders(req),
+                    headers: getDefaultHeaders(req, res),
                 }
             );
 

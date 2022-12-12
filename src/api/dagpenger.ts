@@ -13,8 +13,8 @@ function dagpengerRoutes(tokenDings: Auth, dagpengerInnsynUrl = config.DAGPENGER
 
     const router = Router();
 
-    const getTokenXHeaders = async (req: Request) => {
-        const idPortenToken = req.locals.idporten.token;
+    const getTokenXHeaders = async (req: Request, res: Response) => {
+        const idPortenToken = res.locals.token;
         const tokenSet = await tokenDings.exchangeIDPortenToken(idPortenToken, DP_INNSYN_CLIENT_ID);
         const token = tokenSet.access_token;
         return { Authorization: `Bearer ${token}`, TokenXAuthorization: `Bearer ${token}` };
@@ -24,7 +24,7 @@ function dagpengerRoutes(tokenDings: Auth, dagpengerInnsynUrl = config.DAGPENGER
         return async (req: Request, res: Response) => {
             try {
                 await proxyHttpCall(url, {
-                    headers: await getTokenXHeaders(req),
+                    headers: await getTokenXHeaders(req, res),
                 })(req, res);
             } catch (err) {
                 const axiosError = err as AxiosError;

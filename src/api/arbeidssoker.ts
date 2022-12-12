@@ -97,12 +97,9 @@ function arbeidssokerRoutes(
      *           type: boolean
      */
     router.get('/arbeidssoker', async (req, res) => {
-        const arbeidssokerperioder = await hentArbeidssokerPerioder(
-            veilarbregistreringGcpUrl,
-            getDefaultHeaders(req),
-            req.query
-        );
-        const underoppfolging = await hentUnderOppfolging(getDefaultHeaders(req));
+        const headers = getDefaultHeaders(req, res);
+        const arbeidssokerperioder = await hentArbeidssokerPerioder(veilarbregistreringGcpUrl, headers, req.query);
+        const underoppfolging = await hentUnderOppfolging(headers);
 
         return res.send({
             underoppfolging,
@@ -130,10 +127,11 @@ function arbeidssokerRoutes(
      *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/er-arbeidssoker', async (req, res) => {
-        const perioder = await hentArbeidssokerPerioder(veilarbregistreringGcpUrl, getDefaultHeaders(req), {
+        const headers = getDefaultHeaders(req, res);
+        const perioder = await hentArbeidssokerPerioder(veilarbregistreringGcpUrl, headers, {
             fraOgMed: '2020-01-01',
         });
-        const underOppfolging = await hentUnderOppfolging(getDefaultHeaders(req));
+        const underOppfolging = await hentUnderOppfolging(headers);
         const erUnderOppfolging = underOppfolging.underoppfolging;
         const erArbeidssoker = erUnderOppfolging || perioder.arbeidssokerperioder.length > 0;
         return res.send({ erArbeidssoker });

@@ -24,5 +24,5 @@
         "noFallthroughCasesInSwitch": true
     },
     "exclude": ["node_modules", "src/test/**/*", "src/**/*.test.*", "build"],
-    "include": ["src", "types", "test"]
+    "include": ["src", "types"]
 }

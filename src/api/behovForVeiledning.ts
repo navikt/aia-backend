@@ -54,9 +54,9 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
      *         dialogId:
      *           type: string
      */
-    router.get('/behov-for-veiledning', async (req, res) => {
+    router.get('/behov-for-veiledning', async (_, res) => {
         try {
-            const ident = req.locals.idporten.user;
+            const ident = res.locals.user;
             const behov = await behovForVeiledningRepository.hentBehov(ident);
 
             if (!behov) {
@@ -71,7 +71,7 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
     });
 
     router.post('/behov-for-veiledning', async (req, res) => {
-        const ident = req.locals.idporten.user;
+        const ident = res.locals.user;
 
         const { oppfolging, dialogId } = req.body;
 

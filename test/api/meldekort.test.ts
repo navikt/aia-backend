@@ -20,7 +20,6 @@ describe('meldekort api', () => {
         };
 
         const proxyServer = express();
-        proxyServer.use(idportenAuthMock);
         proxyServer.get('/meldekort', (req, res) => {
             if (
                 req.header('Authorization') === undefined &&

@@ -19,7 +19,7 @@ function dagpengerStatus(
     const DP_INNSYN_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:teamdagpenger:dp-innsyn`;
 
     router.get('/dagpenger-status', async (req, res) => {
-        const token = req.locals.idporten.token;
+        const token = res.locals.token;
 
         const getTokenXHeaders = async () => {
             const tokenSet = await tokenDings.exchangeIDPortenToken(token, DP_INNSYN_CLIENT_ID);
@@ -29,7 +29,7 @@ function dagpengerStatus(
 
         try {
             const headers = {
-                headers: getDefaultHeaders(req),
+                headers: getDefaultHeaders(req, res),
             };
 
             const tokenXHeaders = {

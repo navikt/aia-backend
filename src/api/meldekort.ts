@@ -9,8 +9,8 @@ function meldekortRoutes(tokenDings: Auth, meldekortUrl: string = config.MELDEKO
     const router = Router();
     const MELDEKORT_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:meldekort:${config.MELDEKORT_APP_NAME}`;
 
-    const getTokenXHeaders = async (req: Request) => {
-        const idPortenToken = req.locals.idporten.token;
+    const getTokenXHeaders = async (req: Request, res: Response) => {
+        const idPortenToken = res.locals.token;
         const tokenSet = await tokenDings.exchangeIDPortenToken(idPortenToken, MELDEKORT_CLIENT_ID);
         const token = tokenSet.access_token;
         return { Authorization: null, TokenXAuthorization: `Bearer ${token}` };
@@ -20,7 +20,7 @@ function meldekortRoutes(tokenDings: Auth, meldekortUrl: string = config.MELDEKO
         return async (req: Request, res: Response) => {
             try {
                 await proxyHttpCall(url, {
-                    headers: await getTokenXHeaders(req),
+                    headers: await getTokenXHeaders(req, res),
                 })(req, res);
             } catch (err) {
                 const axiosError = err as AxiosError;

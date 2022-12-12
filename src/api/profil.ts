@@ -80,8 +80,8 @@ function profilRoutes(profilRepository: ProfilRepository) {
      *         valgt:
      *           type: string
      */
-    router.get('/profil', async (req, res) => {
-        const ident = req.locals.idporten.user;
+    router.get('/profil', async (_, res) => {
+        const ident = res.locals.user;
 
         try {
             const profil = await profilRepository.hentProfil(ident as string);
@@ -97,7 +97,7 @@ function profilRoutes(profilRepository: ProfilRepository) {
     });
 
     router.post('/profil', async (req, res) => {
-        const ident = req.locals.idporten.user;
+        const ident = res.locals.user;
         const profil = req.body;
 
         if (!profil) {

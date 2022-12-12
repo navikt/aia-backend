@@ -12,8 +12,8 @@ interface ProxyOpts {
     retryDelay?: number;
 }
 
-export function getDefaultHeaders(req: Request) {
-    const token = req.locals.idporten.token;
+export function getDefaultHeaders(req: Request, res: Response) {
+    const token = res.locals.token;
     return {
         'Content-Type': req.header('Content-Type') || 'application/json',
         ...(req.header('Nav-Call-Id') ? { 'Nav-Call-Id': req.header('Nav-Call-Id') } : {}),
@@ -32,7 +32,7 @@ const defaultOpts: ProxyOpts = {
 export function proxyHttpCall(url: string, opts: ProxyOpts = defaultOpts) {
     return async (req: Request, res: Response) => {
         const method = opts?.overrideMethod || req.method;
-        const defaultHeaders = getDefaultHeaders(req);
+        const defaultHeaders = getDefaultHeaders(req, res);
 
         const retry = async (counter: number): Promise<any> => {
             const { skipRetry, retryDelay, maxRetries } = opts;

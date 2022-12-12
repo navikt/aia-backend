@@ -9,7 +9,7 @@ export default async function idportenAuth(req: Request, res: Response, next: Ne
         return res.status(401).end();
     }
 
-    req.locals.idporten.token = token;
+    res.locals.token = token;
 
     const idPortenJWKSet = createRemoteJWKSet(new URL(config.IDPORTEN_JWKS_URI));
 
@@ -24,9 +24,9 @@ export default async function idportenAuth(req: Request, res: Response, next: Ne
         log.error('fikk ikke hentet ident fra token');
         return res.sendStatus(401).end();
     }
-    req.locals.idporten.user = subject;
+    res.locals.user = subject;
 
-    req.locals.idporten.isLevel3 = decodedToken.payload.acr === 'Level3';
+    res.locals.isLevel3 = decodedToken.payload.acr === 'Level3';
 
     return next();
 }
