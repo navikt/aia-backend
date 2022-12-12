@@ -2,6 +2,7 @@ import express from 'express';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import dagpenger from '../../src/api/dagpenger';
+import idportenAuthMock from './idportenAuthMock';
 
 jest.mock('../../src/config', () => {
     const config = jest.requireActual('../../src/config');
@@ -15,7 +16,6 @@ describe('dagpenger api', () => {
     it('kaller dagpenger-api med token-x i header', async () => {
         const tokenDings = {
             exchangeIDPortenToken: jest.fn().mockReturnValue(Promise.resolve({ access_token: 'tokenX-123' })),
-            verifyIDPortenToken: jest.fn().mockReturnValue(Promise.resolve()),
         };
 
         const proxyServer = express();
@@ -33,6 +33,7 @@ describe('dagpenger api', () => {
 
         const app = express();
         app.use(cookieParser());
+        app.use(idportenAuthMock);
         app.use(dagpenger(tokenDings, 'http://localhost:6667'));
 
         try {

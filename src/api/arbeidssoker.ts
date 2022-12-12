@@ -3,7 +3,6 @@ import config from '../config';
 import { axiosLogError } from '../logger';
 import axios, { AxiosError, RawAxiosRequestHeaders } from 'axios';
 import { ParsedQs } from 'qs';
-import { getTokenFromCookie } from '../auth/tokenDings';
 import { getDefaultHeaders } from '../http';
 
 interface Arbeidssokerperioder {
@@ -98,12 +97,6 @@ function arbeidssokerRoutes(
      *           type: boolean
      */
     router.get('/arbeidssoker', async (req, res) => {
-        const token = getTokenFromCookie(req);
-
-        if (!token) {
-            return res.status(401).end();
-        }
-
         const arbeidssokerperioder = await hentArbeidssokerPerioder(
             veilarbregistreringGcpUrl,
             getDefaultHeaders(req),
@@ -137,12 +130,6 @@ function arbeidssokerRoutes(
      *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/er-arbeidssoker', async (req, res) => {
-        const token = getTokenFromCookie(req);
-
-        if (!token) {
-            return res.status(401).end();
-        }
-
         const perioder = await hentArbeidssokerPerioder(veilarbregistreringGcpUrl, getDefaultHeaders(req), {
             fraOgMed: '2020-01-01',
         });

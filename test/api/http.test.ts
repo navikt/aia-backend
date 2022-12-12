@@ -2,6 +2,7 @@ import express from 'express';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import { proxyHttpCall } from '../../src/http';
+import idportenAuthMock from './idportenAuthMock';
 
 describe('proxyHttpCall', () => {
     it('kaller feilede requester på nytt angitte ganger', async () => {
@@ -18,6 +19,7 @@ describe('proxyHttpCall', () => {
         const app = express();
 
         app.use(cookieParser());
+        app.use(idportenAuthMock);
         app.get('/test', proxyHttpCall(`http://localhost:${port}/test-retry`, { maxRetries: 2 }));
 
         try {
@@ -43,6 +45,7 @@ describe('proxyHttpCall', () => {
         const app = express();
 
         app.use(cookieParser());
+        app.use(idportenAuthMock);
         app.get('/test', proxyHttpCall(`http://localhost:${port}/test-retry`, { skipRetry: true }));
 
         try {

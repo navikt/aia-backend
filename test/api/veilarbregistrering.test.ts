@@ -2,11 +2,13 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import request from 'supertest';
 import veilarbregistrering from '../../src/api/veilarbregistrering';
+import idportenAuthMock from './idportenAuthMock';
 
 describe('veilarbregistrering api', () => {
     it('gir 401 hvis request uten selvbetjening-id cookie', (done) => {
         const app = express();
         app.use(cookieParser());
+        app.use(idportenAuthMock);
         app.use(veilarbregistrering('http://localhost:6666'));
 
         request(app).get('/registrering').expect(401, done);
@@ -25,6 +27,7 @@ describe('veilarbregistrering api', () => {
         const proxy = proxyServer.listen(port);
         const app = express();
         app.use(cookieParser());
+        app.use(idportenAuthMock);
         app.use(veilarbregistrering(`http://localhost:${port}`));
 
         try {
@@ -50,6 +53,7 @@ describe('veilarbregistrering api', () => {
         const proxy = proxyServer.listen(port);
         const app = express();
         app.use(cookieParser());
+        app.use(idportenAuthMock);
         app.use(veilarbregistrering(`http://localhost:${port}`));
 
         try {

@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { getTokenFromCookie } from '../../../auth/tokenDings';
 import axios, { AxiosError } from 'axios';
 import config from '../../../config';
 import { axiosLogError } from '../../../logger';
@@ -11,12 +10,6 @@ function meldekortInaktivering(veilarbregistreringGcpUrl = config.VEILARBREGISTR
     const router = Router();
 
     router.get('/data/meldekort-inaktivering', async (req, res) => {
-        const token = getTokenFromCookie(req);
-
-        if (!token) {
-            return res.status(401).end();
-        }
-
         try {
             const meldekort = await axios<MeldekortDto[]>(
                 `${veilarbregistreringGcpUrl}/veilarbregistrering/api/arbeidssoker/meldekort`,

@@ -2,6 +2,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import meldekort from '../../src/api/meldekort';
 import request from 'supertest';
+import idportenAuthMock from './idportenAuthMock';
 
 jest.mock('../../src/config', () => {
     const config = jest.requireActual('../../src/config');
@@ -16,10 +17,10 @@ describe('meldekort api', () => {
     it('kaller meldekort-api med token-x i header', async () => {
         const tokenDings = {
             exchangeIDPortenToken: jest.fn().mockReturnValue(Promise.resolve({ access_token: 'tokenX-123' })),
-            verifyIDPortenToken: jest.fn().mockReturnValue(Promise.resolve()),
         };
 
         const proxyServer = express();
+        proxyServer.use(idportenAuthMock);
         proxyServer.get('/meldekort', (req, res) => {
             if (
                 req.header('Authorization') === undefined &&
@@ -35,6 +36,7 @@ describe('meldekort api', () => {
 
         const app = express();
         app.use(cookieParser());
+        app.use(idportenAuthMock);
         app.use(meldekort(tokenDings, 'http://localhost:6669'));
 
         try {

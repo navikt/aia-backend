@@ -21,6 +21,7 @@ import logger, { pinoHttpMiddleware } from './logger';
 import config from './config';
 import createDependencies from './deps';
 import meldekortInaktivering from './api/data/meldekortInaktivering';
+import idportenAuth from './middleware/idportenAuth';
 
 const PORT = 3000;
 const app = express();
@@ -41,10 +42,11 @@ async function setUpRoutes() {
     router.use(healhApi());
     router.use(unleashApi());
 
+    // Idporten auth routes
+    router.use(idportenAuth);
     router.use(ptoProxyApi());
     router.use(veilarbregistreringApi());
     router.use(arbeidssokerApi());
-    router.use((await tokenDings).verifyIDPortenToken);
     router.use(dagpengerApi(await tokenDings));
     router.use(meldekortApi(await tokenDings));
     router.use(profilApi(profilRepository));

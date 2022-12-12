@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import config from './config';
 import axios, { AxiosError } from 'axios';
 import logger, { axiosLogError } from './logger';
-import { getTokenFromCookie } from './auth/tokenDings';
 import { isNetworkOrIdempotentRequestError } from './isRetryAllowed';
 
 interface ProxyOpts {
@@ -14,7 +13,7 @@ interface ProxyOpts {
 }
 
 export function getDefaultHeaders(req: Request) {
-    const token = getTokenFromCookie(req);
+    const token = req.locals.idporten.token;
     return {
         'Content-Type': req.header('Content-Type') || 'application/json',
         ...(req.header('Nav-Call-Id') ? { 'Nav-Call-Id': req.header('Nav-Call-Id') } : {}),
@@ -32,12 +31,6 @@ const defaultOpts: ProxyOpts = {
 
 export function proxyHttpCall(url: string, opts: ProxyOpts = defaultOpts) {
     return async (req: Request, res: Response) => {
-        const token = getTokenFromCookie(req);
-
-        if (!token) {
-            return res.status(401).end();
-        }
-
         const method = opts?.overrideMethod || req.method;
         const defaultHeaders = getDefaultHeaders(req);
 

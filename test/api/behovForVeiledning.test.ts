@@ -3,12 +3,8 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import behovForVeiledning from '../../src/api/behovForVeiledning';
 import bodyParser from 'body-parser';
+import idportenAuthMock from './idportenAuthMock';
 
-jest.mock('../../src/auth/tokenDings', () => {
-    return {
-        getSubjectFromToken: jest.fn().mockReturnValue('test-ident'),
-    };
-});
 describe('behovForVeiledning API', () => {
     let app: any;
 
@@ -16,6 +12,7 @@ describe('behovForVeiledning API', () => {
         app = express();
         app.use(cookieParser());
         app.use(bodyParser.json());
+        app.use(idportenAuthMock);
     });
 
     describe('GET', () => {

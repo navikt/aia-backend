@@ -2,11 +2,13 @@ import express from 'express';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import ptoproxy from '../../src/api/ptoproxy';
+import idportenAuthMock from './idportenAuthMock';
 
 describe('ptoproxy api', () => {
     it('gir 401 hvis request uten selvbetjening-id cookie', (done) => {
         const app = express();
         app.use(cookieParser());
+        app.use(idportenAuthMock);
         app.use(ptoproxy('http://localhost:6666'));
 
         request(app).get('/oppfolging').expect(401, done);
@@ -24,6 +26,7 @@ describe('ptoproxy api', () => {
         const proxy = proxyServer.listen(6666);
         const app = express();
         app.use(cookieParser());
+        app.use(idportenAuthMock);
         app.use(ptoproxy('http://localhost:6666'));
 
         try {
@@ -48,6 +51,7 @@ describe('ptoproxy api', () => {
         const proxy = proxyServer.listen(6665);
         const app = express();
         app.use(cookieParser());
+        app.use(idportenAuthMock);
         app.use(ptoproxy('http://localhost:6665'));
 
         try {
