@@ -16,13 +16,13 @@ interface UnderOppfolging {
 }
 
 export async function hentArbeidssokerPerioder(
-    veilarbregistreringGcpUrl: string,
+    veilarbregistreringUrl: string,
     headers: RawAxiosRequestHeaders,
     query: ParsedQs
 ): Promise<Arbeidssokerperioder> {
     const fraOgMed = query.fraOgMed;
     const tilOgMed = query.tilOgMed;
-    const url = `${veilarbregistreringGcpUrl}/veilarbregistrering/api/arbeidssoker/perioder/niva3?fraOgMed=${fraOgMed}${
+    const url = `${veilarbregistreringUrl}/veilarbregistrering/api/arbeidssoker/perioder/niva3?fraOgMed=${fraOgMed}${
         tilOgMed ? `&tilOgMed=${tilOgMed}` : ''
     }`;
 
@@ -47,7 +47,7 @@ export async function hentArbeidssokerPerioder(
 
 function arbeidssokerRoutes(
     ptoProxyUrl = config.PTO_PROXY_URL,
-    veilarbregistreringGcpUrl = config.VEILARBREGISTRERING_GCP_URL
+    veilarbregistreringUrl = config.VEILARBREGISTRERING_GCP_URL
 ) {
     const router = Router();
 
@@ -98,7 +98,7 @@ function arbeidssokerRoutes(
      */
     router.get('/arbeidssoker', async (req, res) => {
         const arbeidssokerperioder = await hentArbeidssokerPerioder(
-            veilarbregistreringGcpUrl,
+            veilarbregistreringUrl,
             getDefaultHeaders(req),
             req.query
         );
@@ -130,7 +130,7 @@ function arbeidssokerRoutes(
      *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/er-arbeidssoker', async (req, res) => {
-        const perioder = await hentArbeidssokerPerioder(veilarbregistreringGcpUrl, getDefaultHeaders(req), {
+        const perioder = await hentArbeidssokerPerioder(veilarbregistreringUrl, getDefaultHeaders(req), {
             fraOgMed: '2020-01-01',
         });
         const underOppfolging = await hentUnderOppfolging(getDefaultHeaders(req));

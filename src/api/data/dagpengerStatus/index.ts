@@ -12,8 +12,7 @@ import { getDefaultHeaders } from '../../../http';
 function dagpengerStatus(
     tokenDings: Auth,
     dagpengerInnsynUrl = config.DAGPENGER_INNSYN_URL,
-    veilarbregistreringUrl = config.VEILARBREGISTRERING_URL,
-    veilarbregistreringGcpUrl = config.VEILARBREGISTRERING_GCP_URL
+    veilarbregistreringUrl = config.VEILARBREGISTRERING_GCP_URL
 ) {
     const router = Router();
     const DP_INNSYN_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:teamdagpenger:dp-innsyn`;
@@ -39,9 +38,9 @@ function dagpengerStatus(
             };
 
             const requests = await Promise.all([
-                axios(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/startregistrering`, headers),
+                axios(`${veilarbregistreringUrl}/veilarbregistrering/api/startregistrering`, headers),
                 axios(`${veilarbregistreringUrl}/veilarbregistrering/api/registrering`, headers),
-                hentArbeidssokerPerioder(veilarbregistreringGcpUrl, headers.headers, { fraOgMed: '2020-01-01' }),
+                hentArbeidssokerPerioder(veilarbregistreringUrl, headers.headers, { fraOgMed: '2020-01-01' }),
                 axios(`${dagpengerInnsynUrl}/paabegynte`, tokenXHeaders),
                 axios(`${dagpengerInnsynUrl}/soknad`, tokenXHeaders),
                 axios(`${dagpengerInnsynUrl}/vedtak`, tokenXHeaders),

@@ -6,13 +6,13 @@ import { MeldekortDto } from './typer';
 import { beregnMeldekortStatus, grupperMeldekort } from './beregnMeldekortStatus';
 import { getDefaultHeaders } from '../../../http';
 
-function meldekortInaktivering(veilarbregistreringGcpUrl = config.VEILARBREGISTRERING_GCP_URL) {
+function meldekortInaktivering(veilarbregistreringUrl = config.VEILARBREGISTRERING_GCP_URL) {
     const router = Router();
 
     router.get('/data/meldekort-inaktivering', async (req, res) => {
         try {
             const meldekort = await axios<MeldekortDto[]>(
-                `${veilarbregistreringGcpUrl}/veilarbregistrering/api/arbeidssoker/meldekort`,
+                `${veilarbregistreringUrl}/veilarbregistrering/api/arbeidssoker/meldekort`,
                 {
                     headers: getDefaultHeaders(req),
                 }

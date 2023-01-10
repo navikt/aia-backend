@@ -2,10 +2,7 @@ import { proxyHttpCall as proxy } from '../http';
 import config from '../config';
 import { Router } from 'express';
 
-function veilarbregistrering(
-    veilarbregistreringUrl = config.VEILARBREGISTRERING_URL,
-    veilarbregistreringGcpUrl = config.VEILARBREGISTRERING_GCP_URL
-): Router {
+function veilarbregistrering(veilarbregistreringUrl = config.VEILARBREGISTRERING_GCP_URL): Router {
     const router = Router();
 
     /**
@@ -22,7 +19,7 @@ function veilarbregistrering(
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
-    router.get('/startregistrering', proxy(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/startregistrering`));
+    router.get('/startregistrering', proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/startregistrering`));
 
     /**
      * @openapi
@@ -103,7 +100,7 @@ function veilarbregistrering(
      */
     router.get(
         '/arbeidssoker/perioder',
-        proxy(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/arbeidssoker/perioder`, { overrideMethod: 'POST' })
+        proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/arbeidssoker/perioder`, { overrideMethod: 'POST' })
     );
 
     /**
@@ -124,7 +121,7 @@ function veilarbregistrering(
      */
     router.get(
         '/meldeplikt/siste',
-        proxy(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/arbeidssoker/meldekort/siste`)
+        proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/arbeidssoker/meldekort/siste`)
     );
     /**
      * @openapi
@@ -140,7 +137,7 @@ function veilarbregistrering(
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */
-    router.get('/meldeplikt', proxy(`${veilarbregistreringGcpUrl}/veilarbregistrering/api/arbeidssoker/meldekort`));
+    router.get('/meldeplikt', proxy(`${veilarbregistreringUrl}/veilarbregistrering/api/arbeidssoker/meldekort`));
     return router;
 }
 
