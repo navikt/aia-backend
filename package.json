@@ -37,7 +37,7 @@
     "swagger-jsdoc": "6.2.7",
     "swagger-ui-express": "4.6.0",
     "ulid": "2.3.0",
-    "unleash-client": "3.16.1"
+    "unleash-client": "3.17.0"
   },
   "devDependencies": {
     "@types/body-parser": "1.19.2",
