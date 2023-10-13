@@ -50,6 +50,24 @@ export async function hentArbeidssokerPerioder(
     }
 }
 
+async function hentErStandardInnsats(
+    veilarbregistreringUrl: string,
+    headers: RawAxiosRequestHeaders,
+): Promise<boolean> {
+    const url = `${veilarbregistreringUrl}/veilarbregistrering/api/profilering/standard-innsats`;
+
+    try {
+        const { data } = await axios(url, {
+            headers,
+        });
+        return data;
+    } catch (err) {
+        const axiosError = err as AxiosError;
+        axiosLogError(axiosError);
+        return false;
+    }
+}
+
 export function filtrerUtGamleArbeidssokerPerioder(perioder: Periode[]) {
     const cutOffDato = plussDager(new Date(), -30);
     return perioder.filter((periode) => {
@@ -150,26 +168,27 @@ function arbeidssokerRoutes(
      *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/er-arbeidssoker', async (req, res) => {
-        const perioder = await hentArbeidssokerPerioder(
-            veilarbregistreringUrl,
-            {
-                ...getDefaultHeaders(req),
-                ...(await tokenXHeadersForVeilarbregistrering(req)),
-            },
-            {
-                fraOgMed: '2020-01-01',
-            },
-        );
-
-        const underOppfolging = await hentUnderOppfolging({
+        const veilarbregistreringHeaders = {
             ...getDefaultHeaders(req),
-            ...(await tokenXHeadersForVeilarboppfoling(req)),
-        });
+            ...(await tokenXHeadersForVeilarbregistrering(req)),
+        };
+
+        const [perioder, underOppfolging, erStandard] = await Promise.all([
+            hentArbeidssokerPerioder(veilarbregistreringUrl, veilarbregistreringHeaders, {
+                fraOgMed: '2020-01-01',
+            }),
+            hentUnderOppfolging({
+                ...getDefaultHeaders(req),
+                ...(await tokenXHeadersForVeilarboppfoling(req)),
+            }),
+            hentErStandardInnsats(veilarbregistreringUrl, veilarbregistreringHeaders),
+        ]);
 
         const erUnderOppfolging = underOppfolging.underoppfolging;
         const harRelevantePerioder = filtrerUtGamleArbeidssokerPerioder(perioder.arbeidssokerperioder).length > 0;
         const erArbeidssoker = erUnderOppfolging || harRelevantePerioder;
-        return res.send({ erArbeidssoker });
+
+        return res.send({ erArbeidssoker, erStandard });
     });
 
     async function hentUnderOppfolging(headers: RawAxiosRequestHeaders): Promise<UnderOppfolging> {
