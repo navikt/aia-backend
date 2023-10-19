@@ -16,6 +16,13 @@ function getProxyServer() {
             res.status(400).end();
         }
     });
+    proxyServer.get('/veilarbregistrering/api/profilering/standard-innsats', (req, res) => {
+        if (req.headers['authorization'] === 'Bearer token123') {
+            res.send(true);
+        } else {
+            res.status(400).end();
+        }
+    });
     proxyServer.get('/veilarboppfolging/api/niva3/underoppfolging', (req, res) => {
         if (req.headers['authorization'] === 'Bearer token123') {
             res.send({ underOppfolging: true });
@@ -126,7 +133,7 @@ describe('arbeidssoker api', () => {
             try {
                 const response = await request(app).get('/er-arbeidssoker').set('authorization', 'token123');
                 expect(response.statusCode).toEqual(200);
-                expect(response.body).toEqual({ erArbeidssoker: true });
+                expect(response.body).toEqual({ erArbeidssoker: true, erStandard: true });
             } finally {
                 proxy.close();
             }
@@ -158,7 +165,7 @@ describe('arbeidssoker api', () => {
             try {
                 const response = await request(app).get('/er-arbeidssoker').set('authorization', 'token123');
                 expect(response.statusCode).toEqual(200);
-                expect(response.body).toEqual({ erArbeidssoker: false });
+                expect(response.body).toEqual({ erArbeidssoker: false, erStandard: false });
             } finally {
                 proxy.close();
             }
