@@ -88,7 +88,7 @@ export const createOppgaveRoutes = (getAzureAdToken: (scope: string) => Promise<
                 personident: fnr,
                 beskrivelse,
                 tema: 'GEN',
-                oppgaveType: 'KONT_BRUK',
+                oppgavetype: 'KONT_BRUK',
                 aktivDato: new Date().toISOString().substring(0, 10),
                 prioritet: 'NORM',
             };
