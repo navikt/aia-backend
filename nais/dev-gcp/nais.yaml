@@ -50,10 +50,6 @@ spec:
       value: https://veilarbdialog.dev-fss-pub.nais.io/veilarbdialog/api
     - name: DIALOG_APP_NAME
       value: veilarbdialog
-    - name: POAO_TILGANG_APP_NAME
-      value: poao-tilgang
-    - name: POAO_TILGANG_URL
-      value: http://poao-tilgang.poao.svc.cluster.local
     - name: VEILARBREGISTRERING_URL
       value: http://veilarbregistrering
     - name: VEILARBOPPFOLGING_URL
@@ -93,8 +89,6 @@ spec:
         - application: paw-reaktiver-arbeidssoker
         - application: tms-min-side-proxy
           namespace: min-side
-        - application: poao-tilgang
-          namespace: poao
         - application: veilarbvedtaksstotte
           namespace: pto
           cluster: dev-fss
@@ -115,9 +109,6 @@ spec:
         - application: veilarbdialog
           namespace: pto
           cluster: dev-fss
-        - application: poao-tilgang
-          namespace: poao
-          cluster: dev-gcp
         - application: veilarbregistrering
         - application: paw-arbeidssoker-besvarelse
         - application: veilarboppfolging
