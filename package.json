@@ -82,7 +82,7 @@
     "*.{js,jsx,json,md,ts,tsx}": "prettier --write"
   },
   "engines": {
-    "node": ">=18.18.0"
+    "node": ">=20.10.0"
   },
   "license": "MIT"
 }
