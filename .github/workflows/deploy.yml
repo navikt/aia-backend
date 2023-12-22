@@ -7,20 +7,6 @@ on:
             - dev/*
 
 jobs:
-#    set-vars:
-#        name: Setter vars
-#        runs-on: ubuntu-latest
-#        outputs:
-#            tag: ${{ steps.tag.outputs.tag }}
-#            image: ${{ env.IMAGE_BASE }}:${{ steps.tag.outputs.tag }}
-#        steps:
-#            - name: Checkout
-#              uses: actions/checkout@v3
-#
-#            - name: Lag tag for image
-#              id: tag
-#              run: echo "tag=$(git log -1 --pretty='%ad_%h' --date=format:'%Y%m%d%H%M%S')" >> ${GITHUB_OUTPUT}
-
     build:
         name: Test, build and push
         permissions:
