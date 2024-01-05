@@ -31,6 +31,9 @@ jobs:
     deploy-dev:
         if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/dev')
         name: Deploy til dev
+        permissions:
+          contents: "read"
+          id-token: "write"
         needs: [build]
         runs-on: ubuntu-latest
         steps:
@@ -38,9 +41,8 @@ jobs:
               uses: actions/checkout@v3
 
             - name: Deploy
-              uses: nais/deploy/actions/deploy@v1
+              uses: nais/deploy/actions/deploy@v2
               env:
-                  APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
                   CLUSTER: dev-gcp
                   IMAGE: ${{ needs.build.outputs.image }}
                   RESOURCE: nais/dev-gcp/nais.yaml
@@ -48,6 +50,9 @@ jobs:
     deploy-prod:
         if: github.ref == 'refs/heads/main'
         name: Deploy til prod
+        permissions:
+          contents: "read"
+          id-token: "write"
         needs: [build, deploy-dev]
         runs-on: ubuntu-latest
         steps:
@@ -55,9 +60,8 @@ jobs:
               uses: actions/checkout@v3
 
             - name: Deploy
-              uses: nais/deploy/actions/deploy@v1
+              uses: nais/deploy/actions/deploy@v2
               env:
-                  APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
                   CLUSTER: prod-gcp
                   RESOURCE: nais/prod-gcp/nais.yaml
                   IMAGE: ${{ needs.build.outputs.image }}
