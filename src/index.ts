@@ -93,7 +93,7 @@ async function setUpRoutes() {
     router.use(oppgaveApi(config.OPPGAVE_API_SCOPE));
 
     router.use(arbeidssokerInnhold(await tokenDings));
-    router.use(arbeidssokerregisteretApi(await tokenDings));
+    router.use('/arbeidssokerregisteret', arbeidssokerregisteretApi(await tokenDings));
 
     app.use(config.BASE_PATH || '', router);
 }
