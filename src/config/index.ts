@@ -32,6 +32,7 @@ export interface IEnvironmentVariables {
     SSO_NAV_COOKIE: string;
     OPPGAVE_URL: string;
     OPPGAVE_API_SCOPE: string;
+    ARBEIDSSOKERREGISTERET_API_URL: string;
 }
 
 const env = process.env as unknown as IEnvironmentVariables;
