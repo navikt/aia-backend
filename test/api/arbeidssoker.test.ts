@@ -155,6 +155,13 @@ describe('arbeidssoker api', () => {
                     res.status(400).end();
                 }
             });
+            proxyServer.get('/veilarbregistrering/api/profilering/standard-innsats', (req, res) => {
+                if (req.headers['authorization'] === 'Bearer token123') {
+                    res.send(false);
+                } else {
+                    res.status(400).end();
+                }
+            });
             const proxy = proxyServer.listen(7666);
 
             const app = express();

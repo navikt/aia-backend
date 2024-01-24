@@ -24,44 +24,6 @@ function veilarbregistrering(tokenDings: Auth, veilarbregistreringUrl = config.V
 
     /**
      * @openapi
-     * /startregistrering:
-     *   get:
-     *     description: Henter oppfølgingsinformasjon om arbeidssøker.
-     *     responses:
-     *       200:
-     *         content:
-     *           application/json:
-     *             schema:
-     *               $ref: '#/components/schemas/StartRegistreringStatusDto'
-     *       401:
-     *         $ref: '#/components/schemas/Unauthorized'
-     */
-    router.get(
-        '/startregistrering',
-        proxyTokenXCall(`${veilarbregistreringUrl}/veilarbregistrering/api/startregistrering`, getTokenXHeaders),
-    );
-
-    /**
-     * @openapi
-     * /registrering:
-     *   get:
-     *     description: Henter siste registrering av bruker.
-     *     responses:
-     *       200:
-     *         content:
-     *           application/json:
-     *             schema:
-     *               $ref: '#/components/schemas/BrukerRegistreringWrapper'
-     *       401:
-     *         $ref: '#/components/schemas/Unauthorized'
-     */
-    router.get(
-        '/registrering',
-        proxyTokenXCall(`${veilarbregistreringUrl}/veilarbregistrering/api/registrering`, getTokenXHeaders),
-    );
-
-    /**
-     * @openapi
      * /fullfoerreaktivering:
      *   post:
      *     description: Gjennomfører enkel reaktivering av en bruker.

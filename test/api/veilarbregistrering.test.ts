@@ -34,12 +34,12 @@ describe('veilarbregistrering api', () => {
         app.use(tokenValidation);
         app.use(veilarbregistrering(tokenDings, 'http://localhost:6666'));
 
-        request(app).get('/registrering').expect(401, done);
+        request(app).get('/standard-innsats').expect(401, done);
     });
 
     it('kaller veilarbregistrering med token i header', async () => {
         const proxyServer = express();
-        proxyServer.get('/veilarbregistrering/api/registrering', (req, res) => {
+        proxyServer.get('/veilarbregistrering/api/profilering/standard-innsats', (req, res) => {
             if (req.headers['authorization'] === 'Bearer x-token123') {
                 res.status(200).send('ok');
             } else {
@@ -53,7 +53,7 @@ describe('veilarbregistrering api', () => {
         app.use(veilarbregistrering(tokenDings, `http://localhost:${port}`));
 
         try {
-            const response = await request(app).get('/registrering').set('authorization', 'token123');
+            const response = await request(app).get('/standard-innsats').set('authorization', 'token123');
 
             expect(response.statusCode).toEqual(200);
             expect(response.text).toBe('ok');
@@ -64,7 +64,7 @@ describe('veilarbregistrering api', () => {
 
     it('sender med call-id', async () => {
         const proxyServer = express();
-        proxyServer.get('/veilarbregistrering/api/registrering', (req, res) => {
+        proxyServer.get('/veilarbregistrering/api/profilering/standard-innsats', (req, res) => {
             if (req.header('Nav-Call-Id') === 'call-id-123') {
                 res.status(200).end();
             } else {
@@ -79,7 +79,7 @@ describe('veilarbregistrering api', () => {
 
         try {
             const response = await request(app)
-                .get('/registrering')
+                .get('/standard-innsats')
                 .set('authorization', 'token123')
                 .set('Nav-Call-Id', 'call-id-123');
 
