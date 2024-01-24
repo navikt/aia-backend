@@ -1,12 +1,11 @@
-import { Router } from 'express';
+import { Request, Router } from 'express';
 import config from '../config';
-import logger, { axiosLogError } from '../logger';
+import logger, { axiosLogError, getCustomLogProps } from '../logger';
 import axios, { AxiosError, RawAxiosRequestHeaders } from 'axios';
 import { ParsedQs } from 'qs';
 import { getDefaultHeaders } from '../http';
-import { Auth } from '../auth/tokenDings';
+import { Auth, getTokenFromRequest } from '../auth/tokenDings';
 import { getTokenXHeadersForVeilarbregistrering } from './veilarbregistrering';
-import { getTokenXHeadersForVeilarboppfolging } from './oppfolging';
 import { Periode } from './data/dagpengerStatus/beregnArbeidssokerPerioder';
 import { plussDager } from '../lib/date-utils';
 
@@ -20,6 +19,20 @@ interface UnderOppfolging {
     underoppfolging: boolean;
 }
 
+export const getTokenXHeadersForVeilarboppfolging =
+    (tokenDings: Auth, naisCluster = config.NAIS_CLUSTER_NAME) =>
+    async (req: Request) => {
+        const incomingToken = getTokenFromRequest(req);
+        const VEILARBOPPFOLGING_CLIENT_ID = `${naisCluster.replace('gcp', 'fss')}:pto:veilarboppfolging`;
+        try {
+            const tokenSet = await tokenDings.exchangeIDPortenToken(incomingToken, VEILARBOPPFOLGING_CLIENT_ID);
+            const token = tokenSet.access_token;
+            return { Authorization: `Bearer ${token}` };
+        } catch (e: any) {
+            logger.error(getCustomLogProps(req), `Feil ved token-utveksling for veilarboppfolging: ${e.message}`);
+            throw e;
+        }
+    };
 export async function hentArbeidssokerPerioder(
     veilarbregistreringUrl: string,
     headers: RawAxiosRequestHeaders,

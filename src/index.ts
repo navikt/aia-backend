@@ -5,7 +5,6 @@ import helmet from 'helmet';
 import cors from 'cors';
 import healhApi from './api/health';
 import unleashApi from './api/unleash';
-import oppfolgingApi from './api/oppfolging';
 import vedtakinfoApi from './api/vedtakinfo';
 import dialogRoutes from './api/dialog';
 import dagpengerApi from './api/dagpenger';
@@ -68,7 +67,6 @@ async function setUpRoutes() {
     // router.use(idportenAuthentication);
     router.use(tokenValidation);
 
-    router.use(oppfolgingApi(await tokenDings));
     router.use(arbeidssokerApi(await tokenDings));
 
     // level4

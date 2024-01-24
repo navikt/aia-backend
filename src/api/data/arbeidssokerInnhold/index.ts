@@ -3,9 +3,9 @@ import { Auth } from '../../../auth/tokenDings';
 import config from '../../../config';
 import axios from 'axios';
 import { getDefaultHeaders } from '../../../http';
-import { getTokenXHeadersForVeilarboppfolging } from '../../oppfolging';
 import { getTokenXHeadersForVeilarbregistrering } from '../../veilarbregistrering';
 import { getTokenXHeadersForDialog } from '../../dialog';
+import { getTokenXHeadersForVeilarboppfolging } from '../../arbeidssoker';
 
 function arbeidssokerInnhold(
     tokenDings: Auth,
