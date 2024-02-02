@@ -77,7 +77,7 @@ spec:
     - name: OPPGAVE_API_SCOPE
       value: api://prod-fss.oppgavehandtering.oppgave/.default
     - name: ARBEIDSSOKERREGISTERET_API_URL
-      value: https://arbeidssokerregisteret-api.intern.nav.no
+      value: https://soek-arbeidssokerregisteret.intern.nav.no
   resources:
     limits:
       cpu: "3"
@@ -105,7 +105,7 @@ spec:
         - host: paw-unleash-api.nav.cloud.nais.io
         - host: oppgave.prod-fss-pub.nais.io
       rules:
-        - application: paw-arbeidssokerregisteret-api
+        - application: paw-arbeidssokerregisteret-api-soek
         - application: dp-innsyn
           namespace: teamdagpenger
         - application: meldekort-api
