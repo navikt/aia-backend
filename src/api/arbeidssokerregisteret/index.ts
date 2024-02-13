@@ -26,11 +26,11 @@ function arbeidssokerregisteretApi(tokenDings: Auth, url: string = config.ARBEID
     router.get('/v1/arbeidssoekerperioder', proxyTokenXCall(`${url}/api/v1/arbeidssoekerperioder`, getTokenXHeaders));
     router.get('/v1/opplysninger-om-arbeidssoeker/:periodeId', (req, res) => {
         const { periodeId } = req.params;
-        return proxyTokenXCall(`${url}/v1/opplysninger-om-arbeidssoeker/${periodeId}`, getTokenXHeaders)(req, res);
+        return proxyTokenXCall(`${url}/api/v1/opplysninger-om-arbeidssoeker/${periodeId}`, getTokenXHeaders)(req, res);
     });
     router.get('/v1/profilering/:periodeId', (req, res) => {
         const { periodeId } = req.params;
-        return proxyTokenXCall(`${url}/v1/profilering/${periodeId}`, getTokenXHeaders)(req, res);
+        return proxyTokenXCall(`${url}/api/v1/profilering/${periodeId}`, getTokenXHeaders)(req, res);
     });
 
     return router;
