@@ -6,7 +6,7 @@ import { proxyTokenXCall } from '../../http';
 
 const getTokenXHeardersForArbeidssokerregisteret = (tokenDings: Auth) => async (req: Request) => {
     const incomingToken = getTokenFromRequest(req);
-    const ARBEIDSSOKERREGISTERET_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:paw:paw-arbeidssokerregisteret-api-soek`;
+    const ARBEIDSSOKERREGISTERET_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:paw:paw-arbeidssoekerregisteret-api-oppslag`;
     try {
         const tokenSet = await tokenDings.exchangeIDPortenToken(incomingToken, ARBEIDSSOKERREGISTERET_CLIENT_ID);
         const token = tokenSet.access_token;
