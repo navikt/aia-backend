@@ -32,6 +32,7 @@ describe('behovForVeiledning API', () => {
                         oppfolging: 'SITUASJONSBESTEMT_INNSATS',
                         created_at: 'test-dato',
                         dialog_id: 'dialog-id',
+                        profilering_id: 'profilering-id',
                     }),
                 ),
             };
@@ -48,6 +49,7 @@ describe('behovForVeiledning API', () => {
                 oppfolging: 'SITUASJONSBESTEMT_INNSATS',
                 dato: 'test-dato',
                 dialogId: 'dialog-id',
+                profileringId: 'profilering-id',
             });
         });
 
@@ -77,6 +79,7 @@ describe('behovForVeiledning API', () => {
                         oppfolging: 'SITUASJONSBESTEMT_INNSATS',
                         created_at: 'test-dato',
                         dialog_id: 'dialog-id',
+                        profilering_id: 'profilering-id',
                     }),
                 ),
             };
@@ -86,7 +89,11 @@ describe('behovForVeiledning API', () => {
 
             const response = await request(app)
                 .post('/behov-for-veiledning')
-                .send({ oppfolging: 'SITUASJONSBESTEMT_INNSATS', dialogId: 'dialog-id-1' })
+                .send({
+                    oppfolging: 'SITUASJONSBESTEMT_INNSATS',
+                    dialogId: 'dialog-id-1',
+                    profileringId: 'profilering-id-1',
+                })
                 .set('Cookie', ['selvbetjening-idtoken=token123;']);
 
             expect(response.statusCode).toEqual(201);
@@ -95,11 +102,13 @@ describe('behovForVeiledning API', () => {
                 foedselsnummer: 'test-fnr',
                 oppfolging: 'SITUASJONSBESTEMT_INNSATS',
                 dialogId: 'dialog-id-1',
+                profileringId: 'profilering-id-1',
             });
             expect(response.body).toEqual({
                 oppfolging: 'SITUASJONSBESTEMT_INNSATS',
                 dato: 'test-dato',
                 dialogId: 'dialog-id',
+                profileringId: 'profilering-id',
             });
         });
     });

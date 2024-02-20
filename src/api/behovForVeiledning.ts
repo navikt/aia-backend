@@ -64,7 +64,12 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
                 return res.sendStatus(204);
             }
 
-            return res.send({ oppfolging: behov.oppfolging, dato: behov.created_at, dialogId: behov.dialog_id });
+            return res.send({
+                oppfolging: behov.oppfolging,
+                dato: behov.created_at,
+                dialogId: behov.dialog_id,
+                profileringId: behov.profilering_id,
+            });
         } catch (err) {
             logger.error(`Feil ved henting av behov for veiledning: ${err}`);
             return res.status(500).send((err as Error)?.message);
@@ -72,7 +77,7 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
     });
 
     router.post('/behov-for-veiledning', async (req, res) => {
-        const { oppfolging, dialogId } = req.body;
+        const { oppfolging, dialogId, profileringId } = req.body;
 
         if (!oppfolging) {
             logger.error('mangler "oppfolging" i request body');
@@ -86,11 +91,15 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
                 foedselsnummer: fnr,
                 oppfolging: oppfolging,
                 dialogId,
+                profileringId,
             });
 
-            return res
-                .status(201)
-                .send({ oppfolging: result.oppfolging, dato: result.created_at, dialogId: result.dialog_id });
+            return res.status(201).send({
+                oppfolging: result.oppfolging,
+                dato: result.created_at,
+                dialogId: result.dialog_id,
+                profileringId: result.profilering_id,
+            });
         } catch (err) {
             logger.error(`Feil ved oppretting av behov for veiledning ${err}`);
             return res.status(500).send(`${(err as Error).message}`);

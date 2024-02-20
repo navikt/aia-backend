@@ -6,6 +6,7 @@ interface LagreBehovDto {
     foedselsnummer?: string;
     oppfolging: Oppfolging;
     dialogId?: string;
+    profileringId?: string;
 }
 
 export interface BehovRepository {
@@ -22,11 +23,12 @@ function createBehovRepository(prismaClient: PrismaClient): BehovRepository {
                     foedselsnummer: data.foedselsnummer,
                     oppfolging: data.oppfolging,
                     dialog_id: data.dialogId,
+                    profilering_id: data.profileringId,
                 },
             });
         },
         async hentBehov(
-            bruker: { bruker_id: string } | { foedselsnummer: string }
+            bruker: { bruker_id: string } | { foedselsnummer: string },
         ): Promise<BehovForVeiledning | null> {
             try {
                 const brukerFilter = Object.keys(bruker).reduce((res, key) => {

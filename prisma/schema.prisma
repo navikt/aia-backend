@@ -17,6 +17,7 @@ model BehovForVeiledning {
   created_at DateTime @default(now())
   oppfolging Oppfolging
   dialog_id String?
+  profilering_id String?
 
   @@index([bruker_id, foedselsnummer])
 }
