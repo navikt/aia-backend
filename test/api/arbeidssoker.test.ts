@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import arbeidssoker, { filtrerUtGamleArbeidssokerPerioder } from '../../src/api/arbeidssoker';
 import { Auth } from '../../src/auth/tokenDings';
-import tokenValidation from '../../src/middleware/token-validation';
+import tokenValidation, { ValidatedRequest } from '../../src/middleware/token-validation';
 import { plussDager } from '../../src/lib/date-utils';
 
 function getProxyServer() {
@@ -78,6 +78,23 @@ describe('arbeidssoker api', () => {
             const app = express();
             app.use(cookieParser());
             app.use(tokenValidation);
+            app.use((req, _, next) => {
+                (req as ValidatedRequest).user = {
+                    fnr: '',
+                    ident: '',
+                    level: 'Level3',
+                };
+                next();
+            });
+            app.use(arbeidssoker(tokenDings, 'http://localhost:7666', 'http://localhost:7666', 'dev-gcp'));
+
+            request(app).get('/arbeidssoker').expect(401, done);
+        });
+
+        it('returnerer 403 når level3', (done) => {
+            const app = express();
+            app.use(cookieParser());
+            app.use(tokenValidation);
             app.use(arbeidssoker(tokenDings, 'http://localhost:7666', 'http://localhost:7666', 'dev-gcp'));
 
             request(app).get('/arbeidssoker').expect(401, done);
@@ -90,6 +107,14 @@ describe('arbeidssoker api', () => {
             const app = express();
             app.use(cookieParser());
             app.use(bodyParser.json());
+            app.use((req, _, next) => {
+                (req as ValidatedRequest).user = {
+                    fnr: '',
+                    ident: '',
+                    level: 'Level4',
+                };
+                next();
+            });
             app.use(arbeidssoker(tokenDings, 'http://localhost:7666', 'http://localhost:7666', 'dev-gcp'));
 
             try {
@@ -128,6 +153,14 @@ describe('arbeidssoker api', () => {
             const app = express();
             app.use(cookieParser());
             app.use(bodyParser.json());
+            app.use((req, _, next) => {
+                (req as ValidatedRequest).user = {
+                    fnr: '',
+                    ident: '',
+                    level: 'Level4',
+                };
+                next();
+            });
             app.use(arbeidssoker(tokenDings, 'http://localhost:7666', 'http://localhost:7666', 'dev-gcp'));
 
             try {
@@ -137,6 +170,25 @@ describe('arbeidssoker api', () => {
             } finally {
                 proxy.close();
             }
+        });
+
+        it('returnerer false når level3', async () => {
+            const app = express();
+            app.use(cookieParser());
+            app.use(bodyParser.json());
+            app.use((req, _, next) => {
+                (req as ValidatedRequest).user = {
+                    fnr: '',
+                    ident: '',
+                    level: 'Level3',
+                };
+                next();
+            });
+            app.use(arbeidssoker(tokenDings, '', '', 'dev-gcp'));
+
+            const response = await request(app).get('/er-arbeidssoker').set('authorization', 'token123');
+            expect(response.statusCode).toEqual(200);
+            expect(response.body).toEqual({ erArbeidssoker: false, erStandard: false });
         });
 
         it('returnerer false når ikke underoppfolging og tom periode', async () => {

@@ -8,6 +8,8 @@ import { Auth, getTokenFromRequest } from '../auth/tokenDings';
 import { getTokenXHeadersForVeilarbregistrering } from './veilarbregistrering';
 import { Periode } from './data/dagpengerStatus/beregnArbeidssokerPerioder';
 import { plussDager } from '../lib/date-utils';
+import { ValidatedRequest } from '../middleware/token-validation';
+import nivaa4Authentication from '../middleware/nivaa4-authentication';
 
 interface Arbeidssokerperioder {
     status: number;
@@ -141,7 +143,7 @@ function arbeidssokerRoutes(
      *         underoppfolging:
      *           type: boolean
      */
-    router.get('/arbeidssoker', async (req, res) => {
+    router.get('/arbeidssoker', nivaa4Authentication, async (req, res) => {
         const arbeidssokerperioder = await hentArbeidssokerPerioder(
             veilarbregistreringUrl,
             {
@@ -181,6 +183,12 @@ function arbeidssokerRoutes(
      *         $ref: '#/components/schemas/Unauthorized'
      */
     router.get('/er-arbeidssoker', async (req, res) => {
+        const authLevel = (req as ValidatedRequest).user?.level;
+
+        if (!['Level4', 'idporten-loa-high'].includes(authLevel!)) {
+            return res.send({ erArbeidssoker: false, erStandard: false });
+        }
+
         const veilarbregistreringHeaders = {
             ...getDefaultHeaders(req),
             ...(await tokenXHeadersForVeilarbregistrering(req)),

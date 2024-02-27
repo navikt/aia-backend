@@ -31,7 +31,7 @@ spec:
     enabled: true
     sidecar:
       enabled: true
-      level: Level3
+      level: Level4
   webproxy: true
   ingresses:
     - https://www.nav.no/aia-backend
