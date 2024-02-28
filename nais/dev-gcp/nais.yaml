@@ -30,7 +30,7 @@ spec:
     enabled: true
     sidecar:
       enabled: true
-      level: Level4
+      level: Level3
   ingresses:
     - https://www.intern.dev.nav.no/aia-backend
   envFrom:
