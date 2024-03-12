@@ -7,6 +7,13 @@ import { Auth } from '../../src/auth/tokenDings';
 import tokenValidation, { ValidatedRequest } from '../../src/middleware/token-validation';
 import { plussDager } from '../../src/lib/date-utils';
 
+let featureTogglePaa = false;
+jest.mock('unleash-client', () => {
+    return {
+        isEnabled: () => featureTogglePaa,
+    };
+});
+
 function getProxyServer() {
     const proxyServer = express();
     proxyServer.get('/veilarbregistrering/api/arbeidssoker/perioder/niva3', (req, res) => {
@@ -33,6 +40,31 @@ function getProxyServer() {
     return proxyServer;
 }
 
+function getProxyServerIkkeArbeidssoker() {
+    const proxyServer = express();
+    proxyServer.get('/veilarbregistrering/api/arbeidssoker/perioder/niva3', (req, res) => {
+        if (req.headers['authorization'] === 'Bearer token123') {
+            res.send({ arbeidssokerperioder: [] });
+        } else {
+            res.status(400).end();
+        }
+    });
+    proxyServer.get('/veilarboppfolging/api/niva3/underoppfolging', (req, res) => {
+        if (req.headers['authorization'] === 'Bearer token123') {
+            res.send({ underOppfolging: false });
+        } else {
+            res.status(400).end();
+        }
+    });
+    proxyServer.get('/veilarbregistrering/api/profilering/standard-innsats', (req, res) => {
+        if (req.headers['authorization'] === 'Bearer token123') {
+            res.send(false);
+        } else {
+            res.status(400).end();
+        }
+    });
+    return proxyServer;
+}
 describe('filtrerArbeidssokerPerioder', () => {
     it('filtrerer ut perioder eldre enn 30 dager', () => {
         const tilOgMedDato = plussDager(new Date(), -31).toISOString().substring(0, 10);
@@ -137,6 +169,9 @@ describe('arbeidssoker api', () => {
     });
 
     describe('/er-arbeidssoker', () => {
+        beforeAll(() => {
+            featureTogglePaa = false;
+        });
         it('returnerer 401 når token mangler', (done) => {
             const app = express();
             app.use(cookieParser());
@@ -192,28 +227,7 @@ describe('arbeidssoker api', () => {
         });
 
         it('returnerer false når ikke underoppfolging og tom periode', async () => {
-            const proxyServer = express();
-            proxyServer.get('/veilarbregistrering/api/arbeidssoker/perioder/niva3', (req, res) => {
-                if (req.headers['authorization'] === 'Bearer token123') {
-                    res.send({ arbeidssokerperioder: [] });
-                } else {
-                    res.status(400).end();
-                }
-            });
-            proxyServer.get('/veilarboppfolging/api/niva3/underoppfolging', (req, res) => {
-                if (req.headers['authorization'] === 'Bearer token123') {
-                    res.send({ underOppfolging: false });
-                } else {
-                    res.status(400).end();
-                }
-            });
-            proxyServer.get('/veilarbregistrering/api/profilering/standard-innsats', (req, res) => {
-                if (req.headers['authorization'] === 'Bearer token123') {
-                    res.send(false);
-                } else {
-                    res.status(400).end();
-                }
-            });
+            const proxyServer = getProxyServerIkkeArbeidssoker();
             const proxy = proxyServer.listen(7666);
 
             const app = express();
@@ -228,6 +242,65 @@ describe('arbeidssoker api', () => {
             } finally {
                 proxy.close();
             }
+        });
+
+        describe('nytt arbeidssokerregister', () => {
+            beforeAll(() => {
+                featureTogglePaa = true;
+            });
+
+            it('returnerer data fra arbeidssøker-registeret når togglet på', async () => {
+                const proxyServer = getProxyServerIkkeArbeidssoker();
+                proxyServer.get('/api/v1/arbeidssoekerperioder', (req, res) => {
+                    if (req.headers['authorization'] === 'Bearer token123') {
+                        res.send([
+                            {
+                                periodeId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+                                startet: {
+                                    tidspunkt: "'2023-03-11T11:22:33.444Z'",
+                                    utfoertAv: {
+                                        type: 'UKJENT_VERDI',
+                                    },
+                                    kilde: 'string',
+                                    aarsak: 'string',
+                                },
+                            },
+                        ]);
+                    } else {
+                        res.status(400).end();
+                    }
+                });
+                const proxy = proxyServer.listen(8666);
+
+                const app = express();
+                app.use(cookieParser());
+                app.use(bodyParser.json());
+                app.use((req, _, next) => {
+                    (req as ValidatedRequest).user = {
+                        fnr: '',
+                        ident: '',
+                        level: 'Level4',
+                    };
+                    next();
+                });
+                app.use(
+                    arbeidssoker(
+                        tokenDings,
+                        'http://localhost:8666',
+                        'http://localhost:8666',
+                        'dev-gcp',
+                        'http://localhost:8666',
+                    ),
+                );
+
+                try {
+                    const response = await request(app).get('/er-arbeidssoker').set('authorization', 'token123');
+                    expect(response.statusCode).toEqual(200);
+                    expect(response.body).toEqual({ erArbeidssoker: true, erStandard: true });
+                } finally {
+                    proxy.close();
+                }
+            });
         });
     });
 });

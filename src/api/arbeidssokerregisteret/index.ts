@@ -4,7 +4,7 @@ import { Auth, getTokenFromRequest } from '../../auth/tokenDings';
 import logger, { getCustomLogProps } from '../../logger';
 import { proxyTokenXCall } from '../../http';
 
-const getTokenXHeardersForArbeidssokerregisteret = (tokenDings: Auth) => async (req: Request) => {
+export const getTokenXHeardersForArbeidssokerregisteret = (tokenDings: Auth) => async (req: Request) => {
     const incomingToken = getTokenFromRequest(req);
     const ARBEIDSSOKERREGISTERET_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:paw:paw-arbeidssoekerregisteret-api-oppslag`;
     try {
