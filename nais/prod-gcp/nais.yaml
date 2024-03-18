@@ -92,6 +92,8 @@ spec:
         - application: paw-reaktiver-arbeidssoker
         - application: tms-min-side-proxy
           namespace: min-side
+        - application: tms-mikrofrontend-selector
+          namespace: min-side
         - application: veilarbvedtaksstotte
           namespace: pto
           cluster: prod-fss
