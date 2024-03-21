@@ -190,7 +190,7 @@ function arbeidssokerRoutes(
         const authLevel = (req as ValidatedRequest).user?.level;
 
         if (!['Level4', 'idporten-loa-high'].includes(authLevel!)) {
-            return res.send({ erArbeidssoker: false, erStandard: false });
+            return res.send({ erArbeidssoker: false, erStandard: false, brukNyAia: false });
         }
 
         if (isEnabled('aia.bruk-opplysninger-om-arbeidssoker-api')) {
@@ -222,7 +222,7 @@ function arbeidssokerRoutes(
         const harRelevantePerioder = filtrerUtGamleArbeidssokerPerioder(perioder.arbeidssokerperioder).length > 0;
         const erArbeidssoker = erUnderOppfolging || harRelevantePerioder;
 
-        return res.send({ erArbeidssoker, erStandard });
+        return res.send({ erArbeidssoker, erStandard, brukNyAia: false });
     });
 
     async function hentFraArbeidssokerregisteret(headers: RawAxiosRequestHeaders) {
@@ -234,12 +234,14 @@ function arbeidssokerRoutes(
             return {
                 erArbeidssoker: perioder?.length > 0,
                 erStandard: true,
+                brukNyAia: true,
             };
         } catch (e) {
             axiosLogError(e as AxiosError);
             return {
                 erArbeidssoker: false,
                 erStandard: false,
+                brukNyAia: true,
             };
         }
     }

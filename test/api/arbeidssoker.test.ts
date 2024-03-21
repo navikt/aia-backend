@@ -201,7 +201,7 @@ describe('arbeidssoker api', () => {
             try {
                 const response = await request(app).get('/er-arbeidssoker').set('authorization', 'token123');
                 expect(response.statusCode).toEqual(200);
-                expect(response.body).toEqual({ erArbeidssoker: true, erStandard: true });
+                expect(response.body).toEqual({ erArbeidssoker: true, erStandard: true, brukNyAia: false });
             } finally {
                 proxy.close();
             }
@@ -223,7 +223,7 @@ describe('arbeidssoker api', () => {
 
             const response = await request(app).get('/er-arbeidssoker').set('authorization', 'token123');
             expect(response.statusCode).toEqual(200);
-            expect(response.body).toEqual({ erArbeidssoker: false, erStandard: false });
+            expect(response.body).toEqual({ erArbeidssoker: false, erStandard: false, brukNyAia: false });
         });
 
         it('returnerer false når ikke underoppfolging og tom periode', async () => {
@@ -238,7 +238,7 @@ describe('arbeidssoker api', () => {
             try {
                 const response = await request(app).get('/er-arbeidssoker').set('authorization', 'token123');
                 expect(response.statusCode).toEqual(200);
-                expect(response.body).toEqual({ erArbeidssoker: false, erStandard: false });
+                expect(response.body).toEqual({ erArbeidssoker: false, erStandard: false, brukNyAia: false });
             } finally {
                 proxy.close();
             }
@@ -296,7 +296,7 @@ describe('arbeidssoker api', () => {
                 try {
                     const response = await request(app).get('/er-arbeidssoker').set('authorization', 'token123');
                     expect(response.statusCode).toEqual(200);
-                    expect(response.body).toEqual({ erArbeidssoker: true, erStandard: true });
+                    expect(response.body).toEqual({ erArbeidssoker: true, erStandard: true, brukNyAia: true });
                 } finally {
                     proxy.close();
                 }
