@@ -28,7 +28,8 @@ import nivaa4Authentication from './middleware/nivaa4-authentication';
 import veilederApi from './api/veileder';
 import oppgaveApi from './api/oppgave';
 import arbeidssokerInnhold from './api/data/arbeidssokerInnhold';
-import arbeidssokerregisteretApi from './api/arbeidssokerregisteret';
+import arbeidssokerregisteretApi from './api/arbeidssokerregisteret/oppslag';
+import inngangRoutes from './api/arbeidssokerregisteret/inngang';
 
 dotenv.config();
 
@@ -92,6 +93,7 @@ async function setUpRoutes() {
 
     router.use(arbeidssokerInnhold(await tokenDings));
     router.use('/arbeidssokerregisteret', arbeidssokerregisteretApi(await tokenDings));
+    router.use('/arbeidssokerregisteret/inngang', inngangRoutes(await tokenDings));
 
     app.use(config.BASE_PATH || '', router);
 }

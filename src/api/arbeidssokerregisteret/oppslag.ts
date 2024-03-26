@@ -19,7 +19,7 @@ export const getTokenXHeardersForArbeidssokerregisteret = (tokenDings: Auth) => 
         throw e;
     }
 };
-function arbeidssokerregisteretApi(tokenDings: Auth, url: string = config.ARBEIDSSOKERREGISTERET_API_URL) {
+function arbeidssokerregisteretApi(tokenDings: Auth, url: string = config.ARBEIDSSOKERREGISTERET_OPPSLAG_API_URL) {
     const router = Router();
     const getTokenXHeaders = getTokenXHeardersForArbeidssokerregisteret(tokenDings);
 

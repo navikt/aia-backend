@@ -10,7 +10,7 @@ import { Periode } from './data/dagpengerStatus/beregnArbeidssokerPerioder';
 import { plussDager } from '../lib/date-utils';
 import { ValidatedRequest } from '../middleware/token-validation';
 import nivaa4Authentication from '../middleware/nivaa4-authentication';
-import { getTokenXHeardersForArbeidssokerregisteret } from './arbeidssokerregisteret';
+import { getTokenXHeardersForArbeidssokerregisteret } from './arbeidssokerregisteret/oppslag';
 import { isEnabled } from 'unleash-client';
 
 interface Arbeidssokerperioder {
@@ -96,7 +96,7 @@ function arbeidssokerRoutes(
     veilarboppfolgingUrl = config.VEILARBOPPFOLGING_URL,
     veilarbregistreringUrl = config.VEILARBREGISTRERING_URL,
     naisCluster = config.NAIS_CLUSTER_NAME,
-    arbeidssokerregisteretApiUrl = config.ARBEIDSSOKERREGISTERET_API_URL,
+    arbeidssokerregisteretApiUrl = config.ARBEIDSSOKERREGISTERET_OPPSLAG_API_URL,
 ) {
     const router = Router();
     const tokenXHeadersForVeilarbregistrering = getTokenXHeadersForVeilarbregistrering(tokenDings);

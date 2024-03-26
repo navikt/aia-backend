@@ -76,8 +76,10 @@ spec:
       value: https://oppgave.prod-fss-pub.nais.io
     - name: OPPGAVE_API_SCOPE
       value: api://prod-fss.oppgavehandtering.oppgave/.default
-    - name: ARBEIDSSOKERREGISTERET_API_URL
-      value: https://oppslag-arbeidssoekerregisteret.intern.nav.no
+    - name: ARBEIDSSOKERREGISTERET_OPPSLAG_API_URL
+      value: http://paw-arbeidssoekerregisteret-api-oppslag
+    - name: ARBEIDSSOKERREGISTERET_INNGANG_API_URL
+      value: http://paw-arbeidssokerregisteret-api-inngang
   resources:
     limits:
       cpu: "3"
