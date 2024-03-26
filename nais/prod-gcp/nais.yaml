@@ -110,6 +110,7 @@ spec:
         - host: oppgave.prod-fss-pub.nais.io
       rules:
         - application: paw-arbeidssoekerregisteret-api-oppslag
+        - application: paw-arbeidssokerregisteret-api-inngang
         - application: dp-innsyn
           namespace: teamdagpenger
         - application: meldekort-api

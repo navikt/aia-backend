@@ -109,6 +109,7 @@ spec:
         - host: oppgave-q1.dev-fss-pub.nais.io
       rules:
         - application: paw-arbeidssoekerregisteret-api-oppslag
+        - application: paw-arbeidssokerregisteret-api-inngang
         - application: dp-innsyn
           namespace: teamdagpenger
         - application: meldekort-api-q1
