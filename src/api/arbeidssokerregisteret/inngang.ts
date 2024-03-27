@@ -21,7 +21,7 @@ export const getTokenXHeadersForInngangsApi = (tokenDings: Auth) => async (req: 
     }
 };
 
-function inngangRoutes(tokenDings: Auth, url: string = config.ARBEIDSSOKERREGISTERET_OPPSLAG_API_URL) {
+function inngangRoutes(tokenDings: Auth, url: string = config.ARBEIDSSOKERREGISTERET_INNGANG_API_URL) {
     const router = Router();
     const getTokenXHeaders = getTokenXHeadersForInngangsApi(tokenDings);
     router.post('/v1/arbeidssoker/opplysninger', (req, res) => {
