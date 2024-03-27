@@ -79,8 +79,29 @@ export function proxyHttpCall(url: string, opts: ProxyOpts = defaultOpts) {
                 res.set(headers);
                 return bodyStream.pipe(res);
             } catch (err) {
-                const axiosError = err as AxiosError;
+                const axiosError = err as AxiosError<any>;
                 const status = axiosError.response?.status || 500;
+
+                const data = await new Promise((resolve) => {
+                    try {
+                        let streamString = '';
+                        if (axiosError.response) {
+                            axiosError.response?.data
+                                .on('data', (chunk: string) => {
+                                    streamString += chunk;
+                                })
+                                .on('end', () => resolve(streamString));
+                        } else {
+                            resolve(undefined);
+                        }
+                    } catch (e) {
+                        resolve(undefined);
+                    }
+                });
+
+                if (data) {
+                    axiosError.response!.data = data;
+                }
 
                 if (shouldRetry(axiosError)) {
                     logger.warn(`Retry kall ${counter + 1}} mot ${url}: response ${status}`);

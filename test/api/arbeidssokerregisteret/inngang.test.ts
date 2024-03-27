@@ -5,12 +5,16 @@ import inngangRoutes from '../../../src/api/arbeidssokerregisteret/inngang';
 import { Auth } from '../../../src/auth/tokenDings';
 import request from 'supertest';
 
-const getProxyServer = (spyFn: jest.Mock<any, any, any>, statusCode = 204) => {
+const getProxyServer = (
+    spyFn: jest.Mock<any, any, any>,
+    statusCode = 204,
+    body: Record<string, string> | undefined = undefined,
+) => {
     const proxyServer = express();
     proxyServer.use(bodyParser.json());
     proxyServer.post('/api/v1/arbeidssoker/opplysninger', (req, res) => {
         spyFn(req.body);
-        res.status(statusCode).end();
+        res.status(statusCode).json(body);
     });
     return proxyServer;
 };
@@ -82,7 +86,7 @@ describe('arbeidssøkerregisteret/inngangs-api', () => {
         });
 
         it('håndterer feil', async () => {
-            const proxyServer = getProxyServer(jest.fn(), 400);
+            const proxyServer = getProxyServer(jest.fn(), 400, { test: 'noe gikk galt' });
             const proxy = proxyServer.listen(8666);
 
             const app = express();

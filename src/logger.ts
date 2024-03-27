@@ -55,8 +55,8 @@ export function axiosLogError(err: AxiosError, props: any = {}) {
     const method = err.request?.method || 'Unknown method';
     const url = err.config?.url || 'unknown URL';
     const statusText = err.response?.statusText || '';
-    const data = err.response?.data || {};
-    logger[logLevel]({ ...props, ...data }, `${method} ${url}: ${status} ${statusText}`);
+    const data = err.response?.data;
+    logger[logLevel]({ ...props, data }, `${method} ${url}: ${status} ${statusText}`);
 }
 
 export default logger;
