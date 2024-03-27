@@ -3,6 +3,7 @@ import { proxyTokenXCall } from '../../http';
 import { Auth, getTokenFromRequest } from '../../auth/tokenDings';
 import config from '../../config';
 import logger, { getCustomLogProps } from '../../logger';
+import { ValidatedRequest } from '../../middleware/token-validation';
 
 export const getTokenXHeadersForInngangsApi = (tokenDings: Auth) => async (req: Request) => {
     const incomingToken = getTokenFromRequest(req);
@@ -23,10 +24,17 @@ export const getTokenXHeadersForInngangsApi = (tokenDings: Auth) => async (req: 
 function inngangRoutes(tokenDings: Auth, url: string = config.ARBEIDSSOKERREGISTERET_OPPSLAG_API_URL) {
     const router = Router();
     const getTokenXHeaders = getTokenXHeadersForInngangsApi(tokenDings);
-    router.post(
-        '/v1/arbeidssoker/opplysninger',
-        proxyTokenXCall(`${url}/api/v1/arbeidssoker/opplysninger`, getTokenXHeaders),
-    );
+    router.post('/v1/arbeidssoker/opplysninger', (req, res) => {
+        const identitetsnummer = (req as ValidatedRequest).user.fnr;
+        return proxyTokenXCall(`${url}/api/v1/arbeidssoker/opplysninger`, getTokenXHeaders, {
+            transformRequestBody(request) {
+                return {
+                    ...request.body,
+                    identitetsnummer,
+                };
+            },
+        })(req, res);
+    });
     return router;
 }
 

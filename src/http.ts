@@ -11,6 +11,7 @@ interface ProxyOpts {
     skipRetry?: boolean;
     maxRetries?: number;
     retryDelay?: number;
+    transformRequestBody?: (req: Request) => Promise<Record<string, string>>;
 }
 
 export function getDefaultHeaders(req: Request) {
@@ -42,6 +43,14 @@ export function proxyHttpCall(url: string, opts: ProxyOpts = defaultOpts) {
                 return !skipRetry && counter < maxRetries! && isNetworkOrIdempotentRequestError(err);
             };
 
+            const getBody = async (req: Request) => {
+                if (typeof opts.transformRequestBody === 'function') {
+                    return opts.transformRequestBody(req);
+                }
+
+                return req.body;
+            };
+
             try {
                 const {
                     data: bodyStream,
@@ -49,7 +58,7 @@ export function proxyHttpCall(url: string, opts: ProxyOpts = defaultOpts) {
                     headers,
                 } = await axios(url, {
                     method,
-                    data: req.method === 'POST' ? req.body : undefined,
+                    data: req.method === 'POST' ? await getBody(req) : undefined,
                     params: req.params,
                     headers: {
                         ...defaultHeaders,
@@ -90,7 +99,7 @@ export function proxyHttpCall(url: string, opts: ProxyOpts = defaultOpts) {
 export function proxyTokenXCall(
     url: string,
     getTokenXHeaders: (req: Request) => Promise<Record<string, string | null>>,
-    opts = defaultOpts
+    opts = defaultOpts,
 ) {
     return async (req: Request, res: Response) => {
         try {
