@@ -132,7 +132,7 @@ describe('arbeidssoker api', () => {
             request(app).get('/arbeidssoker').expect(401, done);
         });
 
-        it('returnerer perioder og under–oppfolging', async () => {
+        it('returnerer perioder og under-oppfolging', async () => {
             const proxyServer = getProxyServer();
             const proxy = proxyServer.listen(7666);
 
@@ -270,7 +270,7 @@ describe('arbeidssoker api', () => {
                         res.status(400).end();
                     }
                 });
-                const proxy = proxyServer.listen(8666);
+                const proxy = proxyServer.listen(9666);
 
                 const app = express();
                 app.use(cookieParser());
@@ -286,10 +286,10 @@ describe('arbeidssoker api', () => {
                 app.use(
                     arbeidssoker(
                         tokenDings,
-                        'http://localhost:8666',
-                        'http://localhost:8666',
+                        'http://localhost:9666',
+                        'http://localhost:9666',
                         'dev-gcp',
-                        'http://localhost:8666',
+                        'http://localhost:9666',
                     ),
                 );
 
