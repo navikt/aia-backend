@@ -58,6 +58,8 @@ spec:
       value: https://veilarboppfolging.prod-fss-pub.nais.io
     - name: VEILARBVEDTAKINFO_URL
       value: https://veilarbvedtakinfo.prod-fss-pub.nais.io
+    - name: VEILARBVEDTAKSSTOTTE_URL
+      value: https://veilarbvedtaksstotte.prod-fss-pub.nais.io
     - name: UNLEASH_API_URL
       value: https://unleash.nais.io/api/
     - name: UNLEASH_ENVIRONMENT
@@ -106,6 +108,7 @@ spec:
       external:
         - host: veilarboppfolging.prod-fss-pub.nais.io
         - host: veilarbvedtakinfo.prod-fss-pub.nais.io
+        - host: veilarbvedtaksstotte.prod-fss-pub.nais.io
         - host: paw-unleash-api.nav.cloud.nais.io
         - host: oppgave.prod-fss-pub.nais.io
       rules:
@@ -124,6 +127,9 @@ spec:
           namespace: pto
           cluster: prod-fss
         - application: veilarbvedtakinfo
+          namespace: pto
+          cluster: prod-fss
+        - application: veilarbvedtaksstotte
           namespace: pto
           cluster: prod-fss
   gcp:

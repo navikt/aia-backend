@@ -13,6 +13,7 @@ export interface IEnvironmentVariables {
     VEILARBREGISTRERING_URL: string;
     VEILARBOPPFOLGING_URL: string;
     VEILARBVEDTAKINFO_URL: string;
+    VEILARBVEDTAKSSTOTTE_URL: string;
     NAIS_CLUSTER_NAME: string;
     BASE_PATH: string;
     MELDEKORT_APP_NAME: string;

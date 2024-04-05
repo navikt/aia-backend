@@ -30,6 +30,7 @@ import oppgaveApi from './api/oppgave';
 import arbeidssokerInnhold from './api/data/arbeidssokerInnhold';
 import arbeidssokerregisteretApi from './api/arbeidssokerregisteret/oppslag';
 import inngangRoutes from './api/arbeidssokerregisteret/inngang';
+import vedtaksstotte from './api/vedtaksstotte';
 
 dotenv.config();
 
@@ -92,6 +93,7 @@ async function setUpRoutes() {
     router.use(oppgaveApi(config.OPPGAVE_API_SCOPE));
 
     router.use(arbeidssokerInnhold(await tokenDings));
+    router.use(vedtaksstotte(await tokenDings));
     router.use('/arbeidssokerregisteret', arbeidssokerregisteretApi(await tokenDings));
     router.use('/arbeidssokerregisteret/inngang', inngangRoutes(await tokenDings));
 
