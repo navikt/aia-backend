@@ -58,6 +58,8 @@ spec:
       value: https://veilarbvedtakinfo.dev-fss-pub.nais.io
     - name: VEILARBVEDTAKSSTOTTE_URL
       value: https://veilarbvedtaksstotte.dev-fss-pub.nais.io
+    - name: VEILARBVEDTAKSSTOTTE_SCOPE
+      value: api://dev-fss.pto.veilarbvedtaksstotte/.default
     - name: UNLEASH_API_URL
       value: https://unleash.nais.io/api/
     - name: UNLEASH_ENVIRONMENT
