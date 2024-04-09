@@ -178,14 +178,14 @@ describe('arbeidssoker api', () => {
             const app = express();
             app.use(cookieParser());
             app.use(tokenValidation);
-            app.use(arbeidssoker(tokenDings, 'http://localhost:8666', 'http://localhost:8666', 'dev-gcp'));
+            app.use(arbeidssoker(tokenDings, 'http://localhost:7555', 'http://localhost:7555', 'dev-gcp'));
 
             request(app).get('/er-arbeidssoker').expect(401, done);
         });
 
         it('returnerer true når underoppfolging ELLER ikke tom perioder', async () => {
             const proxyServer = getProxyServer();
-            const proxy = proxyServer.listen(8666);
+            const proxy = proxyServer.listen(7555);
 
             const app = express();
             app.use(cookieParser());
@@ -199,7 +199,7 @@ describe('arbeidssoker api', () => {
                 next();
             });
 
-            app.use(arbeidssoker(tokenDings, 'http://localhost:8666', 'http://localhost:8666', 'dev-gcp'));
+            app.use(arbeidssoker(tokenDings, 'http://localhost:7555', 'http://localhost:7555', 'dev-gcp'));
 
             try {
                 const response = await request(app).get('/er-arbeidssoker').set('authorization', 'token123');
@@ -222,6 +222,7 @@ describe('arbeidssoker api', () => {
                 };
                 next();
             });
+
             app.use(arbeidssoker(tokenDings, '', '', 'dev-gcp'));
 
             const response = await request(app).get('/er-arbeidssoker').set('authorization', 'token123');
