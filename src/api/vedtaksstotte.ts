@@ -1,10 +1,11 @@
 import { Request, Response, Router } from 'express';
+import axios, { AxiosError } from 'axios';
+import { v4 } from 'uuid';
+
 import logger, { axiosLogError } from '../logger';
 import { getAzureAdToken } from '../auth/azure';
 import { ValidatedRequest } from '../middleware/token-validation';
 import config from '../config';
-import axios, { AxiosError } from 'axios';
-import { v4 } from 'uuid';
 
 export const createVedtaksstoetteRoutes = (getAzureAdToken: (scope: string) => Promise<string>) => {
     return (scope: string, vedtaksstoetteUrl = config.VEILARBVEDTAKSSTOTTE_URL) => {
@@ -21,7 +22,7 @@ export const createVedtaksstoetteRoutes = (getAzureAdToken: (scope: string) => P
                         `Kaller vedtaksstøtte api med X-Correlation-Id=${correlationId}`,
                     );
 
-                    await axios(`${vedtaksstoetteUrl}/veilarbvedtaksstotte/api/hent-siste-14a-vedtak`, {
+                    const respons = await axios(`${vedtaksstoetteUrl}/veilarbvedtaksstotte/api/hent-siste-14a-vedtak`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -33,7 +34,9 @@ export const createVedtaksstoetteRoutes = (getAzureAdToken: (scope: string) => P
                         data: payload,
                     });
 
-                    res.status(201).end();
+                    if (respons.status === 200) {
+                        respons.data ? res.json(respons.data) : res.status(204).end();
+                    }
                 } catch (e: any) {
                     logger.error({
                         error: e,

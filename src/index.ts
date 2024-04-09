@@ -3,7 +3,9 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import cors from 'cors';
-import healhApi from './api/health';
+import bodyParser from 'body-parser';
+
+import healthApi from './api/health';
 import unleashApi from './api/unleash';
 import vedtakinfoApi from './api/vedtakinfo';
 import dialogRoutes from './api/dialog';
@@ -16,7 +18,6 @@ import veilarbregistreringApi from './api/veilarbregistrering';
 import besvarelseApi from './api/besvarelse';
 import swaggerDocs from './api/swagger';
 import dagpengerStatusApi from './api/data/dagpengerStatus';
-import bodyParser from 'body-parser';
 import logger, { pinoHttpMiddleware } from './logger';
 import config from './config';
 import createDependencies from './deps';
@@ -30,7 +31,7 @@ import oppgaveApi from './api/oppgave';
 import arbeidssokerInnhold from './api/data/arbeidssokerInnhold';
 import arbeidssokerregisteretApi from './api/arbeidssokerregisteret/oppslag';
 import inngangRoutes from './api/arbeidssokerregisteret/inngang';
-import vedtaksstotte from './api/vedtaksstotte';
+import vedtaksstotteApi from './api/vedtaksstotte';
 
 dotenv.config();
 
@@ -56,7 +57,7 @@ async function setUpRoutes() {
 
     // Public routes
     router.use(swaggerDocs());
-    router.use(healhApi());
+    router.use(healthApi());
     router.use(unleashApi());
 
     // veileder routes - ingen auth middleware
@@ -93,7 +94,7 @@ async function setUpRoutes() {
     router.use(oppgaveApi(config.OPPGAVE_API_SCOPE));
 
     router.use(arbeidssokerInnhold(await tokenDings));
-    router.use(vedtaksstotte(config.VEILARBVEDTAKSSTOTTE_SCOPE));
+    router.use(vedtaksstotteApi(config.VEILARBVEDTAKSSTOTTE_SCOPE));
     router.use('/arbeidssokerregisteret', arbeidssokerregisteretApi(await tokenDings));
     router.use('/arbeidssokerregisteret/inngang', inngangRoutes(await tokenDings));
 
