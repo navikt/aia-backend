@@ -2,6 +2,7 @@ import express from 'express';
 import request from 'supertest';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
+
 import arbeidssoker, { filtrerUtGamleArbeidssokerPerioder } from '../../src/api/arbeidssoker';
 import { Auth } from '../../src/auth/tokenDings';
 import tokenValidation, { ValidatedRequest } from '../../src/middleware/token-validation';
@@ -232,12 +233,12 @@ describe('arbeidssoker api', () => {
 
         it('returnerer false når ikke underoppfolging og tom periode', async () => {
             const proxyServer = getProxyServerIkkeArbeidssoker();
-            const proxy = proxyServer.listen(7666);
+            const proxy = proxyServer.listen(7777);
 
             const app = express();
             app.use(cookieParser());
             app.use(bodyParser.json());
-            app.use(arbeidssoker(tokenDings, 'http://localhost:7666', 'http://localhost:7666', 'dev-gcp'));
+            app.use(arbeidssoker(tokenDings, 'http://localhost:7777', 'http://localhost:7777', 'dev-gcp'));
 
             try {
                 const response = await request(app).get('/er-arbeidssoker').set('authorization', 'token123');
