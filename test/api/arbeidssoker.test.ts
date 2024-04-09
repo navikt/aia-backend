@@ -136,7 +136,7 @@ describe('arbeidssoker api', () => {
 
         it('returnerer perioder og under-oppfolging', async () => {
             const proxyServer = getProxyServer();
-            const proxy = proxyServer.listen(7666);
+            const proxy = proxyServer.listen(7444);
 
             const app = express();
             app.use(cookieParser());
@@ -150,7 +150,7 @@ describe('arbeidssoker api', () => {
                 next();
             });
 
-            app.use(arbeidssoker(tokenDings, 'http://localhost:7666', 'http://localhost:7666', 'dev-gcp'));
+            app.use(arbeidssoker(tokenDings, 'http://localhost:7444', 'http://localhost:7444', 'dev-gcp'));
 
             try {
                 const response = await request(app).get('/arbeidssoker').set('authorization', 'token123');
