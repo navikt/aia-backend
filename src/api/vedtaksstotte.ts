@@ -22,17 +22,20 @@ export const createVedtaksstoetteRoutes = (getAzureAdToken: (scope: string) => P
                         `Kaller vedtaksstøtte api med X-Correlation-Id=${correlationId}`,
                     );
 
-                    const respons = await axios(`${vedtaksstoetteUrl}/veilarbvedtaksstotte/api/hent-siste-14a-vedtak`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-Correlation-ID': correlationId,
-                            'Nav-Call-Id': req.header('Nav-Call-Id') || null,
-                            [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
-                            Authorization: `Bearer ${azureAdToken}`,
+                    const respons = await axios(
+                        `${vedtaksstoetteUrl}/veilarbvedtaksstotte/api/v2/hent-siste-14a-vedtak`,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Correlation-ID': correlationId,
+                                'Nav-Call-Id': req.header('Nav-Call-Id') || null,
+                                [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
+                                Authorization: `Bearer ${azureAdToken}`,
+                            },
+                            data: payload,
                         },
-                        data: payload,
-                    });
+                    );
 
                     if (respons.status === 200) {
                         respons.data ? res.json(respons.data) : res.status(204).end();
