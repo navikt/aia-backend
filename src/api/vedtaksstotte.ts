@@ -44,7 +44,7 @@ function vedtaksstoette(tokenDings: Auth, veilarbvedtaksstoetteUrl = config.VEIL
                 `Kaller vedtaksstøtte api med X-Correlation-Id=${correlationId}`,
             );
 
-            await axios(`${veilarbvedtaksstoetteUrl}/api/v2/hent-siste-14a-vedtak`, {
+            await axios(`${veilarbvedtaksstoetteUrl}/veilarbvedtaksstotte/api/v2/hent-siste-14a-vedtak`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
