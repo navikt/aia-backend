@@ -44,19 +44,28 @@ function vedtaksstoette(tokenDings: Auth, veilarbvedtaksstoetteUrl = config.VEIL
                 `Kaller vedtaksstøtte api med X-Correlation-Id=${correlationId}`,
             );
 
-            await axios(`${veilarbvedtaksstoetteUrl}/veilarbvedtaksstotte/api/v2/hent-siste-14a-vedtak`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Correlation-ID': correlationId,
-                    'Nav-Call-Id': req.header('Nav-Call-Id') || null,
-                    [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
-                    Authorization: `Bearer ${tokenXToken}`,
+            const vedtak = await axios(
+                `${veilarbvedtaksstoetteUrl}/veilarbvedtaksstotte/api/v2/hent-siste-14a-vedtak`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Correlation-ID': correlationId,
+                        'Nav-Call-Id': req.header('Nav-Call-Id') || null,
+                        [config.CONSUMER_ID_HEADER_NAME]: config.CONSUMER_ID_HEADER_VALUE,
+                        Authorization: `Bearer ${tokenXToken}`,
+                    },
+                    data: payload,
                 },
-                data: payload,
-            });
+            );
 
-            res.status(201).end();
+            logger.info(`Kall til vedtaksstøtte api med X-Correlation-Id=${correlationId} er ferdig`);
+
+            if (vedtak.data) {
+                res.json(vedtak.data);
+            } else {
+                res.status(204).end();
+            }
         } catch (e: any) {
             logger.error({
                 error: e,
