@@ -249,29 +249,7 @@ describe('arbeidssoker api', () => {
                 featureTogglePaa = true;
             });
 
-            it('returnerer data fra arbeidssøker-registeret når togglet på', async () => {
-                const proxyServer = getProxyServerIkkeArbeidssoker();
-                proxyServer.get('/api/v1/arbeidssoekerperioder', (req, res) => {
-                    if (req.headers['authorization'] === 'Bearer token123') {
-                        res.send([
-                            {
-                                periodeId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-                                startet: {
-                                    tidspunkt: "'2023-03-11T11:22:33.444Z'",
-                                    utfoertAv: {
-                                        type: 'UKJENT_VERDI',
-                                    },
-                                    kilde: 'string',
-                                    aarsak: 'string',
-                                },
-                            },
-                        ]);
-                    } else {
-                        res.status(400).end();
-                    }
-                });
-                const proxy = proxyServer.listen(9666);
-
+            it('returnerer false når togglet på', async () => {
                 const app = express();
                 app.use(cookieParser());
                 app.use(bodyParser.json());
@@ -283,23 +261,11 @@ describe('arbeidssoker api', () => {
                     };
                     next();
                 });
-                app.use(
-                    arbeidssoker(
-                        tokenDings,
-                        'http://localhost:9666',
-                        'http://localhost:9666',
-                        'dev-gcp',
-                        'http://localhost:9666',
-                    ),
-                );
+                app.use(arbeidssoker(tokenDings, 'http://localhost:9666', 'http://localhost:9666', 'dev-gcp'));
 
-                try {
-                    const response = await request(app).get('/er-arbeidssoker').set('authorization', 'token123');
-                    expect(response.statusCode).toEqual(200);
-                    expect(response.body).toEqual({ erArbeidssoker: true, erStandard: true, brukNyAia: true });
-                } finally {
-                    proxy.close();
-                }
+                const response = await request(app).get('/er-arbeidssoker').set('authorization', 'token123');
+                expect(response.statusCode).toEqual(200);
+                expect(response.body).toEqual({ erArbeidssoker: false, erStandard: false, brukNyAia: false });
             });
         });
     });

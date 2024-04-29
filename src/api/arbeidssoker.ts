@@ -10,7 +10,6 @@ import { Periode } from './data/dagpengerStatus/beregnArbeidssokerPerioder';
 import { plussDager } from '../lib/date-utils';
 import { ValidatedRequest } from '../middleware/token-validation';
 import nivaa4Authentication from '../middleware/nivaa4-authentication';
-import { getTokenXHeardersForArbeidssokerregisteret } from './arbeidssokerregisteret/oppslag';
 import { isEnabled } from 'unleash-client';
 
 interface Arbeidssokerperioder {
@@ -96,12 +95,10 @@ function arbeidssokerRoutes(
     veilarboppfolgingUrl = config.VEILARBOPPFOLGING_URL,
     veilarbregistreringUrl = config.VEILARBREGISTRERING_URL,
     naisCluster = config.NAIS_CLUSTER_NAME,
-    arbeidssokerregisteretApiUrl = config.ARBEIDSSOKERREGISTERET_OPPSLAG_API_URL,
 ) {
     const router = Router();
     const tokenXHeadersForVeilarbregistrering = getTokenXHeadersForVeilarbregistrering(tokenDings);
     const tokenXHeadersForVeilarboppfoling = getTokenXHeadersForVeilarboppfolging(tokenDings, naisCluster);
-    const tokenXHeadersForArbeidssokerregisteret = getTokenXHeardersForArbeidssokerregisteret(tokenDings);
     /**
      * @openapi
      * /arbeidssoker:
@@ -194,12 +191,12 @@ function arbeidssokerRoutes(
         }
 
         if (isEnabled('aia.bruk-opplysninger-om-arbeidssoker-api')) {
-            return res.send(
-                await hentFraArbeidssokerregisteret({
-                    ...getDefaultHeaders(req),
-                    ...(await tokenXHeadersForArbeidssokerregisteret(req)),
-                }),
-            );
+            // Bruker AiA som mikrofrontend togglet via kafka
+            return res.send({
+                erArbeidssoker: false,
+                erStandard: false,
+                brukNyAia: false,
+            });
         }
 
         const veilarbregistreringHeaders = {
@@ -224,27 +221,6 @@ function arbeidssokerRoutes(
 
         return res.send({ erArbeidssoker, erStandard, brukNyAia: false });
     });
-
-    async function hentFraArbeidssokerregisteret(headers: RawAxiosRequestHeaders) {
-        try {
-            const { data: perioder } = await axios(`${arbeidssokerregisteretApiUrl}/api/v1/arbeidssoekerperioder`, {
-                headers,
-            });
-
-            return {
-                erArbeidssoker: perioder?.length > 0,
-                erStandard: true,
-                brukNyAia: true,
-            };
-        } catch (e) {
-            axiosLogError(e as AxiosError);
-            return {
-                erArbeidssoker: false,
-                erStandard: false,
-                brukNyAia: true,
-            };
-        }
-    }
 
     async function hentUnderOppfolging(headers: RawAxiosRequestHeaders): Promise<UnderOppfolging> {
         try {
