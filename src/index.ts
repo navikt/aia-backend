@@ -51,6 +51,7 @@ async function setUpRoutes() {
         automatiskReaktiveringRepository,
         automatiskReaktiveringSvarRepository,
         automatiskReaktivertProducer,
+        microfrontendToggler,
     } = createDependencies();
 
     // Public routes
@@ -78,7 +79,7 @@ async function setUpRoutes() {
     router.use(dagpengerApi(await tokenDings));
     router.use(meldekortApi(await tokenDings));
     router.use(profilApi(profilRepository));
-    router.use(behovForVeiledningApi(behovRepository));
+    router.use(behovForVeiledningApi(behovRepository, await microfrontendToggler));
     router.use(dagpengerStatusApi(await tokenDings));
     router.use(meldekortInaktivering(await tokenDings));
     router.use(

@@ -10,6 +10,7 @@ import createAutomatiskReaktiveringSvarRepository, {
     AutomatiskReaktiveringSvarRepository,
 } from './db/automatiskReaktiveringSvarRepository';
 import createProducer, { KafkaProducer } from './kafka/automatisk-reaktivert-producer';
+import createMicrofrontendToggler, { MicrofrontendToggler } from './microfrontendToggler';
 
 export interface Dependencies {
     tokenDings: Promise<Auth>;
@@ -18,23 +19,25 @@ export interface Dependencies {
     automatiskReaktiveringRepository: AutomatiskReaktiveringRepository;
     automatiskReaktiveringSvarRepository: AutomatiskReaktiveringSvarRepository;
     automatiskReaktivertProducer: Promise<KafkaProducer>;
+    microfrontendToggler: Promise<MicrofrontendToggler>;
 }
 
 function createDependencies(): Dependencies {
     const prismaClient = new PrismaClient();
-
+    const tokenDings = createTokenDings({
+        tokenXWellKnownUrl: config.TOKEN_X_WELL_KNOWN_URL,
+        tokenXClientId: config.TOKEN_X_CLIENT_ID,
+        tokenXTokenEndpoint: config.TOKEN_X_TOKEN_ENDPOINT,
+        tokenXPrivateJwk: config.TOKEN_X_PRIVATE_JWK,
+    });
     return {
-        tokenDings: createTokenDings({
-            tokenXWellKnownUrl: config.TOKEN_X_WELL_KNOWN_URL,
-            tokenXClientId: config.TOKEN_X_CLIENT_ID,
-            tokenXTokenEndpoint: config.TOKEN_X_TOKEN_ENDPOINT,
-            tokenXPrivateJwk: config.TOKEN_X_PRIVATE_JWK,
-        }),
+        tokenDings,
         profilRepository: createProfilRepository(prismaClient),
         behovRepository: createBehovRepository(prismaClient),
         automatiskReaktiveringRepository: createAutomatiskReaktiveringRepository(prismaClient),
         automatiskReaktiveringSvarRepository: createAutomatiskReaktiveringSvarRepository(prismaClient),
         automatiskReaktivertProducer: createProducer(),
+        microfrontendToggler: createMicrofrontendToggler(tokenDings),
     };
 }
 

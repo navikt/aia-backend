@@ -4,6 +4,20 @@ import cookieParser from 'cookie-parser';
 import behovForVeiledning from '../../src/api/behovForVeiledning';
 import bodyParser from 'body-parser';
 import { ValidatedRequest } from '../../src/middleware/token-validation';
+import { MicrofrontendToggler } from '../../src/microfrontendToggler';
+import { BehovRepository } from '../../src/db/behovForVeiledningRepository';
+
+let isEnabledMock: jest.Mock;
+
+function isEnabled() {
+    return isEnabledMock();
+}
+
+jest.mock('unleash-client', () => {
+    return {
+        isEnabled,
+    };
+});
 
 export const mockAuthMiddleware: RequestHandler = (req, res, next) => {
     (req as ValidatedRequest).user = {
@@ -15,12 +29,16 @@ export const mockAuthMiddleware: RequestHandler = (req, res, next) => {
 };
 
 describe('behovForVeiledning API', () => {
-    let app: any;
+    let app: any, microfrontendToggler: MicrofrontendToggler;
 
     beforeEach(() => {
         app = express();
         app.use(cookieParser());
         app.use(bodyParser.json());
+        microfrontendToggler = {
+            toggle: jest.fn().mockReturnValue(Promise.resolve()),
+        };
+        isEnabledMock = jest.fn().mockReturnValue(false);
     });
 
     describe('GET', () => {
@@ -38,7 +56,7 @@ describe('behovForVeiledning API', () => {
             };
 
             app.use(mockAuthMiddleware);
-            app.use(behovForVeiledning(behovRepository));
+            app.use(behovForVeiledning(behovRepository, microfrontendToggler));
 
             const response = await request(app)
                 .get('/behov-for-veiledning')
@@ -60,7 +78,7 @@ describe('behovForVeiledning API', () => {
             };
 
             app.use(mockAuthMiddleware);
-            app.use(behovForVeiledning(behovRepository));
+            app.use(behovForVeiledning(behovRepository, microfrontendToggler));
 
             const response = await request(app)
                 .get('/behov-for-veiledning')
@@ -71,8 +89,10 @@ describe('behovForVeiledning API', () => {
     });
 
     describe('POST', () => {
-        it('lagrer og returnerer {oppfolging, dato, dialogId}', async () => {
-            const behovRepository = {
+        let behovRepository: BehovRepository;
+        beforeEach(() => {
+            jest.resetAllMocks();
+            behovRepository = {
                 hentBehov: jest.fn(),
                 lagreBehov: jest.fn().mockReturnValue(
                     Promise.resolve({
@@ -83,9 +103,11 @@ describe('behovForVeiledning API', () => {
                     }),
                 ),
             };
+        });
 
+        it('lagrer og returnerer {oppfolging, dato, dialogId}', async () => {
             app.use(mockAuthMiddleware);
-            app.use(behovForVeiledning(behovRepository));
+            app.use(behovForVeiledning(behovRepository, microfrontendToggler));
 
             const response = await request(app)
                 .post('/behov-for-veiledning')
@@ -110,6 +132,42 @@ describe('behovForVeiledning API', () => {
                 dialogId: 'dialog-id',
                 profileringId: 'profilering-id',
             });
+        });
+        it('gjør ikke microfrontend toggling når unleash er av', async () => {
+            app.use(mockAuthMiddleware);
+            app.use(behovForVeiledning(behovRepository, microfrontendToggler));
+
+            const response = await request(app)
+                .post('/behov-for-veiledning')
+                .send({
+                    oppfolging: 'SITUASJONSBESTEMT_INNSATS',
+                    dialogId: 'dialog-id-1',
+                    profileringId: 'profilering-id-1',
+                })
+                .set('authorization', 'token234');
+            console.log((microfrontendToggler.toggle as jest.Mock).length);
+            expect(microfrontendToggler.toggle).toHaveBeenCalledTimes(0);
+
+            expect(response.statusCode).toEqual(201);
+        });
+        it('toggler av aia-behovsvurdering-mf når unleash er på', async () => {
+            isEnabledMock.mockReturnValue(true);
+            app.use(mockAuthMiddleware);
+            app.use(behovForVeiledning(behovRepository, microfrontendToggler));
+
+            const response = await request(app)
+                .post('/behov-for-veiledning')
+                .send({
+                    oppfolging: 'SITUASJONSBESTEMT_INNSATS',
+                    dialogId: 'dialog-id-1',
+                    profileringId: 'profilering-id-1',
+                })
+                .set('authorization', 'token123');
+
+            expect(microfrontendToggler.toggle).toHaveBeenCalledTimes(1);
+            expect(microfrontendToggler.toggle).toHaveBeenCalledWith('disable', 'aia-behovsvurdering', 'token123');
+
+            expect(response.statusCode).toEqual(201);
         });
     });
 });

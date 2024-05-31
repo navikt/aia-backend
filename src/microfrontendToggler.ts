@@ -15,8 +15,15 @@ export const createGetTokenX = (tokenDings: Auth) => async (incomingToken: strin
     }
 };
 
-const createMicrofrontendToggler = (tokenDings: Auth, url = config.PAW_MICROFRONTEND_TOGGLER_URL) => {
-    const getTokenX = createGetTokenX(tokenDings);
+export interface MicrofrontendToggler {
+    toggle(action: 'enable' | 'disable', microfrontendId: string, userToken: string): Promise<void>;
+}
+
+const createMicrofrontendToggler = async (
+    tokenDings: Promise<Auth>,
+    url = config.PAW_MICROFRONTEND_TOGGLER_URL,
+): Promise<MicrofrontendToggler> => {
+    const getTokenX = createGetTokenX(await tokenDings);
     return {
         async toggle(action: 'enable' | 'disable', microfrontendId: string, userToken: string) {
             const traceId = v4();

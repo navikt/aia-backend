@@ -2,8 +2,14 @@ import { Router } from 'express';
 import logger from '../logger';
 import { BehovRepository } from '../db/behovForVeiledningRepository';
 import { ValidatedRequest } from '../middleware/token-validation';
+import { isEnabled } from 'unleash-client';
+import { MicrofrontendToggler } from '../microfrontendToggler';
+import { getTokenFromRequest } from '../auth/tokenDings';
 
-function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository) {
+function behovForVeiledningRoutes(
+    behovForVeiledningRepository: BehovRepository,
+    microfrontendToggler: MicrofrontendToggler,
+) {
     const router = Router();
 
     /**
@@ -93,6 +99,14 @@ function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository)
                 dialogId,
                 profileringId,
             });
+
+            if (isEnabled('aia.bruk-opplysninger-om-arbeidssoker-api')) {
+                try {
+                    await microfrontendToggler.toggle('disable', 'aia-behovsvurdering', getTokenFromRequest(req));
+                } catch (err) {
+                    // feil er allerede logget. Returner OK for bruker
+                }
+            }
 
             return res.status(201).send({
                 oppfolging: result.oppfolging,

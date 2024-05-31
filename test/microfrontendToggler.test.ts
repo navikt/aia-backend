@@ -29,7 +29,7 @@ describe('microfrontendToggler', () => {
         };
         const api = createApi(jest.fn());
         const server = api.listen(9812);
-        const toggler = createMicrofrontendToggler(tokenDings, 'http://localhost:9812');
+        const toggler = await createMicrofrontendToggler(Promise.resolve(tokenDings), 'http://localhost:9812');
 
         try {
             await toggler.toggle('disable', 'test', 'token');
@@ -49,7 +49,7 @@ describe('microfrontendToggler', () => {
         const spy = jest.fn();
         const api = createApi(spy);
         const server = api.listen(9813);
-        const toggler = createMicrofrontendToggler(tokenDings, 'http://localhost:9813');
+        const toggler = await createMicrofrontendToggler(Promise.resolve(tokenDings), 'http://localhost:9813');
 
         try {
             await toggler.toggle('disable', 'test', 'token');
@@ -67,7 +67,7 @@ describe('microfrontendToggler', () => {
         const api = createApi(jest.fn(), 500);
 
         const server = api.listen(9814);
-        const toggler = createMicrofrontendToggler(tokenDings, 'http://localhost:9814');
+        const toggler = await createMicrofrontendToggler(Promise.resolve(tokenDings), 'http://localhost:9814');
 
         try {
             expect.assertions(1);

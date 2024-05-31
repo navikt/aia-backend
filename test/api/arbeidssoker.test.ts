@@ -7,10 +7,15 @@ import { Auth } from '../../src/auth/tokenDings';
 import tokenValidation, { ValidatedRequest } from '../../src/middleware/token-validation';
 import { plussDager } from '../../src/lib/date-utils';
 
-let featureTogglePaa = false;
+let isEnabledMock: jest.Mock;
+
+function isEnabled() {
+    return isEnabledMock();
+}
+
 jest.mock('unleash-client', () => {
     return {
-        isEnabled: () => featureTogglePaa,
+        isEnabled,
     };
 });
 
@@ -84,6 +89,7 @@ describe('filtrerArbeidssokerPerioder', () => {
 describe('arbeidssoker api', () => {
     let tokenDings: Auth;
     beforeAll(() => {
+        isEnabledMock = jest.fn().mockReturnValue(false);
         tokenDings = {
             exchangeIDPortenToken(token: string, targetApp: string) {
                 return Promise.resolve({
@@ -169,9 +175,6 @@ describe('arbeidssoker api', () => {
     });
 
     describe('/er-arbeidssoker', () => {
-        beforeAll(() => {
-            featureTogglePaa = false;
-        });
         it('returnerer 401 når token mangler', (done) => {
             const app = express();
             app.use(cookieParser());
@@ -246,7 +249,7 @@ describe('arbeidssoker api', () => {
 
         describe('nytt arbeidssokerregister', () => {
             beforeAll(() => {
-                featureTogglePaa = true;
+                isEnabledMock.mockReturnValue(true);
             });
 
             it('returnerer false når togglet på', async () => {
