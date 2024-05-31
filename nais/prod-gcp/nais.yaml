@@ -80,6 +80,8 @@ spec:
       value: http://paw-arbeidssoekerregisteret-api-oppslag
     - name: ARBEIDSSOKERREGISTERET_INNGANG_API_URL
       value: http://paw-arbeidssokerregisteret-api-inngang
+    - name: PAW_MICROFRONTEND_TOGGLER_URL
+      value: http://paw-microfrontend-toggler
   resources:
     limits:
       cpu: "3"
@@ -111,6 +113,7 @@ spec:
       rules:
         - application: paw-arbeidssoekerregisteret-api-oppslag
         - application: paw-arbeidssokerregisteret-api-inngang
+        - application: paw-microfrontend-toggler
         - application: dp-innsyn
           namespace: teamdagpenger
         - application: meldekort-api
