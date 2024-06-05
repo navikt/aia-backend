@@ -93,6 +93,7 @@ spec:
     inbound:
       rules:
         - application: arbeidssokerregistrering
+        - application: arbeidssokerregistrering-for-veileder
         - application: paw-reaktiver-arbeidssoker
         - application: tms-min-side-proxy
           namespace: min-side
