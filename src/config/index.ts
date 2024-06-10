@@ -23,11 +23,6 @@ export interface IEnvironmentVariables {
     AZURE_OPENID_CONFIG_TOKEN_ENDPOINT: string;
     AZURE_APP_CLIENT_SECRET: string;
     APP_NAME: string;
-    KAFKA_TOPIC: string;
-    KAFKA_BROKERS: string;
-    KAFKA_CERTIFICATE: string;
-    KAFKA_CA: string;
-    KAFKA_PRIVATE_KEY: string;
     BESVARELSE_URL: string;
     SSO_NAV_COOKIE: string;
     OPPGAVE_URL: string;

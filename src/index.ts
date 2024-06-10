@@ -21,8 +21,6 @@ import logger, { pinoHttpMiddleware } from './logger';
 import config from './config';
 import createDependencies from './deps';
 import meldekortInaktivering from './api/data/meldekortInaktivering';
-import automatiskReaktiveringApi from './api/reaktivering/automatiskReaktivering';
-import reaktiveringApi from './api/reaktivering/automatiskReaktiveringSvar';
 import tokenValidation from './middleware/token-validation';
 import nivaa4Authentication from './middleware/nivaa4-authentication';
 import veilederApi from './api/veileder';
@@ -44,15 +42,7 @@ app.use(cors({ origin: /\.nav\.no$/, credentials: true }));
 app.disable('x-powered-by');
 
 async function setUpRoutes() {
-    const {
-        tokenDings,
-        profilRepository,
-        behovRepository,
-        automatiskReaktiveringRepository,
-        automatiskReaktiveringSvarRepository,
-        automatiskReaktivertProducer,
-        microfrontendToggler,
-    } = createDependencies();
+    const { tokenDings, profilRepository, behovRepository, microfrontendToggler } = createDependencies();
 
     // Public routes
     router.use(swaggerDocs());
@@ -61,9 +51,6 @@ async function setUpRoutes() {
 
     // veileder routes - ingen auth middleware
     router.use(veilederApi(await behovRepository));
-
-    // azure ad
-    router.use(automatiskReaktiveringApi(automatiskReaktiveringRepository, await automatiskReaktivertProducer));
 
     // id porten
     // router.use(idportenAuthentication);
@@ -82,13 +69,6 @@ async function setUpRoutes() {
     router.use(behovForVeiledningApi(behovRepository, await microfrontendToggler));
     router.use(dagpengerStatusApi(await tokenDings));
     router.use(meldekortInaktivering(await tokenDings));
-    router.use(
-        reaktiveringApi(
-            automatiskReaktiveringRepository,
-            automatiskReaktiveringSvarRepository,
-            await automatiskReaktivertProducer,
-        ),
-    );
     router.use(besvarelseApi(await tokenDings));
     router.use(oppgaveApi(config.OPPGAVE_API_SCOPE));
 

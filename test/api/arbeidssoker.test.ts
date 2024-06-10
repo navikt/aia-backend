@@ -186,7 +186,7 @@ describe('arbeidssoker api', () => {
 
         it('returnerer true når underoppfolging ELLER ikke tom perioder', async () => {
             const proxyServer = getProxyServer();
-            const proxy = proxyServer.listen(7666);
+            const proxy = proxyServer.listen(7667);
 
             const app = express();
             app.use(cookieParser());
@@ -199,7 +199,7 @@ describe('arbeidssoker api', () => {
                 };
                 next();
             });
-            app.use(arbeidssoker(tokenDings, 'http://localhost:7666', 'http://localhost:7666', 'dev-gcp'));
+            app.use(arbeidssoker(tokenDings, 'http://localhost:7667', 'http://localhost:7667', 'dev-gcp'));
 
             try {
                 const response = await request(app).get('/er-arbeidssoker').set('authorization', 'token123');
@@ -231,12 +231,12 @@ describe('arbeidssoker api', () => {
 
         it('returnerer false når ikke underoppfolging og tom periode', async () => {
             const proxyServer = getProxyServerIkkeArbeidssoker();
-            const proxy = proxyServer.listen(7666);
+            const proxy = proxyServer.listen(7668);
 
             const app = express();
             app.use(cookieParser());
             app.use(bodyParser.json());
-            app.use(arbeidssoker(tokenDings, 'http://localhost:7666', 'http://localhost:7666', 'dev-gcp'));
+            app.use(arbeidssoker(tokenDings, 'http://localhost:7668', 'http://localhost:7668', 'dev-gcp'));
 
             try {
                 const response = await request(app).get('/er-arbeidssoker').set('authorization', 'token123');
