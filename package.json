@@ -35,9 +35,9 @@
     "pino-http": "10.1.0",
     "prom-client": "15.1.2",
     "swagger-jsdoc": "6.2.8",
-    "swagger-ui-express": "5.0.0",
+    "swagger-ui-express": "5.0.1",
     "ulid": "2.3.0",
-    "unleash-client": "5.5.2",
+    "unleash-client": "5.5.4",
     "uuid": "9.0.1"
   },
   "devDependencies": {
@@ -64,7 +64,7 @@
     "prettier": "3.2.5",
     "prisma": "5.13.0",
     "supertest": "7.0.0",
-    "ts-jest": "29.1.2",
+    "ts-jest": "29.1.5",
     "ts-node-dev": "2.0.0",
     "typescript": "5.4.5"
   },
