@@ -9,7 +9,7 @@ spec:
   observability:
     autoInstrumentation:
       enabled: true
-      runtime: sdk
+      runtime: nodejs
   image: {{image}}
   port: 3000
   azure:
