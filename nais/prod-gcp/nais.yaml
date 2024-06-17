@@ -9,6 +9,10 @@ metadata:
     config.linkerd.io/proxy-memory-limit: 512Mi
     config.linkerd.io/proxy-memory-request: 128Mi
 spec:
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: nodejs
   image: {{image}}
   port: 3000
   azure:
