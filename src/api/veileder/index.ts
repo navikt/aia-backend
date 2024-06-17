@@ -3,6 +3,7 @@ import config from '../../config';
 import { getDefaultHeaders, proxyHttpCall } from '../../http';
 import axios, { AxiosError } from 'axios';
 import { BehovRepository } from '../../db/behovForVeiledningRepository';
+import logger from '../../logger';
 
 function veilederApi(behovForVeiledningRepository: BehovRepository, besvarelseUrl = config.BESVARELSE_URL) {
     const router = Router();
@@ -44,7 +45,8 @@ function veilederApi(behovForVeiledningRepository: BehovRepository, besvarelseUr
                     res.status(204).end();
                 }
             }
-        } catch (err) {
+        } catch (err: any) {
+            logger.error(`Feil i /veileder/behov-for-veiledning: ${err.message}`, err);
             const errorResponse = (err as AxiosError).response;
             res.status(errorResponse?.status || 500).end();
         }
