@@ -1,10 +1,8 @@
-import { getDefaultHeaders, proxyTokenXCall } from '../http';
+import { proxyTokenXCall } from '../http';
 import config from '../config';
 import { Request, Router } from 'express';
 import { Auth, getTokenFromRequest } from '../auth/tokenDings';
-import logger, { axiosLogError, getCustomLogProps } from '../logger';
-import { ValidatedRequest } from '../middleware/token-validation';
-import axios, { AxiosError } from 'axios';
+import logger from '../logger';
 
 export const getTokenXHeadersForVeilarbregistrering = (tokenDings: Auth) => async (req: Request) => {
     const VEILARBREGISTRERING_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:paw:veilarbregistrering`;
@@ -22,58 +20,58 @@ function veilarbregistrering(tokenDings: Auth, veilarbregistreringUrl = config.V
     const router = Router();
     const getTokenXHeaders = getTokenXHeadersForVeilarbregistrering(tokenDings);
 
-    /**
-     * @openapi
-     * /fullfoerreaktivering:
-     *   post:
-     *     description: Gjennomfører enkel reaktivering av en bruker.
-     *     responses:
-     *       204: Bruker er reaktivert
-     *       401:
-     *         $ref: '#/components/schemas/Unauthorized'
-     */
-    router.post(
-        '/fullfoerreaktivering',
-        proxyTokenXCall(`${veilarbregistreringUrl}/veilarbregistrering/api/fullfoerreaktivering`, getTokenXHeaders),
-    );
+    // /**
+    //  * @openapi
+    //  * /fullfoerreaktivering:
+    //  *   post:
+    //  *     description: Gjennomfører enkel reaktivering av en bruker.
+    //  *     responses:
+    //  *       204: Bruker er reaktivert
+    //  *       401:
+    //  *         $ref: '#/components/schemas/Unauthorized'
+    //  */
+    // router.post(
+    //     '/fullfoerreaktivering',
+    //     proxyTokenXCall(`${veilarbregistreringUrl}/veilarbregistrering/api/fullfoerreaktivering`, getTokenXHeaders),
+    // );
 
-    /**
-     * @openapi
-     * /kan-reaktiveres:
-     *   post:
-     *     description: Sjekker om bruker kan reaktiveres.
-     *     responses:
-     *       200: $ref: '#/components/schemas/KanReaktiveresDto'
-     *       401:
-     *         $ref: '#/components/schemas/Unauthorized'
-     */
-    router.get('/kan-reaktiveres', async (req, res) => {
-        try {
-            const fnr = (req as ValidatedRequest).user.fnr;
-            const {
-                data: bodyStream,
-                status,
-                headers,
-            } = await axios(`${veilarbregistreringUrl}/veilarbregistrering/api/kan-reaktiveres`, {
-                method: 'POST',
-                data: { fnr },
-                headers: {
-                    ...getDefaultHeaders(req),
-                    ...(await getTokenXHeaders(req)),
-                },
-                responseType: 'stream',
-            });
-
-            res.status(status);
-            res.set(headers);
-            return bodyStream.pipe(res);
-        } catch (err) {
-            const axiosError = err as AxiosError;
-            const status = axiosError.response?.status || 500;
-            axiosLogError(axiosError, getCustomLogProps(req));
-            return res.status(status).send((err as Error).message);
-        }
-    });
+    // /**
+    //  * @openapi
+    //  * /kan-reaktiveres:
+    //  *   post:
+    //  *     description: Sjekker om bruker kan reaktiveres.
+    //  *     responses:
+    //  *       200: $ref: '#/components/schemas/KanReaktiveresDto'
+    //  *       401:
+    //  *         $ref: '#/components/schemas/Unauthorized'
+    //  */
+    // router.get('/kan-reaktiveres', async (req, res) => {
+    //     try {
+    //         const fnr = (req as ValidatedRequest).user.fnr;
+    //         const {
+    //             data: bodyStream,
+    //             status,
+    //             headers,
+    //         } = await axios(`${veilarbregistreringUrl}/veilarbregistrering/api/kan-reaktiveres`, {
+    //             method: 'POST',
+    //             data: { fnr },
+    //             headers: {
+    //                 ...getDefaultHeaders(req),
+    //                 ...(await getTokenXHeaders(req)),
+    //             },
+    //             responseType: 'stream',
+    //         });
+    //
+    //         res.status(status);
+    //         res.set(headers);
+    //         return bodyStream.pipe(res);
+    //     } catch (err) {
+    //         const axiosError = err as AxiosError;
+    //         const status = axiosError.response?.status || 500;
+    //         axiosLogError(axiosError, getCustomLogProps(req));
+    //         return res.status(status).send((err as Error).message);
+    //     }
+    // });
     /**
      * @openapi
      * /standard-innsats:
