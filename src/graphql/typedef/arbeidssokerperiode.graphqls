@@ -1,0 +1,17 @@
+type ArbeidssokerperiodeUtfoertAv {
+    type: String!
+}
+
+type ArbeidssokerperiodeMetadata {
+    tidspunkt: String
+    utfoertAv: ArbeidssokerperiodeUtfoertAv
+    kilde: String
+    aarsak: String
+}
+
+# Todo: Legg til opplysninger og profilering til perioden
+type ArbeidssokerPeriode {
+    periodeId: String!
+    startet: ArbeidssokerperiodeMetadata
+    avsluttet: ArbeidssokerperiodeMetadata
+}
