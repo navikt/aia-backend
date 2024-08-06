@@ -107,13 +107,13 @@ const setUpGraphQL = async () => {
 
 const startServer = async () => {
     try {
+        await setUpRoutes();
         app.use(
             `${config.BASE_PATH || ''}/graphql`,
             expressMiddleware(await setUpGraphQL(), {
                 context: async ({ req }) => ({ token: getTokenFromHeader(req) }),
             }),
         );
-        await setUpRoutes();
         logger.info(`Starting server...`);
         app.listen(PORT, () => {
             logger.info('Server running at http://localhost:3000');
