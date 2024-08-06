@@ -21,7 +21,7 @@ export async function arbeidssokerregisteretOppslagApi(
     }
 
     try {
-        logger.debug(`Gjør graphQL data-oppslog til ${url}/${path}, traceId=${traceId}`);
+        logger.info(`Gjør graphQL data-oppslog mot ${url}/${path}, traceId=${traceId}`);
         const { data } = await axios(`${url}/${path}`, {
             method: 'GET',
             headers: {
@@ -30,6 +30,7 @@ export async function arbeidssokerregisteretOppslagApi(
                 Authorization: `Bearer ${tokenX.token}`,
             },
         });
+        logger.info(`Ferdig med data-oppslog mot ${url}/${path}, traceId=${traceId}`);
         return data;
     } catch (err: any) {
         logger.error(`Feil => traceId=${traceId}, error=${err.message}`);
