@@ -24,8 +24,7 @@ jobs:
                 team: paw
                 identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
                 project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
-            - env:
-                NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+                build_secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
         outputs:
           image: ${{ steps.docker-build-push.outputs.image }}
 
