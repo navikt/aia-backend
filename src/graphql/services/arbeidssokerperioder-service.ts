@@ -2,7 +2,7 @@ import config from '../../config';
 import axios from 'axios';
 import { v4 } from 'uuid';
 import logger from '../../logger';
-import { requestOboToken } from '@navikt/oasis';
+import { requestTokenxOboToken } from '@navikt/oasis';
 
 export async function arbeidssokerregisteretOppslagApi(
     path: string,
@@ -11,7 +11,7 @@ export async function arbeidssokerregisteretOppslagApi(
 ) {
     const traceId = v4();
     const ARBEIDSSOKERREGISTERET_CLIENT_ID = `${config.NAIS_CLUSTER_NAME}:paw:paw-arbeidssoekerregisteret-api-oppslag`;
-    const tokenX = await requestOboToken(token, ARBEIDSSOKERREGISTERET_CLIENT_ID);
+    const tokenX = await requestTokenxOboToken(token, ARBEIDSSOKERREGISTERET_CLIENT_ID);
 
     if (!tokenX.ok) {
         throw new Error(
