@@ -96,17 +96,19 @@ async function setUpRoutes() {
 }
 
 const setUpGraphQL = async () => {
+    logger.info('Starting ApolloServer...');
     const server = new ApolloServer({
         schema,
     });
     await server.start();
+    logger.info('ApolloServer running');
     return server;
 };
 
 const startServer = async () => {
     try {
         app.use(
-            '/graphql',
+            `${config.BASE_PATH || ''}/graphql`,
             expressMiddleware(await setUpGraphQL(), {
                 context: async ({ req }) => ({ token: getTokenFromHeader(req) }),
             }),
