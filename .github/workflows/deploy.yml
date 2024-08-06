@@ -11,6 +11,7 @@ jobs:
         name: Test, build and push
         permissions:
           contents: "read"
+          packages: 'write'
           id-token: "write"
         runs-on: ubuntu-latest
         steps:
