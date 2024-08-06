@@ -33,6 +33,7 @@ import inngangRoutes from './api/arbeidssokerregisteret/inngang';
 import { ApolloServer } from '@apollo/server';
 import schema from './graphql/schema';
 import { expressMiddleware } from '@apollo/server/express4';
+import { getTokenFromHeader } from './auth/tokenDings';
 
 const PORT = 3000;
 const app = express();
@@ -104,7 +105,12 @@ const setUpGraphQL = async () => {
 
 const startServer = async () => {
     try {
-        app.use('/graphql', expressMiddleware(await setUpGraphQL()));
+        app.use(
+            '/graphql',
+            expressMiddleware(await setUpGraphQL(), {
+                context: async ({ req }) => ({ token: getTokenFromHeader(req) }),
+            }),
+        );
         await setUpRoutes();
         logger.info(`Starting server...`);
         app.listen(PORT, () => {
