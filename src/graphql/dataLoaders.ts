@@ -1,8 +1,8 @@
-import config from '../../config';
 import axios from 'axios';
 import { v4 } from 'uuid';
-import logger from '../../logger';
 import { requestTokenxOboToken } from '@navikt/oasis';
+import logger from '../logger';
+import config from '../config';
 
 export async function arbeidssokerregisteretOppslagApi(
     path: string,
