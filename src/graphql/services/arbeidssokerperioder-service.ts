@@ -41,3 +41,7 @@ export async function arbeidssokerregisteretOppslagApi(
 export async function getArbeidssokerperioder(token: string) {
     return arbeidssokerregisteretOppslagApi('/api/v1/arbeidssoekerperioder', token);
 }
+
+export async function getOpplysninger(token: string, periodeId: string) {
+    return arbeidssokerregisteretOppslagApi(`/api/v1/opplysninger-om-arbeidssoeker/${periodeId}`, token);
+}
