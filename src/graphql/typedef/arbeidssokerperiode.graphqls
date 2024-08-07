@@ -9,10 +9,10 @@ type ArbeidssokerperiodeMetadata {
     aarsak: String
 }
 
-# Todo: Legg til opplysninger og profilering til perioden
 type ArbeidssokerPeriode {
     periodeId: String!
     startet: ArbeidssokerperiodeMetadata
     avsluttet: ArbeidssokerperiodeMetadata
     opplysninger: [Opplysninger]
+    profilering: [Profilering]
 }

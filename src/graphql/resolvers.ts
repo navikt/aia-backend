@@ -1,4 +1,4 @@
-import { getArbeidssokerperioder, getOpplysninger } from './services/arbeidssokerperioder-service';
+import { getArbeidssokerperioder, getOpplysninger, getProfilering } from './services/arbeidssokerperioder-service';
 
 const resolvers = {
     Query: {
@@ -9,6 +9,9 @@ const resolvers = {
     ArbeidssokerPeriode: {
         opplysninger: async (parent: any, args: any, context: any) => {
             return getOpplysninger(context.token, parent.periodeId);
+        },
+        profilering: async (parent: any, args: any, context: any) => {
+            return getProfilering(context.token, parent.periodeId);
         },
     },
 };
@@ -34,7 +37,6 @@ const resolvers = {
 //     },
 //     ArbeidssokerPeriode: {
 //         opplysninger: async (parent: any, args: any, context: any) => {
-//             console.log('parent?', parent)
 //             return [
 //                 {
 //                     opplysningerOmArbeidssoekerId: '9077e4b5-807c-4568-9e04-8bf06e49d9fc',
@@ -85,6 +87,26 @@ const resolvers = {
 //                 },
 //             ];
 //         },
+//         profilering: async (parent: any, args: any, context: any) => {
+//             return [
+//                 {
+//                     profileringId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+//                     periodeId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+//                     opplysningerOmArbeidssoekerId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+//                     sendtInnAv: {
+//                         tidspunkt: '2021-09-29T11:22:33.444Z',
+//                         utfoertAv: {
+//                             type: 'UKJENT_VERDI',
+//                         },
+//                         kilde: 'string',
+//                         aarsak: 'string',
+//                     },
+//                     profilertTil: 'ANTATT_GODE_MULIGHETER',
+//                     jobbetSammenhengendeSeksAvTolvSisteManeder: true,
+//                     alder: 42,
+//                 },
+//             ];
+//         }
 //     },
 // };
 
