@@ -1,6 +1,6 @@
 const mockResolvers = {
     Query: {
-        perioder: async (parent: any, args: any, context: any) => {
+        perioder: () => {
             return [
                 {
                     periodeId: 'eb39f0ee-ddba-42a1-8ed3-590285b2e279',
@@ -18,7 +18,7 @@ const mockResolvers = {
         },
     },
     ArbeidssokerPeriode: {
-        opplysninger: async (parent: any, args: any, context: any) => {
+        opplysninger: () => {
             return [
                 {
                     opplysningerOmArbeidssoekerId: '9077e4b5-807c-4568-9e04-8bf06e49d9fc',
@@ -55,7 +55,7 @@ const mockResolvers = {
                 },
             ];
         },
-        profilering: async (parent: any, args: any, context: any) => {
+        profilering: () => {
             return [
                 {
                     profileringId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',

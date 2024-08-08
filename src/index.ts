@@ -34,6 +34,8 @@ import { ApolloServer } from '@apollo/server';
 import schema from './graphql/schema';
 import { expressMiddleware } from '@apollo/server/express4';
 import { getTokenFromHeader } from './auth/tokenDings';
+import http from 'http';
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 
 const PORT = 3000;
 const app = express();
@@ -56,6 +58,7 @@ app.use(
 );
 app.use(cors({ origin: /\.nav\.no$/, credentials: true }));
 app.disable('x-powered-by');
+const httpServer = http.createServer(app);
 
 async function setUpRoutes() {
     const { tokenDings, profilRepository, behovRepository, microfrontendToggler } = createDependencies();
@@ -99,23 +102,28 @@ const setUpGraphQL = async () => {
     logger.info('Starting ApolloServer...');
     const server = new ApolloServer({
         schema,
+        plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
     });
     await server.start();
     logger.info('ApolloServer running');
-    return server;
+
+    const middleware = [
+        process.env.NODE_ENV !== 'development' ? tokenValidation : undefined,
+        process.env.NODE_ENV !== 'development' ? nivaa4Authentication : undefined,
+        expressMiddleware(server, {
+            context: async ({ req }) => ({ token: getTokenFromHeader(req) ?? '' }),
+        }),
+    ].filter((i) => i !== undefined);
+
+    app.use(`${config.BASE_PATH || ''}/graphql`, ...middleware);
 };
 
 const startServer = async () => {
     try {
+        await setUpGraphQL();
         await setUpRoutes();
-        app.use(
-            `${config.BASE_PATH || ''}/graphql`,
-            expressMiddleware(await setUpGraphQL(), {
-                context: async ({ req }) => ({ token: getTokenFromHeader(req) }),
-            }),
-        );
         logger.info(`Starting server...`);
-        app.listen(PORT, () => {
+        httpServer.listen(PORT, () => {
             logger.info('Server running at http://localhost:3000');
         });
     } catch (err) {
