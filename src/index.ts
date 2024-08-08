@@ -108,8 +108,8 @@ const setUpGraphQL = async () => {
     logger.info('ApolloServer running');
 
     const middleware = [
-        process.env.NODE_ENV !== 'development' ? tokenValidation : undefined,
-        process.env.NODE_ENV !== 'development' ? nivaa4Authentication : undefined,
+        // process.env.NODE_ENV !== 'development' ? tokenValidation : undefined,
+        // process.env.NODE_ENV !== 'development' ? nivaa4Authentication : undefined,
         expressMiddleware(server, {
             context: async ({ req }) => ({ token: getTokenFromHeader(req) ?? '' }),
         }),
