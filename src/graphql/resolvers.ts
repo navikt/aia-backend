@@ -1,16 +1,17 @@
 import { getArbeidssokerperioder, getOpplysninger, getProfilering } from './dataLoaders';
+import { Resolvers } from './resolver-types.generated';
 
-const resolvers = {
+const resolvers: Partial<Resolvers> = {
     Query: {
-        perioder: async (parent: any, args: any, context: any) => {
+        perioder: async (parent, args, context) => {
             return getArbeidssokerperioder(context.token);
         },
     },
     ArbeidssokerPeriode: {
-        opplysninger: async (parent: any, args: any, context: any) => {
+        opplysninger: async (parent, args, context) => {
             return getOpplysninger(context.token, parent.periodeId);
         },
-        profilering: async (parent: any, args: any, context: any) => {
+        profilering: async (parent, args, context) => {
             return getProfilering(context.token, parent.periodeId);
         },
     },
