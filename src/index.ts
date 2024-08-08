@@ -103,6 +103,7 @@ const setUpGraphQL = async () => {
     const server = new ApolloServer({
         schema,
         plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+        introspection: true,
     });
     await server.start();
     logger.info('ApolloServer running');
