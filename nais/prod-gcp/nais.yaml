@@ -104,14 +104,9 @@ spec:
         - application: paw-arbeidssoekerregisteret-api-oppslag
         - application: paw-arbeidssokerregisteret-api-inngang
         - application: paw-microfrontend-toggler
-        - application: dp-innsyn
-          namespace: teamdagpenger
-        - application: meldekort-api
-          namespace: meldekort
         - application: veilarbdialog
           namespace: pto
           cluster: prod-fss
-        - application: veilarbregistrering
         - application: paw-arbeidssoker-besvarelse
         - application: veilarboppfolging
           namespace: pto
