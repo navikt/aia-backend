@@ -14,7 +14,6 @@ import meldekortApi from './api/meldekort';
 import profilApi from './api/profil';
 import behovForVeiledningApi from './api/behovForVeiledning';
 import arbeidssokerApi from './api/arbeidssoker';
-import veilarbregistreringApi from './api/veilarbregistrering';
 import besvarelseApi from './api/besvarelse';
 import swaggerDocs from './api/swagger';
 import dagpengerStatusApi from './api/data/dagpengerStatus';
@@ -81,7 +80,6 @@ async function setUpRoutes() {
     router.use(nivaa4Authentication);
     router.use(vedtakinfoApi(await tokenDings));
     router.use(dialogRoutes(await tokenDings));
-    router.use(veilarbregistreringApi(await tokenDings));
     router.use(dagpengerApi(await tokenDings));
     router.use(meldekortApi(await tokenDings));
     router.use(profilApi(profilRepository));
