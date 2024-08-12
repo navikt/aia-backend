@@ -10,7 +10,6 @@ export interface IEnvironmentVariables {
     DAGPENGER_INNSYN_URL: string;
     VEILARBDIALOG_API_URL: string;
     DIALOG_APP_NAME: string;
-    VEILARBREGISTRERING_URL: string;
     VEILARBOPPFOLGING_URL: string;
     VEILARBVEDTAKINFO_URL: string;
     NAIS_CLUSTER_NAME: string;

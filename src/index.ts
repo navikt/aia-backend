@@ -16,17 +16,14 @@ import behovForVeiledningApi from './api/behovForVeiledning';
 import arbeidssokerApi from './api/arbeidssoker';
 import besvarelseApi from './api/besvarelse';
 import swaggerDocs from './api/swagger';
-import dagpengerStatusApi from './api/data/dagpengerStatus';
 import bodyParser from 'body-parser';
 import logger, { pinoHttpMiddleware } from './logger';
 import config from './config';
 import createDependencies from './deps';
-import meldekortInaktivering from './api/data/meldekortInaktivering';
 import tokenValidation from './middleware/token-validation';
 import nivaa4Authentication from './middleware/nivaa4-authentication';
 import veilederApi from './api/veileder';
 import oppgaveApi from './api/oppgave';
-import arbeidssokerInnhold from './api/data/arbeidssokerInnhold';
 import arbeidssokerregisteretApi from './api/arbeidssokerregisteret/oppslag';
 import inngangRoutes from './api/arbeidssokerregisteret/inngang';
 import { ApolloServer } from '@apollo/server';
@@ -74,7 +71,7 @@ async function setUpRoutes() {
     // router.use(idportenAuthentication);
     router.use(tokenValidation);
 
-    router.use(arbeidssokerApi(await tokenDings));
+    router.use(arbeidssokerApi());
 
     // level4
     router.use(nivaa4Authentication);
@@ -84,12 +81,9 @@ async function setUpRoutes() {
     router.use(meldekortApi(await tokenDings));
     router.use(profilApi(profilRepository));
     router.use(behovForVeiledningApi(behovRepository, await microfrontendToggler));
-    router.use(dagpengerStatusApi(await tokenDings));
-    router.use(meldekortInaktivering(await tokenDings));
     router.use(besvarelseApi(await tokenDings));
     router.use(oppgaveApi(config.OPPGAVE_API_SCOPE));
 
-    router.use(arbeidssokerInnhold(await tokenDings));
     router.use('/arbeidssokerregisteret', arbeidssokerregisteretApi(await tokenDings));
     router.use('/arbeidssokerregisteret/inngang', inngangRoutes(await tokenDings));
 

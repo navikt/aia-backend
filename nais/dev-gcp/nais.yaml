@@ -54,8 +54,6 @@ spec:
       value: https://veilarbdialog.dev-fss-pub.nais.io/veilarbdialog/api
     - name: DIALOG_APP_NAME
       value: veilarbdialog
-    - name: VEILARBREGISTRERING_URL
-      value: http://veilarbregistrering
     - name: VEILARBOPPFOLGING_URL
       value: https://veilarboppfolging.dev-fss-pub.nais.io
     - name: VEILARBVEDTAKINFO_URL
