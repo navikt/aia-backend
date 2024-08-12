@@ -7,7 +7,6 @@ export interface IEnvironmentVariables {
     TOKEN_X_ISSUER: string;
     UNLEASH_SERVER_API_URL: string;
     UNLEASH_SERVER_API_TOKEN: string;
-    DAGPENGER_INNSYN_URL: string;
     VEILARBDIALOG_API_URL: string;
     DIALOG_APP_NAME: string;
     VEILARBOPPFOLGING_URL: string;

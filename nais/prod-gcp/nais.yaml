@@ -56,8 +56,6 @@ spec:
       value: https://veilarboppfolging.prod-fss-pub.nais.io
     - name: VEILARBVEDTAKINFO_URL
       value: https://veilarbvedtakinfo.prod-fss-pub.nais.io
-    - name: DAGPENGER_INNSYN_URL
-      value: http://dp-innsyn.teamdagpenger.svc.cluster.local
     - name: BESVARELSE_URL
       value: http://paw-arbeidssoker-besvarelse
     - name: SSO_NAV_COOKIE

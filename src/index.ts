@@ -9,7 +9,6 @@ import healhApi from './api/health';
 import unleashApi from './api/unleash';
 import vedtakinfoApi from './api/vedtakinfo';
 import dialogRoutes from './api/dialog';
-import dagpengerApi from './api/dagpenger';
 import profilApi from './api/profil';
 import behovForVeiledningApi from './api/behovForVeiledning';
 import arbeidssokerApi from './api/arbeidssoker';
@@ -76,7 +75,6 @@ async function setUpRoutes() {
     router.use(nivaa4Authentication);
     router.use(vedtakinfoApi(await tokenDings));
     router.use(dialogRoutes(await tokenDings));
-    router.use(dagpengerApi(await tokenDings));
     router.use(profilApi(profilRepository));
     router.use(behovForVeiledningApi(behovRepository, await microfrontendToggler));
     router.use(besvarelseApi(await tokenDings));
