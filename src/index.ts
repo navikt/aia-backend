@@ -12,7 +12,6 @@ import dialogRoutes from './api/dialog';
 import profilApi from './api/profil';
 import behovForVeiledningApi from './api/behovForVeiledning';
 import arbeidssokerApi from './api/arbeidssoker';
-import besvarelseApi from './api/besvarelse';
 import swaggerDocs from './api/swagger';
 import bodyParser from 'body-parser';
 import logger, { pinoHttpMiddleware } from './logger';
@@ -77,7 +76,6 @@ async function setUpRoutes() {
     router.use(dialogRoutes(await tokenDings));
     router.use(profilApi(profilRepository));
     router.use(behovForVeiledningApi(behovRepository, await microfrontendToggler));
-    router.use(besvarelseApi(await tokenDings));
     router.use(oppgaveApi(config.OPPGAVE_API_SCOPE));
 
     router.use('/arbeidssokerregisteret', arbeidssokerregisteretApi(await tokenDings));
