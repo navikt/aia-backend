@@ -48,10 +48,6 @@ spec:
       value: www.nav.no
     - name: CORS_ALLOWED_SCHEMES
       value: https
-    - name: MELDEKORT_APP_NAME
-      value: meldekort-api
-    - name: MELDEKORT_URL
-      value: http://meldekort-api.meldekort.svc.cluster.local/meldekort/meldekort-api/api/person
     - name: VEILARBDIALOG_API_URL
       value: https://veilarbdialog.prod-fss-pub.nais.io/veilarbdialog/api
     - name: DIALOG_APP_NAME

@@ -14,8 +14,6 @@ export interface IEnvironmentVariables {
     VEILARBVEDTAKINFO_URL: string;
     NAIS_CLUSTER_NAME: string;
     BASE_PATH: string;
-    MELDEKORT_APP_NAME: string;
-    MELDEKORT_URL: string;
     IDPORTEN_JWKS_URI: string;
     AZURE_APP_WELL_KNOWN_URL: string;
     AZURE_APP_CLIENT_ID: string;
