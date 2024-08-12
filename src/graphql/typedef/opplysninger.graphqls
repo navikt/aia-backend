@@ -1,0 +1,50 @@
+type UtfoertAv {
+    type: String
+    id: String
+}
+
+type SendtInnAv {
+    tidspunkt: String
+    utfoertAv: UtfoertAv
+    kilde: String
+    aarsak: String
+}
+
+type Utdanning {
+    nus: String!
+    bestaatt: String
+    godkjent: String
+}
+
+type Helse {
+    helsetilstandHindrerArbeid: String
+}
+
+type Annet {
+    andreForholdHindrerArbeid: String
+}
+
+type JobbsituasjonDetaljer {
+    gjelder_fra_dato_iso8601: String
+    gjelder_til_dato_iso8601: String
+    stilling: String
+    stilling_styrk08: String
+    prosent: String
+    siste_dag_med_loenn_iso8601: String
+    siste_arbeidsdag_iso8601: String
+}
+
+type Jobbsituasjon {
+    beskrivelse: String
+    detaljer: JobbsituasjonDetaljer
+}
+
+type Opplysninger {
+    opplysningerOmArbeidssoekerId: String!
+    periodeId: String!
+    sendtInnAv: SendtInnAv
+    utdanning: Utdanning
+    helse: Helse
+    annet: Annet
+    jobbsituasjon: [Jobbsituasjon]
+}

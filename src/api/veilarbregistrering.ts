@@ -43,7 +43,8 @@ function veilarbregistrering(tokenDings: Auth, veilarbregistreringUrl = config.V
      *   post:
      *     description: Sjekker om bruker kan reaktiveres.
      *     responses:
-     *       200: $ref: '#/components/schemas/KanReaktiveresDto'
+     *       200:
+     *          $ref: '#/components/schemas/KanReaktiveresDto'
      *       401:
      *         $ref: '#/components/schemas/Unauthorized'
      */

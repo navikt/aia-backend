@@ -60,10 +60,6 @@ spec:
       value: https://veilarboppfolging.dev-fss-pub.nais.io
     - name: VEILARBVEDTAKINFO_URL
       value: https://veilarbvedtakinfo.dev-fss-pub.nais.io
-    - name: UNLEASH_API_URL
-      value: https://unleash.nais.io/api/
-    - name: UNLEASH_ENVIRONMENT
-      value: dev
     - name: DAGPENGER_INNSYN_URL
       value: http://dp-innsyn.teamdagpenger.svc.cluster.local
     - name: BESVARELSE_URL

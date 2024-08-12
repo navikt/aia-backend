@@ -49,11 +49,16 @@ async function createClientAssertion(options: TokenDingsOptions): Promise<string
             nbf: now,
         },
         key.toPEM(true),
-        { algorithm: 'RS256' }
+        { algorithm: 'RS256' },
     );
 }
 
 const createTokenDings = async (options: TokenDingsOptions): Promise<Auth> => {
+    if (process.env.NODE_ENV === 'development') {
+        return {
+            exchangeIDPortenToken: () => Promise.resolve({ access_token: 'token' } as TokenSet),
+        };
+    }
     const { tokenXWellKnownUrl, tokenXClientId } = options;
     const tokenXIssuer = await Issuer.discover(tokenXWellKnownUrl);
     const tokenXClient = new tokenXIssuer.Client({

@@ -11,6 +11,7 @@ jobs:
         name: Test, build and push
         permissions:
           contents: "read"
+          packages: 'write'
           id-token: "write"
         runs-on: ubuntu-latest
         steps:
@@ -24,6 +25,7 @@ jobs:
                 team: paw
                 identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
                 project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+                build_secrets: NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}
         outputs:
           image: ${{ steps.docker-build-push.outputs.image }}
 
