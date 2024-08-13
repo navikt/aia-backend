@@ -49,9 +49,7 @@ spec:
     - name: CORS_ALLOWED_SCHEMES
       value: https
     - name: VEILARBDIALOG_API_URL
-      value: https://veilarbdialog.prod-fss-pub.nais.io/veilarbdialog/api
-    - name: DIALOG_APP_NAME
-      value: veilarbdialog
+      value: http://veilarbdialog.dab/veilarbdialog/api
     - name: VEILARBOPPFOLGING_URL
       value: https://veilarboppfolging.prod-fss-pub.nais.io
     - name: VEILARBVEDTAKINFO_URL

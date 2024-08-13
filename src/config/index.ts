@@ -8,7 +8,6 @@ export interface IEnvironmentVariables {
     UNLEASH_SERVER_API_URL: string;
     UNLEASH_SERVER_API_TOKEN: string;
     VEILARBDIALOG_API_URL: string;
-    DIALOG_APP_NAME: string;
     VEILARBOPPFOLGING_URL: string;
     VEILARBVEDTAKINFO_URL: string;
     NAIS_CLUSTER_NAME: string;
