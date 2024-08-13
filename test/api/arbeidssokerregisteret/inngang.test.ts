@@ -22,7 +22,7 @@ describe('arbeidssøkerregisteret/inngangs-api', () => {
     let tokenDings: Auth;
     beforeAll(() => {
         tokenDings = {
-            exchangeIDPortenToken(token: string, targetApp: string) {
+            exchangeIDPortenToken(token: string) {
                 return Promise.resolve({
                     access_token: token,
                     expired() {

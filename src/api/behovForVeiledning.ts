@@ -103,7 +103,7 @@ function behovForVeiledningRoutes(
             if (isEnabled('aia.bruk-opplysninger-om-arbeidssoker-api')) {
                 try {
                     await microfrontendToggler.toggle('disable', 'aia-behovsvurdering', getTokenFromRequest(req));
-                } catch (err) {
+                } catch (ignoreErr) {
                     // feil er allerede logget. Returner OK for bruker
                 }
             }

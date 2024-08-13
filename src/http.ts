@@ -95,7 +95,7 @@ export function proxyHttpCall(url: string, opts: ProxyOpts = defaultOpts) {
                         } else {
                             resolve(undefined);
                         }
-                    } catch (e) {
+                    } catch (ignoreErr) {
                         resolve(undefined);
                     }
                 });
