@@ -106,8 +106,8 @@ spec:
         - application: paw-arbeidssokerregisteret-api-inngang
         - application: paw-microfrontend-toggler
         - application: veilarbdialog
-          namespace: pto
-          cluster: dev-fss
+          namespace: dab
+          cluster: dev-gcp
         - application: paw-arbeidssoker-besvarelse
         - application: veilarboppfolging
           namespace: pto
