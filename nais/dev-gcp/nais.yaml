@@ -51,9 +51,7 @@ spec:
     - name: MELDEKORT_URL
       value: http://meldekort-api-q1.meldekort.svc.cluster.local/meldekort/meldekort-api/api/person
     - name: VEILARBDIALOG_API_URL
-      value: https://veilarbdialog.dev-fss-pub.nais.io/veilarbdialog/api
-    - name: DIALOG_APP_NAME
-      value: veilarbdialog
+      value: http://veilarbdialog.dab/veilarbdialog/api
     - name: VEILARBOPPFOLGING_URL
       value: https://veilarboppfolging.dev-fss-pub.nais.io
     - name: VEILARBVEDTAKINFO_URL
@@ -108,8 +106,8 @@ spec:
         - application: paw-arbeidssokerregisteret-api-inngang
         - application: paw-microfrontend-toggler
         - application: veilarbdialog
-          namespace: pto
-          cluster: dev-fss
+          namespace: dab
+          cluster: dev-gcp
         - application: paw-arbeidssoker-besvarelse
         - application: veilarboppfolging
           namespace: pto

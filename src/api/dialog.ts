@@ -7,7 +7,7 @@ import { proxyTokenXCall } from '../http';
 export const getTokenXHeadersForDialog =
     (tokenDings: Auth, naisCluster = config.NAIS_CLUSTER_NAME) =>
     async (req: Request) => {
-        const DIALOG_CLIENT_ID = `${naisCluster.replace('gcp', 'fss')}:pto:${config.DIALOG_APP_NAME}`;
+        const DIALOG_CLIENT_ID = `${naisCluster}:dab:veilarbdialog`;
 
         const idPortenToken = getTokenFromRequest(req);
         const tokenSet = await tokenDings.exchangeIDPortenToken(idPortenToken, DIALOG_CLIENT_ID);
