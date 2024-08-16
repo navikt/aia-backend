@@ -73,12 +73,9 @@ spec:
     - name: PAW_MICROFRONTEND_TOGGLER_URL
       value: http://paw-microfrontend-toggler
   resources:
-    limits:
-      cpu: "3"
-      memory: 768Mi
     requests:
-      cpu: 500m
-      memory: 580Mi
+      cpu: 5000m
+      memory: 256Mi
   accessPolicy:
     inbound:
       rules:
