@@ -74,7 +74,7 @@ spec:
       value: http://paw-microfrontend-toggler
   resources:
     requests:
-      cpu: 5000m
+      cpu: 50m
       memory: 256Mi
   accessPolicy:
     inbound:
