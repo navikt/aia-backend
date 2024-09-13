@@ -84,8 +84,8 @@ spec:
         - application: tms-min-side-proxy
           namespace: min-side
         - application: veilarbvedtaksstotte
-          namespace: pto
-          cluster: dev-fss
+          namespace: obo
+          cluster: dev-gcp
         - application: veilarbperson
           namespace: pto
           cluster: dev-fss
