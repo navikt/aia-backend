@@ -108,8 +108,8 @@ spec:
           cluster: dev-gcp
         - application: paw-arbeidssoker-besvarelse
         - application: veilarboppfolging
-          namespace: pto
-          cluster: dev-fss
+          namespace: poao
+          cluster: dev-gcp
         - application: veilarbvedtakinfo
           namespace: pto
           cluster: dev-fss
