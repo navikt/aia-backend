@@ -111,8 +111,8 @@ spec:
           cluster: prod-gcp
         - application: paw-arbeidssoker-besvarelse
         - application: veilarboppfolging
-          namespace: pto
-          cluster: prod-fss
+          namespace: poao
+          cluster: prod-gcp
         - application: veilarbvedtakinfo
           namespace: pto
           cluster: prod-fss
