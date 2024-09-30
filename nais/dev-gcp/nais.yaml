@@ -87,12 +87,8 @@ spec:
           namespace: obo
           cluster: dev-gcp
         - application: veilarbperson
-          namespace: pto
-          cluster: dev-fss
-        - application: veilarbperson
           namespace: obo
           cluster: dev-gcp
-
     outbound:
       external:
         - host: veilarboppfolging.dev-fss-pub.nais.io
