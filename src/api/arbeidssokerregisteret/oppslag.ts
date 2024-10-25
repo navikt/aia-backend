@@ -32,6 +32,10 @@ function arbeidssokerregisteretApi(tokenDings: Auth, url: string = config.ARBEID
         const { periodeId } = req.params;
         return proxyTokenXCall(`${url}/api/v1/profilering/${periodeId}`, getTokenXHeaders)(req, res);
     });
+    router.get(
+        '/v1/samlet-informasjon',
+        proxyTokenXCall(`${url}/api/v1/samlet-informasjon?siste=true`, getTokenXHeaders),
+    );
 
     return router;
 }
