@@ -36,6 +36,7 @@ spec:
       enabled: true
       level: Level3
   ingresses:
+    - https://www.ansatt.dev.nav.no/aia-backend
     - https://www.intern.dev.nav.no/aia-backend
   envFrom:
     - secret: aia-backend-unleash-api-token
