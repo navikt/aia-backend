@@ -1,20 +1,30 @@
 import { Request, Response, Router } from 'express';
 import logger, { axiosLogError } from '../logger';
-import { getAzureAdToken } from '../auth/azure';
 import { ValidatedRequest } from '../middleware/token-validation';
 import config from '../config';
 import axios, { AxiosError } from 'axios';
 import { v4 } from 'uuid';
+import { requestAzureClientCredentialsToken } from '@navikt/oasis';
+import { TokenResult } from '@navikt/oasis/dist/token-result';
 
-export const createOppgaveRoutes = (getAzureAdToken: (scope: string) => Promise<string>) => {
+export const createOppgaveRoutes = (requestAzureClientCredentialsToken: (scope: string) => Promise<TokenResult>) => {
     return (scope: string, oppgaveUrl = config.OPPGAVE_URL) => {
         const router = Router();
+
+        async function getAzureAdToken() {
+            const tokenResult = await requestAzureClientCredentialsToken(scope);
+
+            if (!tokenResult.ok) {
+                throw tokenResult.error;
+            }
+
+            return tokenResult.token;
+        }
 
         function post(payload: any) {
             return async (req: Request, res: Response) => {
                 try {
-                    const azureAdToken = await getAzureAdToken(scope);
-
+                    const azureAdToken = await getAzureAdToken();
                     const correlationId = v4();
                     logger.info(
                         { x_callId: req.header('Nav-Call-Id') },
@@ -99,5 +109,5 @@ export const createOppgaveRoutes = (getAzureAdToken: (scope: string) => Promise<
     };
 };
 
-const oppgaveRoutes = createOppgaveRoutes(getAzureAdToken);
+const oppgaveRoutes = createOppgaveRoutes(requestAzureClientCredentialsToken);
 export default oppgaveRoutes;
