@@ -1,5 +1,4 @@
 import createTokenDings, { Auth } from './auth/tokenDings';
-import config from './config';
 import createProfilRepository, { ProfilRepository } from './db/profilRepository';
 import { PrismaClient } from '@prisma/client';
 import createBehovRepository, { BehovRepository } from './db/behovForVeiledningRepository';
@@ -14,12 +13,8 @@ export interface Dependencies {
 
 function createDependencies(): Dependencies {
     const prismaClient = new PrismaClient();
-    const tokenDings = createTokenDings({
-        tokenXWellKnownUrl: config.TOKEN_X_WELL_KNOWN_URL,
-        tokenXClientId: config.TOKEN_X_CLIENT_ID,
-        tokenXTokenEndpoint: config.TOKEN_X_TOKEN_ENDPOINT,
-        tokenXPrivateJwk: config.TOKEN_X_PRIVATE_JWK,
-    });
+    const tokenDings = createTokenDings();
+
     return {
         tokenDings,
         profilRepository: createProfilRepository(prismaClient),

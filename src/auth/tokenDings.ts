@@ -33,7 +33,7 @@ export function getTokenFromHeader(req: Request) {
     return req.headers.authorization?.replace('Bearer ', '');
 }
 
-const createTokenDings = async (options: TokenDingsOptions): Promise<Auth> => {
+const createTokenDings = async (): Promise<Auth> => {
     if (process.env.NODE_ENV === 'development') {
         return {
             exchangeIDPortenToken: () => Promise.resolve({ access_token: 'token' } as TokenSet),
