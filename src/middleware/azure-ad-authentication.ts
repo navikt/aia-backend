@@ -1,19 +1,17 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
-import { validateAzureToken } from '../auth/azure';
 import logger from '../logger';
+import { validateAzureToken } from '@navikt/oasis';
 
 const azureAdAuthentication: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     const bearerToken = req.header('Authorization');
 
     if (bearerToken) {
         const validationResult = await validateAzureToken(bearerToken);
-        if (validationResult === 'valid') {
+        if (validationResult.ok) {
             next();
             return;
         } else {
-            logger.error(
-                `Feil med azure token-validering: ${validationResult.errorType} ${validationResult.message} (${validationResult.error})`
-            );
+            logger.error(validationResult.error, `Feil med azure token-validering: ${validationResult.errorType}`);
         }
     } else {
         logger.error(`Feil med azure token-validering: ingen token i header`);

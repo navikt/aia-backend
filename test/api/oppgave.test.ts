@@ -16,7 +16,7 @@ describe('oppgave api', () => {
 
         const oppgaveMock = oppgaveServer.listen(9898);
 
-        const getAzureAdToken = jest.fn().mockReturnValue(Promise.resolve(''));
+        const getAzureAdToken = jest.fn().mockReturnValue(Promise.resolve({ ok: true, token: 'token-123' }));
         const oppgaveUrl = 'http://localhost:9898';
 
         const app = express();
@@ -55,7 +55,7 @@ describe('oppgave api', () => {
 
         const oppgaveMock = oppgaveServer.listen(9898);
 
-        const getAzureAdToken = jest.fn().mockReturnValue(Promise.resolve(''));
+        const getAzureAdToken = jest.fn().mockReturnValue(Promise.resolve({ ok: true, token: 'token-123' }));
         const oppgaveUrl = 'http://localhost:9898';
 
         const app = express();
@@ -96,7 +96,7 @@ describe('oppgave api', () => {
 
         const oppgaveMock = oppgaveServer.listen(9898);
 
-        const getAzureAdToken = jest.fn().mockReturnValue(Promise.resolve(''));
+        const getAzureAdToken = jest.fn().mockReturnValue(Promise.resolve({ ok: true, token: 'token-123' }));
         const oppgaveUrl = 'http://localhost:9898';
 
         const app = express();
@@ -137,7 +137,7 @@ describe('oppgave api', () => {
 
         const oppgaveMock = oppgaveServer.listen(9897);
 
-        const getAzureAdToken = jest.fn().mockReturnValue(Promise.resolve('ad-token'));
+        const getAzureAdToken = jest.fn().mockReturnValue(Promise.resolve({ ok: true, token: 'ad-token' }));
         const oppgaveUrl = 'http://localhost:9897';
 
         const app = express();
@@ -166,7 +166,7 @@ describe('oppgave api', () => {
             res.status(500).end();
         });
         const oppgaveMock = oppgaveServer.listen(9896);
-        const getAzureAdToken = jest.fn().mockReturnValue(Promise.resolve(''));
+        const getAzureAdToken = jest.fn().mockReturnValue(Promise.resolve({ ok: true, token: 'token-123' }));
         const oppgaveUrl = 'http://localhost:9896';
 
         const app = express();
