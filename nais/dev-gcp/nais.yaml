@@ -85,12 +85,6 @@ spec:
         - application: arbeidssoekerregisteret-for-personbruker
         - application: tms-min-side-proxy
           namespace: min-side
-        - application: veilarbvedtaksstotte
-          namespace: obo
-          cluster: dev-gcp
-        - application: veilarbperson
-          namespace: obo
-          cluster: dev-gcp
     outbound:
       external:
         - host: veilarboppfolging.dev-fss-pub.nais.io
