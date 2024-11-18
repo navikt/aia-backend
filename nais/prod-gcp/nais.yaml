@@ -82,6 +82,7 @@ spec:
       rules:
         - application: arbeidssokerregistrering
         - application: arbeidssokerregistrering-for-veileder
+        - application: arbeidssoekerregisteret-for-personbruker
         - application: tms-min-side-proxy
           namespace: min-side
         - application: veilarbvedtaksstotte
