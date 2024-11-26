@@ -25,6 +25,7 @@ export interface IEnvironmentVariables {
     ARBEIDSSOKERREGISTERET_OPPSLAG_API_URL: string;
     ARBEIDSSOKERREGISTERET_INNGANG_API_URL: string;
     PAW_MICROFRONTEND_TOGGLER_URL: string;
+    BEKREFTELSE_API_URL: string;
 }
 
 const env = process.env as unknown as IEnvironmentVariables;

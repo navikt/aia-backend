@@ -29,6 +29,7 @@ import { expressMiddleware } from '@apollo/server/express4';
 import { getTokenFromHeader } from './auth/tokenDings';
 import http from 'http';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+import tilgjengeligeBekreftelserApi from './api/arbeidssokerregisteret/tilgjengelige-bekreftelser';
 
 const PORT = 3000;
 const app = express();
@@ -80,6 +81,7 @@ async function setUpRoutes() {
 
     router.use('/arbeidssokerregisteret', arbeidssokerregisteretApi(await tokenDings));
     router.use('/arbeidssokerregisteret/inngang', inngangRoutes(await tokenDings));
+    router.use(tilgjengeligeBekreftelserApi(await tokenDings));
 
     app.use(config.BASE_PATH || '', router);
 }

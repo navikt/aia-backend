@@ -73,6 +73,8 @@ spec:
       value: http://paw-arbeidssokerregisteret-api-inngang
     - name: PAW_MICROFRONTEND_TOGGLER_URL
       value: http://paw-microfrontend-toggler
+    - name: BEKREFTELSE_API_URL
+      value: http://paw-arbeidssoekerregisteret-api-bekreftelse
   resources:
     requests:
       cpu: 50m
@@ -95,6 +97,7 @@ spec:
         - application: paw-arbeidssoekerregisteret-api-oppslag
         - application: paw-arbeidssokerregisteret-api-inngang
         - application: paw-microfrontend-toggler
+        - application: paw-arbeidssoekerregisteret-api-bekreftelse
         - application: veilarbdialog
           namespace: dab
           cluster: dev-gcp
