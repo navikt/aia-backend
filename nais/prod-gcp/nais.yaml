@@ -72,6 +72,8 @@ spec:
       value: http://paw-microfrontend-toggler
     - name: BEKREFTELSE_API_URL
       value: http://paw-arbeidssoekerregisteret-api-bekreftelse
+    - name: PAW_TILGANGSKONTROLL_API_URL
+      value: http://paw-tilgangskontroll
   resources:
     limits:
       cpu: "3"

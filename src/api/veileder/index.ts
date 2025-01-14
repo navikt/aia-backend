@@ -1,11 +1,27 @@
-import { Router } from 'express';
+import { Router, Request } from 'express';
 import config from '../../config';
 import { getDefaultHeaders, proxyHttpCall } from '../../http';
 import axios, { AxiosError } from 'axios';
 import { BehovRepository } from '../../db/behovForVeiledningRepository';
 import logger from '../../logger';
+import { requestAzureOboToken } from '@navikt/oasis';
+import { getTokenFromRequest } from '../../auth/tokenDings';
 
-function veilederApi(behovForVeiledningRepository: BehovRepository, besvarelseUrl = config.BESVARELSE_URL) {
+const PAW_TILGANGSKONTROLL_SCOPE = `api://${process.env.NAIS_CLUSTER_NAME}.paw.paw-tilgangskontroll/.default`;
+
+type GetOboToken = (req: Request) => Promise<string>;
+
+const getOboTokenFn = async (req: Request) => {
+    const result = await requestAzureOboToken(getTokenFromRequest(req), PAW_TILGANGSKONTROLL_SCOPE);
+    return result.ok ? result.token : 'token';
+};
+
+function veilederApi(
+    behovForVeiledningRepository: BehovRepository,
+    besvarelseUrl = config.BESVARELSE_URL,
+    tilgangskontrollUrl = config.PAW_TILGANGSKONTROLL_API_URL,
+    getOboToken: GetOboToken = getOboTokenFn,
+) {
     const router = Router();
 
     router.post('/veileder/besvarelse', proxyHttpCall(`${besvarelseUrl}/api/v1/veileder/besvarelse`));
@@ -19,11 +35,16 @@ function veilederApi(behovForVeiledningRepository: BehovRepository, besvarelseUr
                 return;
             }
 
-            const { status } = await axios(`${besvarelseUrl}/api/v1/veileder/har-tilgang`, {
-                headers: getDefaultHeaders(req),
+            const { status, data } = await axios(`${tilgangskontrollUrl}/api/v1/tilgang`, {
+                headers: {
+                    ...getDefaultHeaders(req),
+                    Authorization: `Bearer ${await getOboToken(req)}`,
+                },
                 method: 'POST',
-                data: { foedselsnummer },
+                data: { identitetsnummer: foedselsnummer },
             });
+
+            logger.info(data, 'Tilgangskontroll data');
 
             if (status === 200) {
                 const behov = await behovForVeiledningRepository.hentBehov({ foedselsnummer });
