@@ -109,6 +109,7 @@ spec:
         - application: paw-arbeidssokerregisteret-api-inngang
         - application: paw-microfrontend-toggler
         - application: paw-arbeidssoekerregisteret-api-bekreftelse
+        - application: paw-tilgangskontroll
         - application: veilarbdialog
           namespace: dab
           cluster: prod-gcp
