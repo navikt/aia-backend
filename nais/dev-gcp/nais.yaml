@@ -78,11 +78,9 @@ spec:
     - name: PAW_TILGANGSKONTROLL_API_URL
       value: http://paw-tilgangskontroll
   resources:
-    limits:
-      memory: 512Mi
     requests:
       cpu: 50m
-      memory: 512Mi
+      memory: 256Mi
   accessPolicy:
     inbound:
       rules:
