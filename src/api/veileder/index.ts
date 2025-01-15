@@ -44,7 +44,7 @@ function veilederApi(
             const parsedToken = parseAzureUserToken(oboToken.token);
             const navAnsattId = parsedToken.ok && parsedToken.NAVident;
 
-            const { data } = await axios(`${tilgangskontrollUrl}/api/v1/tilgang`, {
+            const { status, data } = await axios(`${tilgangskontrollUrl}/api/v1/tilgang`, {
                 headers: {
                     ...getDefaultHeaders(req),
                     Authorization: `Bearer ${oboToken.token}`,
@@ -53,7 +53,9 @@ function veilederApi(
                 data: { identitetsnummer: foedselsnummer, navAnsattId, tilgang: 'LESE' },
             });
 
+            logger.info(`Status fra api/tilgang=${status}`);
             if (!data.harTilgang) {
+                logger.info(data, 'Bruker mangler tilgang');
                 res.status(403).end();
                 return;
             }
