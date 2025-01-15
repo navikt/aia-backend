@@ -44,7 +44,7 @@ function veilederApi(
             const parsedToken = parseAzureUserToken(oboToken.token);
             const navAnsattId = parsedToken.ok && parsedToken.NAVident;
 
-            const { status, data } = await axios(`${tilgangskontrollUrl}/api/v1/tilgang`, {
+            const { data } = await axios(`${tilgangskontrollUrl}/api/v1/tilgang`, {
                 headers: {
                     ...getDefaultHeaders(req),
                     Authorization: `Bearer ${oboToken.token}`,
@@ -53,27 +53,27 @@ function veilederApi(
                 data: { identitetsnummer: foedselsnummer, navAnsattId, tilgang: 'LESE' },
             });
 
-            logger.info(data, 'Tilgangskontroll data');
+            if (!data.harTilgang) {
+                res.status(403).end();
+                return;
+            }
 
-            if (status === 200) {
-                const behov = await behovForVeiledningRepository.hentBehov({ foedselsnummer });
-
-                if (behov) {
-                    res.send({
-                        oppfolging: behov.oppfolging,
-                        dato: behov.created_at,
-                        dialogId: behov.dialog_id,
-                        tekster: {
-                            sporsmal: 'Hva slags veiledning ønsker du?',
-                            svar: {
-                                STANDARD_INNSATS: 'Jeg ønsker å klare meg selv',
-                                SITUASJONSBESTEMT_INNSATS: 'Jeg ønsker oppfølging fra NAV',
-                            },
+            const behov = await behovForVeiledningRepository.hentBehov({ foedselsnummer });
+            if (behov) {
+                res.send({
+                    oppfolging: behov.oppfolging,
+                    dato: behov.created_at,
+                    dialogId: behov.dialog_id,
+                    tekster: {
+                        sporsmal: 'Hva slags veiledning ønsker du?',
+                        svar: {
+                            STANDARD_INNSATS: 'Jeg ønsker å klare meg selv',
+                            SITUASJONSBESTEMT_INNSATS: 'Jeg ønsker oppfølging fra NAV',
                         },
-                    });
-                } else {
-                    res.status(204).end();
-                }
+                    },
+                });
+            } else {
+                res.status(204).end();
             }
         } catch (err: any) {
             logger.error(`Feil i /veileder/behov-for-veiledning: ${err.message}`, err);
