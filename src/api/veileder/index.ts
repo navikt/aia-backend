@@ -4,16 +4,16 @@ import { getDefaultHeaders, proxyHttpCall } from '../../http';
 import axios, { AxiosError } from 'axios';
 import { BehovRepository } from '../../db/behovForVeiledningRepository';
 import logger from '../../logger';
-import { requestAzureOboToken } from '@navikt/oasis';
+import { parseAzureUserToken, requestAzureOboToken } from '@navikt/oasis';
 import { getTokenFromRequest } from '../../auth/tokenDings';
+import { TokenResult } from '@navikt/oasis/dist/token-result';
 
 const PAW_TILGANGSKONTROLL_SCOPE = `api://${process.env.NAIS_CLUSTER_NAME}.paw.paw-tilgangskontroll/.default`;
 
-type GetOboToken = (req: Request) => Promise<string>;
+type GetOboToken = (req: Request) => Promise<TokenResult>;
 
-const getOboTokenFn = async (req: Request) => {
-    const result = await requestAzureOboToken(getTokenFromRequest(req), PAW_TILGANGSKONTROLL_SCOPE);
-    return result.ok ? result.token : 'token';
+const getOboTokenFn = async (req: Request): Promise<TokenResult> => {
+    return await requestAzureOboToken(getTokenFromRequest(req), PAW_TILGANGSKONTROLL_SCOPE);
 };
 
 function veilederApi(
@@ -35,13 +35,22 @@ function veilederApi(
                 return;
             }
 
+            const oboToken = await getOboToken(foedselsnummer);
+            if (!oboToken.ok) {
+                res.status(401).end();
+                return;
+            }
+
+            const parsedToken = parseAzureUserToken(oboToken.token);
+            const navAnsattId = parsedToken.ok && parsedToken.NAVident;
+
             const { status, data } = await axios(`${tilgangskontrollUrl}/api/v1/tilgang`, {
                 headers: {
                     ...getDefaultHeaders(req),
-                    Authorization: `Bearer ${await getOboToken(req)}`,
+                    Authorization: `Bearer ${oboToken.token}`,
                 },
                 method: 'POST',
-                data: { identitetsnummer: foedselsnummer },
+                data: { identitetsnummer: foedselsnummer, navAnsattId, tilgang: 'LESE' },
             });
 
             logger.info(data, 'Tilgangskontroll data');
