@@ -4,7 +4,7 @@ import { getDefaultHeaders, proxyHttpCall } from '../../http';
 import axios, { AxiosError } from 'axios';
 import { BehovRepository } from '../../db/behovForVeiledningRepository';
 import logger from '../../logger';
-import { parseAzureUserToken, requestAzureOboToken } from '@navikt/oasis';
+import { parseAzureUserToken as parseAzureUserTokenFn, requestAzureOboToken } from '@navikt/oasis';
 import { getTokenFromRequest } from '../../auth/tokenDings';
 import { TokenResult } from '@navikt/oasis/dist/token-result';
 
@@ -21,6 +21,7 @@ function veilederApi(
     besvarelseUrl = config.BESVARELSE_URL,
     tilgangskontrollUrl = config.PAW_TILGANGSKONTROLL_API_URL,
     getOboToken: GetOboToken = getOboTokenFn,
+    parseAzureUserToken = parseAzureUserTokenFn,
 ) {
     const router = Router();
 
