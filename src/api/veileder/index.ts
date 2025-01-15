@@ -35,7 +35,7 @@ function veilederApi(
                 return;
             }
 
-            const oboToken = await getOboToken(foedselsnummer);
+            const oboToken = await getOboToken(req);
             if (!oboToken.ok) {
                 res.status(401).end();
                 return;
