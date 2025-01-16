@@ -7,6 +7,13 @@ import { TokenResult } from '@navikt/oasis/dist/token-result';
 import { AzurePayload } from '@navikt/oasis/dist/validate';
 import { ParseResult } from '@navikt/oasis/dist/parse-token';
 
+jest.mock('unleash-client', () => {
+    return {
+        isEnabled() {
+            return true;
+        },
+    };
+});
 describe('veileder api', () => {
     describe('POST /veileder/besvarelse', () => {
         it('proxy kaller besvarelse', async () => {
