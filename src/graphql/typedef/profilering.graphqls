@@ -1,9 +1,0 @@
-type Profilering {
-    profileringId: String
-    periodeId: String!
-    opplysningerOmArbeidssoekerId: String
-    sendtInnAv: SendtInnAv
-    profilertTil: String
-    jobbetSammenhengendeSeksAvTolvSisteManeder: Boolean
-    alder: Int
-}
