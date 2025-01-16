@@ -72,6 +72,8 @@ spec:
       value: http://paw-microfrontend-toggler
     - name: BEKREFTELSE_API_URL
       value: http://paw-arbeidssoekerregisteret-api-bekreftelse
+    - name: PAW_TILGANGSKONTROLL_API_URL
+      value: http://paw-tilgangskontroll
   resources:
     limits:
       cpu: "3"
@@ -107,6 +109,7 @@ spec:
         - application: paw-arbeidssokerregisteret-api-inngang
         - application: paw-microfrontend-toggler
         - application: paw-arbeidssoekerregisteret-api-bekreftelse
+        - application: paw-tilgangskontroll
         - application: veilarbdialog
           namespace: dab
           cluster: prod-gcp
