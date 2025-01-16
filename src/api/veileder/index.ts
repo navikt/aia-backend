@@ -113,7 +113,7 @@ function veilederApi(
                     res.status(204).end();
                 }
             } else {
-                legacyTilgangskontroll(req, res);
+                await legacyTilgangskontroll(req, res);
             }
         } catch (err: any) {
             logger.error(`Feil i /veileder/behov-for-veiledning: ${err.message}`, err);
