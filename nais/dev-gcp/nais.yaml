@@ -89,6 +89,8 @@ spec:
         - application: arbeidssoekerregisteret-for-personbruker
         - application: tms-min-side-proxy
           namespace: min-side
+        - application: veilarbvedtaksstotte
+          namespace: obo
     outbound:
       external:
         - host: veilarboppfolging.dev-fss-pub.nais.io
