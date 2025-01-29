@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import config from '../../config';
-import { getDefaultHeaders, proxyHttpCall } from '../../http';
+import { getDefaultHeaders } from '../../http';
 import axios, { AxiosError } from 'axios';
 import { BehovRepository } from '../../db/behovForVeiledningRepository';
 import logger from '../../logger';
@@ -25,8 +25,6 @@ function veilederApi(
     parseAzureUserToken = parseAzureUserTokenFn,
 ) {
     const router = Router();
-
-    router.post('/veileder/besvarelse', proxyHttpCall(`${besvarelseUrl}/api/v1/veileder/besvarelse`));
 
     async function legacyTilgangskontroll(req: Request, res: Response) {
         const { foedselsnummer } = req.body;
