@@ -18,7 +18,6 @@ export interface IEnvironmentVariables {
     AZURE_OPENID_CONFIG_TOKEN_ENDPOINT: string;
     AZURE_APP_CLIENT_SECRET: string;
     APP_NAME: string;
-    BESVARELSE_URL: string;
     SSO_NAV_COOKIE: string;
     OPPGAVE_URL: string;
     OPPGAVE_API_SCOPE: string;

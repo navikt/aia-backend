@@ -68,9 +68,7 @@ describe('veileder api', () => {
             const port = 6173;
             const proxy = proxyServer.listen(port);
 
-            app.use(
-                veilederApi(behovRepository, '', `http://localhost:${port}`, getOboTokenStub, parseAzureUserTokenStub),
-            );
+            app.use(veilederApi(behovRepository, `http://localhost:${port}`, getOboTokenStub, parseAzureUserTokenStub));
 
             try {
                 const response = await request(app)
@@ -98,9 +96,7 @@ describe('veileder api', () => {
             const port = 6174;
             const proxy = proxyServer.listen(port);
 
-            app.use(
-                veilederApi(behovRepository, '', `http://localhost:${port}`, getOboTokenStub, parseAzureUserTokenStub),
-            );
+            app.use(veilederApi(behovRepository, `http://localhost:${port}`, getOboTokenStub, parseAzureUserTokenStub));
 
             try {
                 const response = await request(app)
@@ -137,9 +133,7 @@ describe('veileder api', () => {
 
             behovRepository.hentBehov = jest.fn().mockReturnValue(Promise.resolve(null));
 
-            app.use(
-                veilederApi(behovRepository, '', `http://localhost:${port}`, getOboTokenStub, parseAzureUserTokenStub),
-            );
+            app.use(veilederApi(behovRepository, `http://localhost:${port}`, getOboTokenStub, parseAzureUserTokenStub));
             try {
                 const response = await request(app)
                     .post('/veileder/behov-for-veiledning')

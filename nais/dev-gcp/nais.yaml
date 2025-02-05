@@ -57,8 +57,6 @@ spec:
       value: https://veilarboppfolging.dev-fss-pub.nais.io
     - name: VEILARBVEDTAKINFO_URL
       value: https://veilarbvedtakinfo.dev-fss-pub.nais.io
-    - name: BESVARELSE_URL
-      value: http://paw-arbeidssoker-besvarelse
     - name: SSO_NAV_COOKIE
       value: sso-dev-nav.no
     - name: UNLEASH_SERVER_API_URL
@@ -106,7 +104,6 @@ spec:
         - application: veilarbdialog
           namespace: dab
           cluster: dev-gcp
-        - application: paw-arbeidssoker-besvarelse
         - application: veilarboppfolging
           namespace: poao
           cluster: dev-gcp

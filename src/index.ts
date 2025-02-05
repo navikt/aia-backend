@@ -46,7 +46,7 @@ async function setUpRoutes() {
     router.use(unleashApi());
 
     // veileder routes - ingen auth middleware
-    router.use(veilederApi(await behovRepository));
+    router.use(veilederApi(behovRepository));
 
     // id porten
     // router.use(idportenAuthentication);
