@@ -53,18 +53,18 @@ async function setUpRoutes() {
     router.use(tokenValidation);
 
     router.use(arbeidssokerApi());
+    router.use('/arbeidssokerregisteret', arbeidssokerregisteretApi(await tokenDings));
+    router.use(tilgjengeligeBekreftelserApi(await tokenDings));
+    router.use(behovForVeiledningApi(behovRepository, await microfrontendToggler));
 
     // level4
     router.use(nivaa4Authentication);
     router.use(vedtakinfoApi(await tokenDings));
     router.use(dialogRoutes(await tokenDings));
     router.use(profilApi(profilRepository));
-    router.use(behovForVeiledningApi(behovRepository, await microfrontendToggler));
     router.use(oppgaveApi(config.OPPGAVE_API_SCOPE));
 
-    router.use('/arbeidssokerregisteret', arbeidssokerregisteretApi(await tokenDings));
     router.use('/arbeidssokerregisteret/inngang', inngangRoutes(await tokenDings));
-    router.use(tilgjengeligeBekreftelserApi(await tokenDings));
 
     app.use(config.BASE_PATH || '', router);
 }
