@@ -36,7 +36,7 @@
     "swagger-ui-express": "5.0.1",
     "ulid": "2.3.0",
     "unleash-client": "6.6.0",
-    "uuid": "10.0.0"
+    "uuid": "11.1.0"
   },
   "devDependencies": {
     "@eslint/js": "9.21.0",
