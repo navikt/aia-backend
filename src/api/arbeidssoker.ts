@@ -5,7 +5,7 @@ function arbeidssokerRoutes() {
 
     router.get('/er-arbeidssoker', async (req, res) => {
         // Legacy api kall
-        return res.send({
+        res.send({
             erArbeidssoker: false,
             erStandard: false,
             brukNyAia: false,

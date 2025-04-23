@@ -145,7 +145,6 @@ describe('behovForVeiledning API', () => {
                     profileringId: 'profilering-id-1',
                 })
                 .set('authorization', 'token234');
-            console.log((microfrontendToggler.toggle as jest.Mock).length);
             expect(microfrontendToggler.toggle).toHaveBeenCalledTimes(0);
 
             expect(response.statusCode).toEqual(201);

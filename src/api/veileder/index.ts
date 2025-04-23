@@ -26,7 +26,7 @@ function veilederApi(
 
     router.post('/veileder/behov-for-veiledning', async (req, res) => {
         try {
-            const { foedselsnummer } = req.body;
+            const foedselsnummer = req.body?.foedselsnummer;
 
             if (!foedselsnummer) {
                 res.status(400).send('missing foedselsnummer');

@@ -67,10 +67,11 @@ function behovForVeiledningRoutes(
             const behov = await behovForVeiledningRepository.hentBehov({ bruker_id: ident });
 
             if (!behov) {
-                return res.sendStatus(204);
+                res.sendStatus(204);
+                return;
             }
 
-            return res.send({
+            res.status(200).send({
                 oppfolging: behov.oppfolging,
                 dato: behov.created_at,
                 dialogId: behov.dialog_id,
@@ -78,7 +79,7 @@ function behovForVeiledningRoutes(
             });
         } catch (err) {
             logger.error(`Feil ved henting av behov for veiledning: ${err}`);
-            return res.status(500).send((err as Error)?.message);
+            res.status(500).send((err as Error)?.message);
         }
     });
 
@@ -87,7 +88,8 @@ function behovForVeiledningRoutes(
 
         if (!oppfolging) {
             logger.error('mangler "oppfolging" i request body');
-            return res.status(400).end();
+            res.status(400).end();
+            return;
         }
 
         try {
@@ -108,7 +110,7 @@ function behovForVeiledningRoutes(
                 }
             }
 
-            return res.status(201).send({
+            res.status(201).send({
                 oppfolging: result.oppfolging,
                 dato: result.created_at,
                 dialogId: result.dialog_id,
@@ -116,7 +118,7 @@ function behovForVeiledningRoutes(
             });
         } catch (err) {
             logger.error(`Feil ved oppretting av behov for veiledning ${err}`);
-            return res.status(500).send(`${(err as Error).message}`);
+            res.status(500).send(`${(err as Error).message}`);
         }
     });
 
