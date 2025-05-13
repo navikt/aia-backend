@@ -4,17 +4,14 @@ Backend for AiA
 
 ## Utvikling
 
-Bruk Node.js 18.
+Bruk Node.js 22 `nvm use` (dersom du bruker nvm til versjonshåndtering av Node.js).
 
-Du kan bruke [NVM](https://github.com/nvm-sh/nvm) for å sette versjon.
-F.eks. `nvm install 18.15.0 && nvm use 18.15.0` eller bare `nvm use`
-
--   klon repo
--   installer avhengigheter `npm i`
--   start database: `docker-compose up -d database`
--   sett miljøvariabler i `.env`: `cp .env-example .env`
--   start utviklingsserver `npm start`
--   åpne nettleseren på `http://localhost:3000`
+- klon repo
+- installer avhengigheter `npm i`
+- start database: `docker-compose up -d database`
+- sett miljøvariabler i `.env`: `cp .env-example .env`
+- start utviklingsserver `npm start`
+- åpne nettleseren på `http://localhost:3000`
 
 ## Docker oppsett
 
