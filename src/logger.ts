@@ -6,6 +6,9 @@ import Config from './config';
 import { AxiosError } from 'axios';
 
 const logger = pino({
+    redact: {
+        paths: ['req.headers', 'res.headers', 'selvbetjening_idtoken'],
+    },
     ...ecsFormat({ apmIntegration: false }),
     formatters: {
         level: (label: string) => ({ level: label }),
@@ -26,7 +29,6 @@ export function getCustomLogProps(req: IncomingMessage) {
     return {
         x_callId: req.headers['nav-call-id'],
         x_consumerId: req.headers[Config.CONSUMER_ID_HEADER_NAME],
-        'x-trace-id': req.headers['x-trace-id'],
     };
 }
 
@@ -44,7 +46,6 @@ export function pinoHttpMiddleware() {
                 ...val,
                 x_callId: req.headers['nav-call-id'],
                 x_consumerId: req.headers[Config.CONSUMER_ID_HEADER_NAME],
-                'x-trace-id': req.headers['x-trace-id'],
             };
         },
         customProps: getCustomLogProps,
