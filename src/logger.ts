@@ -6,6 +6,9 @@ import Config from './config';
 import { AxiosError } from 'axios';
 
 const logger = pino({
+    redact: {
+        paths: ['req.headers', 'res.headers'],
+    },
     ...ecsFormat({ apmIntegration: false }),
     formatters: {
         level: (label: string) => ({ level: label }),
