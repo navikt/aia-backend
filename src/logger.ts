@@ -7,7 +7,7 @@ import { AxiosError } from 'axios';
 
 const logger = pino({
     redact: {
-        paths: ['req.headers', 'res.headers'],
+        paths: ['req.headers', 'res.headers', 'selvbetjening_idtoken'],
     },
     ...ecsFormat({ apmIntegration: false }),
     formatters: {
