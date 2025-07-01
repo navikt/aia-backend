@@ -38,7 +38,7 @@ describe('automatiskReaktiveringRepository', () => {
             prismaClient.automatiskReaktivering.findFirst.mockImplementation(() => {
                 throw new Error('automatiskReaktivering feil');
             });
-            await expect(repository.hent('42')).rejects.toThrowError('automatiskReaktivering feil');
+            await expect(repository.hent('42')).rejects.toThrow('automatiskReaktivering feil');
         });
 
         it('returnerer automatiskReaktivering', async () => {

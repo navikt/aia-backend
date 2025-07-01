@@ -28,7 +28,7 @@ describe('oppgave api', () => {
             const response = await request(app).post('/oppgave').send({ beskrivelse: 'beskrivelse' });
 
             expect(response.statusCode).toEqual(201);
-            expect(bodySpy).toBeCalledTimes(1);
+            expect(bodySpy).toHaveBeenCalledTimes(1);
             const requestBody = bodySpy.mock.calls[0][0];
             expect(requestBody).toEqual({
                 personident: 'test-fnr',
@@ -69,7 +69,7 @@ describe('oppgave api', () => {
                 .send({ beskrivelse: 'beskrivelse', dinSituasjon: 'OPPSIGELSE' });
 
             expect(response.statusCode).toEqual(201);
-            expect(bodySpy).toBeCalledTimes(1);
+            expect(bodySpy).toHaveBeenCalledTimes(1);
             const requestBody = bodySpy.mock.calls[0][0];
             expect(requestBody).toEqual({
                 personident: 'test-fnr',
@@ -110,7 +110,7 @@ describe('oppgave api', () => {
                 .send({ beskrivelse: 'beskrivelse', dinSituasjon: 'KONKURS' });
 
             expect(response.statusCode).toEqual(201);
-            expect(bodySpy).toBeCalledTimes(1);
+            expect(bodySpy).toHaveBeenCalledTimes(1);
             const requestBody = bodySpy.mock.calls[0][0];
             expect(requestBody).toEqual({
                 personident: 'test-fnr',
@@ -150,7 +150,7 @@ describe('oppgave api', () => {
 
             expect(getAzureAdToken).toHaveBeenCalledWith('scope');
             expect(response.statusCode).toEqual(201);
-            expect(headersSpy).toBeCalledTimes(1);
+            expect(headersSpy).toHaveBeenCalledTimes(1);
             const headers = headersSpy.mock.calls[0][0];
             expect(headers['authorization']).toEqual('Bearer ad-token');
             expect(headers['x-correlation-id']).toBeDefined();
