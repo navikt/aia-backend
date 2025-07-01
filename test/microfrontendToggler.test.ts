@@ -54,7 +54,7 @@ describe('microfrontendToggler', () => {
         try {
             await toggler.toggle('disable', 'test', 'token');
             expect(spy).toHaveBeenCalledTimes(1);
-            expect(spy).lastCalledWith({ '@action': 'disable', microfrontend_id: 'test' });
+            expect(spy).toHaveBeenLastCalledWith({ '@action': 'disable', microfrontend_id: 'test' });
         } finally {
             server.close();
         }
