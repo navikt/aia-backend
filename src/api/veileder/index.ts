@@ -1,6 +1,6 @@
 import { Request, Router } from 'express';
 import config from '../../config';
-import { getDefaultHeaders } from '../../http';
+import { getDefaultHeaders, proxyTokenXCall } from '../../http';
 import axios, { AxiosError } from 'axios';
 import { BehovRepository } from '../../db/behovForVeiledningRepository';
 import logger from '../../logger';
@@ -9,11 +9,12 @@ import { getTokenFromRequest } from '../../auth/tokenDings';
 import { TokenResult } from '@navikt/oasis/dist/token-result';
 
 const PAW_TILGANGSKONTROLL_SCOPE = `api://${process.env.NAIS_CLUSTER_NAME}.paw.paw-tilgangskontroll/.default`;
+const OPPSLAG_API_SCOPE = `${config.NAIS_CLUSTER_NAME}:paw:paw-arbeidssoekerregisteret-api-oppslag/.default`;
 
-type GetOboToken = (req: Request) => Promise<TokenResult>;
+type GetOboToken = (req: Request, clientId: string) => Promise<TokenResult>;
 
-const getOboTokenFn = async (req: Request): Promise<TokenResult> => {
-    return await requestAzureOboToken(getTokenFromRequest(req), PAW_TILGANGSKONTROLL_SCOPE);
+const getOboTokenFn = async (req: Request, clientId: string): Promise<TokenResult> => {
+    return await requestAzureOboToken(getTokenFromRequest(req), clientId);
 };
 
 function veilederApi(
@@ -21,6 +22,7 @@ function veilederApi(
     tilgangskontrollUrl = config.PAW_TILGANGSKONTROLL_API_URL,
     getOboToken: GetOboToken = getOboTokenFn,
     parseAzureUserToken = parseAzureUserTokenFn,
+    oppslagApiUrl = config.ARBEIDSSOKERREGISTERET_OPPSLAG_API_URL,
 ) {
     const router = Router();
 
@@ -33,7 +35,7 @@ function veilederApi(
                 return;
             }
 
-            const oboToken = await getOboToken(req);
+            const oboToken = await getOboToken(req, PAW_TILGANGSKONTROLL_SCOPE);
             if (!oboToken.ok) {
                 res.status(401).end();
                 return;
@@ -81,6 +83,20 @@ function veilederApi(
             res.status(errorResponse?.status || 500).end();
         }
     });
+
+    const getOppslagApiHeaders = async (req: Request) => {
+        const oboToken = await getOboToken(req, OPPSLAG_API_SCOPE);
+        const token = oboToken.ok ? oboToken.token : '';
+        return {
+            ...getDefaultHeaders(req),
+            Authorization: `Bearer ${token}`,
+        };
+    };
+
+    router.post(
+        '/veileder/egenvurdering',
+        proxyTokenXCall(`${oppslagApiUrl}/api/v1/veileder/profilering/egenvurdering`, getOppslagApiHeaders),
+    );
 
     return router;
 }
