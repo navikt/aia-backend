@@ -263,6 +263,90 @@ const options = {
                         },
                     },
                 },
+                BehovForVeiledningRequest: {
+                    required: ['foedselsnummer'],
+                    type: 'object',
+                    properties: {
+                        foedselsnummer: { type: 'string' },
+                    },
+                },
+                BehovForVeiledningResponse: {
+                    type: 'object',
+                    properties: {
+                        oppfolging: {
+                            type: 'string',
+                            enum: ['STANDARD_INNSATS', 'SITUASJONSBESTEMT_INNSATS'],
+                        },
+                        dato: { type: 'string' },
+                        dialogId: { type: 'string' },
+                        tekster: {
+                            type: 'object',
+                            properties: {
+                                sporsmal: { type: 'string' },
+                                svar: {
+                                    type: 'object',
+                                },
+                            },
+                        },
+                    },
+                },
+                VeilederEgenvurderingerRequest: {
+                    required: true,
+                    type: 'object',
+                    properties: {
+                        identitetsnummer: { type: 'string' },
+                        periodeId: { type: 'string' },
+                    },
+                },
+                VeilederEgenvurderingerResponse: {
+                    required: true,
+                    type: 'array',
+                    items: {
+                        type: 'object',
+                        properties: {
+                            egenvurderingId: { type: 'string' },
+                            periodeId: { type: 'string' },
+                            opplysningerOmArbeidssoekerId: { type: 'string' },
+                            profileringId: { type: 'string' },
+                            sendtInnAv: {
+                                type: 'object',
+                                properties: {
+                                    tidspunkt: { type: 'string' },
+                                    utfoertAv: {
+                                        type: 'object',
+                                        properties: {
+                                            type: { type: 'string' },
+                                            id: { type: 'string' },
+                                        },
+                                    },
+                                    kilde: { type: 'string' },
+                                    aarsak: { type: 'string' },
+                                    tidspunktFraKilde: {
+                                        type: 'object',
+                                        properties: {
+                                            tidspunkt: { type: 'string' },
+                                            avviksType: { type: 'string' },
+                                        },
+                                    },
+                                },
+                            },
+                            profilertTil: {
+                                type: 'string',
+                                enum: [
+                                    'UKJENT_VERDI',
+                                    'UDEFINERT',
+                                    'ANTATT_GODE_MULIGHETER',
+                                    'ANTATT_BEHOV_FOR_VEILEDNING',
+                                    'OPPGITT_HINDRINGER',
+                                ],
+                            },
+                            egenvurdering: {
+                                type: 'string',
+                                enum: ['ANTATT_GODE_MULIGHETER', 'ANTATT_BEHOV_FOR_VEILEDNING'],
+                            },
+                        },
+                    },
+                },
             },
         },
         security: [
@@ -271,7 +355,7 @@ const options = {
             },
         ],
     },
-    apis: ['./src/api/*.ts'],
+    apis: ['./src/api/**/*.ts'],
 };
 
 export default swaggerJsdoc(options);

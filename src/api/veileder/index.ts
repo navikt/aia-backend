@@ -26,6 +26,28 @@ function veilederApi(
 ) {
     const router = Router();
 
+    /**
+     * @openapi
+     * /veileder/behov-for-veiledning:
+     *   post:
+     *     parameters:
+     *       - in: body
+     *         required: true
+     *         schema:
+     *           $ref: '#/components/schemas/BehovForVeiledningRequest'
+     *     responses:
+     *       200:
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/BehovForVeiledningResponse'
+     *       400:
+     *         description: Forespørsel mangler foedselsnummer i request body
+     *       401:
+     *         $ref: '#/components/schemas/Unauthorized'
+     *       500:
+     *         description: Noe gikk galt
+     */
     router.post('/veileder/behov-for-veiledning', async (req, res) => {
         try {
             const foedselsnummer = req.body?.foedselsnummer;
@@ -96,7 +118,28 @@ function veilederApi(
             Authorization: `Bearer ${token}`,
         };
     };
-
+    /**
+     * @openapi
+     * /veileder/egenvurderinger:
+     *   post:
+     *     parameters:
+     *       - in: body
+     *         required: true
+     *         schema:
+     *           $ref: '#/components/schemas/VeilederEgenvurderingerRequest'
+     *     responses:
+     *       200:
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/VeilederEgenvurderingerResponse'
+     *       400:
+     *         description: Feil i request body
+     *       401:
+     *         $ref: '#/components/schemas/Unauthorized'
+     *       500:
+     *         description: Noe gikk galt
+     */
     router.post(
         '/veileder/egenvurderinger',
         proxyTokenXCall(
