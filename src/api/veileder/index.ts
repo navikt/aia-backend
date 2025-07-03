@@ -8,8 +8,8 @@ import { parseAzureUserToken as parseAzureUserTokenFn, requestAzureOboToken } fr
 import { getTokenFromRequest } from '../../auth/tokenDings';
 import { TokenResult } from '@navikt/oasis/dist/token-result';
 
-const PAW_TILGANGSKONTROLL_SCOPE = `api://${process.env.NAIS_CLUSTER_NAME}.paw.paw-tilgangskontroll/.default`;
-const OPPSLAG_API_SCOPE = `api://${config.NAIS_CLUSTER_NAME}:paw:paw-arbeidssoekerregisteret-api-oppslag/.default`;
+const PAW_TILGANGSKONTROLL_SCOPE = `api://${config.NAIS_CLUSTER_NAME}.paw.paw-tilgangskontroll/.default`;
+const OPPSLAG_API_SCOPE = `api://${config.NAIS_CLUSTER_NAME}.paw.paw-arbeidssoekerregisteret-api-oppslag/.default`;
 
 type GetOboToken = (req: Request, clientId: string) => Promise<TokenResult>;
 
@@ -86,7 +86,11 @@ function veilederApi(
 
     const getOppslagApiHeaders = async (req: Request) => {
         const oboToken = await getOboToken(req, OPPSLAG_API_SCOPE);
+        if (!oboToken.ok) {
+            logger.error(oboToken.error, `Feil ved utveksling av azure obo-token for ${OPPSLAG_API_SCOPE}`);
+        }
         const token = oboToken.ok ? oboToken.token : '';
+
         return {
             ...getDefaultHeaders(req),
             Authorization: `Bearer ${token}`,
