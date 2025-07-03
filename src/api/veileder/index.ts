@@ -9,7 +9,7 @@ import { getTokenFromRequest } from '../../auth/tokenDings';
 import { TokenResult } from '@navikt/oasis/dist/token-result';
 
 const PAW_TILGANGSKONTROLL_SCOPE = `api://${process.env.NAIS_CLUSTER_NAME}.paw.paw-tilgangskontroll/.default`;
-const OPPSLAG_API_SCOPE = `${config.NAIS_CLUSTER_NAME}:paw:paw-arbeidssoekerregisteret-api-oppslag/.default`;
+const OPPSLAG_API_SCOPE = `api://${config.NAIS_CLUSTER_NAME}:paw:paw-arbeidssoekerregisteret-api-oppslag/.default`;
 
 type GetOboToken = (req: Request, clientId: string) => Promise<TokenResult>;
 
