@@ -89,6 +89,10 @@ spec:
           namespace: min-side
         - application: veilarbvedtaksstotte
           namespace: obo
+        - application: tokenx-token-generator
+          namespace: nais
+        - application: azure-token-generator
+          namespace: nais
     outbound:
       external:
         - host: veilarboppfolging.dev-fss-pub.nais.io
