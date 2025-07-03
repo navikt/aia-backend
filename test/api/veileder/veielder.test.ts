@@ -145,7 +145,7 @@ describe('veileder api', () => {
             }
         });
     });
-    describe('POST /veileder/egenvurdering', () => {
+    describe('POST /veileder/egenvurderinger', () => {
         let app: any, getOboTokenStub: (req: Request, clientId: string) => Promise<TokenResult>;
 
         beforeEach(() => {
@@ -163,7 +163,7 @@ describe('veileder api', () => {
             const proxyServer = express();
             proxyServer.use(bodyParser.json());
             const spy = jest.fn();
-            proxyServer.post('/api/v1/veileder/profilering/egenvurdering', (req, res) => {
+            proxyServer.post('/api/v1/veileder/profilering/egenvurderinger', (req, res) => {
                 spy(req.body);
                 res.status(204).end();
             });
@@ -175,7 +175,7 @@ describe('veileder api', () => {
 
             try {
                 const response = await request(app)
-                    .post('/veileder/egenvurdering')
+                    .post('/veileder/egenvurderinger')
                     .send({ identitetsnummer: '666', periodeId: '42' });
 
                 expect(response.statusCode).toEqual(204);
@@ -189,7 +189,7 @@ describe('veileder api', () => {
             const proxyServer = express();
             proxyServer.use(bodyParser.json());
             const spy = jest.fn();
-            proxyServer.post('/api/v1/veileder/profilering/egenvurdering', (req, res) => {
+            proxyServer.post('/api/v1/veileder/profilering/egenvurderinger', (req, res) => {
                 spy(req.headers.authorization);
                 res.status(204).end();
             });
@@ -201,7 +201,7 @@ describe('veileder api', () => {
 
             try {
                 const response = await request(app)
-                    .post('/veileder/egenvurdering')
+                    .post('/veileder/egenvurderinger')
                     .send({ identitetsnummer: '666', periodeId: '42' });
 
                 expect(response.statusCode).toEqual(204);

@@ -94,8 +94,11 @@ function veilederApi(
     };
 
     router.post(
-        '/veileder/egenvurdering',
-        proxyTokenXCall(`${oppslagApiUrl}/api/v1/veileder/profilering/egenvurdering`, getOppslagApiHeaders),
+        '/veileder/egenvurderinger',
+        proxyTokenXCall(
+            `${oppslagApiUrl}/api/v1/veileder/profilering/egenvurderinger?siste=true`,
+            getOppslagApiHeaders,
+        ),
     );
 
     return router;
