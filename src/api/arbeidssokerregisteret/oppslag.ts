@@ -36,6 +36,13 @@ function arbeidssokerregisteretApi(tokenDings: Auth, url: string = config.ARBEID
         '/v1/samlet-informasjon',
         proxyTokenXCall(`${url}/api/v1/samlet-informasjon?siste=true`, getTokenXHeaders),
     );
+    router.get('/v1/arbeidssoekerperioder-aggregert', (req, res) => {
+        const siste = req.query.siste === 'true';
+        return proxyTokenXCall(
+            `${url}/api/v1/arbeidssoekerperioder-aggregert${siste ? '?siste=true' : ''}`,
+            getTokenXHeaders,
+        )(req, res);
+    });
 
     return router;
 }
