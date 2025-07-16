@@ -1,12 +1,11 @@
 import express from 'express';
-import { requestTexasOboToken } from '../../src/auth/texas';
+import { requestTexasAzureOboToken, requestTexasOboToken } from '../../src/auth/texas';
 
 describe('texas', () => {
+    beforeAll(() => {
+        process.env.NAIS_TOKEN_EXCHANGE_ENDPOINT = 'http://localhost:6767';
+    });
     describe('requestTexasOboToken', () => {
-        beforeAll(() => {
-            process.env.NAIS_TOKEN_EXCHANGE_ENDPOINT = 'http://localhost:6767';
-        });
-
         test('veksler token via texas', async () => {
             const spy = jest.fn();
             const mockServer = express();
@@ -50,6 +49,35 @@ describe('texas', () => {
                     'dev-gcp:paw:paw-arbeidssoekerregisteret-api-oppslag',
                 );
                 expect(result.ok).toBe(false);
+            } finally {
+                server.close();
+            }
+        });
+    });
+    describe('requestTexasAzureOboToken', () => {
+        test('veksler token via texas', async () => {
+            const spy = jest.fn();
+            const mockServer = express();
+            mockServer.use(express.json());
+            mockServer.post('/', (req, res) => {
+                spy(req.body);
+                res.json({ access_token: 'access_token 456' });
+            });
+            const server = mockServer.listen(6767);
+
+            try {
+                const result = await requestTexasAzureOboToken(
+                    'token',
+                    'api://dev-gcp.paw.paw-arbeidssoekerregisteret-api-oppslag/.default',
+                );
+
+                expect(result.ok).toBe(true);
+                expect(result.ok && result.token).toEqual('access_token 456');
+                expect(spy).toHaveBeenCalledWith({
+                    identity_provider: 'azuread',
+                    target: 'api://dev-gcp.paw.paw-arbeidssoekerregisteret-api-oppslag/.default',
+                    user_token: 'token',
+                });
             } finally {
                 server.close();
             }

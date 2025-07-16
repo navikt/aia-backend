@@ -6,7 +6,11 @@ type TexasTokenResponse = {
     token_type: string;
 };
 
-export async function requestTexasOboToken(token: string, audience: string): Promise<TokenResult> {
+async function requestOboToken(
+    token: string,
+    audience: string,
+    identityProvider: 'tokenx' | 'azuread',
+): Promise<TokenResult> {
     try {
         const response = await fetch(`${process.env.NAIS_TOKEN_EXCHANGE_ENDPOINT}`, {
             headers: {
@@ -14,7 +18,7 @@ export async function requestTexasOboToken(token: string, audience: string): Pro
             },
             method: 'POST',
             body: JSON.stringify({
-                identity_provider: 'tokenx',
+                identity_provider: identityProvider,
                 target: audience,
                 user_token: token,
             }),
@@ -34,4 +38,12 @@ export async function requestTexasOboToken(token: string, audience: string): Pro
     } catch (error) {
         return { ok: false, error: error as Error };
     }
+}
+
+export async function requestTexasOboToken(token: string, audience: string) {
+    return requestOboToken(token, audience, 'tokenx');
+}
+
+export async function requestTexasAzureOboToken(token: string, audience: string) {
+    return requestOboToken(token, audience, 'azuread');
 }
