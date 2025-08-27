@@ -24,19 +24,22 @@ function arbeidssokerregisteretApiV2(tokenDings: Auth, url: string = config.ARBE
     const router = Router();
     const getTokenXHeaders = getTokenXHeardersForArbeidssokerregisteretV2(tokenDings);
 
-    router.get('/v1/arbeidssoekerperioder', proxyTokenXCall(`${url}/api/v1/arbeidssoekerperioder`, getTokenXHeaders));
+    router.get(
+        '/arbeidssokerregisteret-v2/v1/arbeidssoekerperioder',
+        proxyTokenXCall(`${url}/api/v1/arbeidssoekerperioder`, getTokenXHeaders),
+    );
 
-    router.get('/v1/opplysninger-om-arbeidssoeker/:periodeId', (req, res) => {
+    router.get('/arbeidssokerregisteret-v2/v1/opplysninger-om-arbeidssoeker/:periodeId', (req, res) => {
         const { periodeId } = req.params;
         return proxyTokenXCall(`${url}/api/v1/opplysninger-om-arbeidssoeker/${periodeId}`, getTokenXHeaders)(req, res);
     });
 
-    router.get('/v1/profilering/:periodeId', (req, res) => {
+    router.get('/arbeidssokerregisteret-v2/v1/profilering/:periodeId', (req, res) => {
         const { periodeId } = req.params;
         return proxyTokenXCall(`${url}/api/v1/profilering/${periodeId}`, getTokenXHeaders)(req, res);
     });
 
-    router.get('/v1/arbeidssoekerperioder-aggregert', (req, res) => {
+    router.get('/arbeidssokerregisteret-v2/v1/arbeidssoekerperioder-aggregert', (req, res) => {
         const siste = req.query.siste === 'true';
         return proxyTokenXCall(
             `${url}/api/v1/arbeidssoekerperioder-aggregert${siste ? '?siste=true' : ''}`,
