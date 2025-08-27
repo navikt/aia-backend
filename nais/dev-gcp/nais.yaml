@@ -67,7 +67,7 @@ spec:
       value: api://dev-fss.oppgavehandtering.oppgave-q1/.default
     - name: ARBEIDSSOKERREGISTERET_OPPSLAG_API_URL
       value: http://paw-arbeidssoekerregisteret-api-oppslag
-    - name: ARBEIDSSOKERREGISTERET_OPPSLAG_API_URL_V2
+    - name: ARBEIDSSOKERREGISTERET_OPPSLAG_API_V2_URL
       value: http://paw-arbeidssoekerregisteret-api-oppslag-v2
     - name: ARBEIDSSOKERREGISTERET_INNGANG_API_URL
       value: http://paw-arbeidssokerregisteret-api-inngang
