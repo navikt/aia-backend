@@ -22,6 +22,7 @@ import nivaa4Authentication from './middleware/nivaa4-authentication';
 import veilederApi from './api/veileder';
 import oppgaveApi from './api/oppgave';
 import arbeidssokerregisteretApi from './api/arbeidssokerregisteret/oppslag';
+import arbeidssokerregisteretApiV2 from './api/arbeidssokerregisteret/oppslag-v2';
 import inngangRoutes from './api/arbeidssokerregisteret/inngang';
 import http from 'http';
 import tilgjengeligeBekreftelserApi from './api/arbeidssokerregisteret/tilgjengelige-bekreftelser';
@@ -54,6 +55,7 @@ async function setUpRoutes() {
 
     router.use(arbeidssokerApi());
     router.use('/arbeidssokerregisteret', arbeidssokerregisteretApi(await tokenDings));
+    router.use('/arbeidssokerregisteret-v2', arbeidssokerregisteretApiV2(await tokenDings));
     router.use(tilgjengeligeBekreftelserApi(await tokenDings));
     router.use(behovForVeiledningApi(behovRepository, await microfrontendToggler));
 

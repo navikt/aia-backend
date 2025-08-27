@@ -65,6 +65,8 @@ spec:
       value: api://prod-fss.oppgavehandtering.oppgave/.default
     - name: ARBEIDSSOKERREGISTERET_OPPSLAG_API_URL
       value: http://paw-arbeidssoekerregisteret-api-oppslag
+    - name: ARBEIDSSOKERREGISTERET_OPPSLAG_API_V2_URL
+      value: http://paw-arbeidssoekerregisteret-api-oppslag-v2
     - name: ARBEIDSSOKERREGISTERET_INNGANG_API_URL
       value: http://paw-arbeidssokerregisteret-api-inngang
     - name: PAW_MICROFRONTEND_TOGGLER_URL
@@ -105,6 +107,7 @@ spec:
         - host: oppgave.prod-fss-pub.nais.io
       rules:
         - application: paw-arbeidssoekerregisteret-api-oppslag
+        - application: paw-arbeidssoekerregisteret-api-oppslag-v2
         - application: paw-arbeidssokerregisteret-api-inngang
         - application: paw-microfrontend-toggler
         - application: paw-arbeidssoekerregisteret-api-bekreftelse
