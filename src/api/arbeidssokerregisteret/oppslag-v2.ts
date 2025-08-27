@@ -39,7 +39,7 @@ function arbeidssokerregisteretApiV2(tokenDings: Auth, url: string = config.ARBE
         return proxyTokenXCall(`${url}/api/v1/profilering/${periodeId}`, getTokenXHeaders)(req, res);
     });
 
-    router.get('/arbeidssokerregisteret-v2/arbeidssoekerperioder-aggregert', (req, res) => {
+    router.get('/v1/arbeidssoekerperioder-aggregert', (req, res) => {
         const siste = req.query.siste === 'true';
         return proxyTokenXCall(
             `${url}/api/v1/arbeidssoekerperioder-aggregert${siste ? '?siste=true' : ''}`,
