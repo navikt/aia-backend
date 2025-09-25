@@ -1,6 +1,6 @@
 import { Request, Router } from 'express';
 import config from '../../config';
-import { getDefaultHeaders, proxyTokenXCall } from '../../http';
+import { getDefaultHeaders } from '../../http';
 import axios, { AxiosError } from 'axios';
 import { BehovRepository } from '../../db/behovForVeiledningRepository';
 import logger from '../../logger';
@@ -10,7 +10,6 @@ import { TokenResult } from '@navikt/oasis/dist/token-result';
 import { requestTexasAzureOboToken } from '../../auth/texas';
 
 const PAW_TILGANGSKONTROLL_SCOPE = `api://${config.NAIS_CLUSTER_NAME}.paw.paw-tilgangskontroll/.default`;
-const OPPSLAG_API_SCOPE = `api://${config.NAIS_CLUSTER_NAME}.paw.paw-arbeidssoekerregisteret-api-oppslag/.default`;
 
 type GetOboToken = (req: Request, clientId: string) => Promise<TokenResult>;
 
@@ -23,7 +22,6 @@ function veilederApi(
     tilgangskontrollUrl = config.PAW_TILGANGSKONTROLL_API_URL,
     getOboToken: GetOboToken = getOboTokenFn,
     parseAzureUserToken = parseAzureUserTokenFn,
-    oppslagApiUrl = config.ARBEIDSSOKERREGISTERET_OPPSLAG_API_URL,
 ) {
     const router = Router();
 
@@ -106,48 +104,6 @@ function veilederApi(
             res.status(errorResponse?.status || 500).end();
         }
     });
-
-    const getOppslagApiHeaders = async (req: Request) => {
-        const oboToken = await getOboToken(req, OPPSLAG_API_SCOPE);
-        if (!oboToken.ok) {
-            logger.error(oboToken.error, `Feil ved utveksling av azure obo-token for ${OPPSLAG_API_SCOPE}`);
-        }
-        const token = oboToken.ok ? oboToken.token : '';
-
-        return {
-            ...getDefaultHeaders(req),
-            Authorization: `Bearer ${token}`,
-        };
-    };
-    /**
-     * @openapi
-     * /veileder/egenvurderinger:
-     *   post:
-     *     parameters:
-     *       - in: body
-     *         required: true
-     *         schema:
-     *           $ref: '#/components/schemas/VeilederEgenvurderingerRequest'
-     *     responses:
-     *       200:
-     *         content:
-     *           application/json:
-     *             schema:
-     *               $ref: '#/components/schemas/VeilederEgenvurderingerResponse'
-     *       400:
-     *         description: Feil i request body
-     *       401:
-     *         $ref: '#/components/schemas/Unauthorized'
-     *       500:
-     *         description: Noe gikk galt
-     */
-    router.post(
-        '/veileder/egenvurderinger',
-        proxyTokenXCall(
-            `${oppslagApiUrl}/api/v1/veileder/profilering/egenvurderinger?siste=true`,
-            getOppslagApiHeaders,
-        ),
-    );
 
     return router;
 }
