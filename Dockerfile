@@ -1,6 +1,6 @@
-FROM node:20-alpine as builder
+FROM node:22-alpine as builder
 
-RUN apk add --update --no-cache openssl # nødvendig for prisma generate i node:20-alpine
+RUN apk add --update --no-cache openssl # nødvendig for prisma generate i node:22-alpine
 
 ADD / /src
 ENV CI=true
