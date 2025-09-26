@@ -1,5 +1,5 @@
 import { Auth } from './auth/tokenDings';
-import { v4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import config from './config';
 import logger from './logger';
 import axios from 'axios';
@@ -26,7 +26,7 @@ const createMicrofrontendToggler = async (
     const getTokenX = createGetTokenX(await tokenDings);
     return {
         async toggle(action: 'enable' | 'disable', microfrontendId: string, userToken: string) {
-            const traceId = v4();
+            const traceId = uuidv4();
             try {
                 logger.info(`Toggler microfrontend: @action=${action}, id=${microfrontendId}, traceId=${traceId}`);
                 await axios(`${url}/api/v1/microfrontend-toggle`, {
