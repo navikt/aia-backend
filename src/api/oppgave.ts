@@ -3,7 +3,7 @@ import logger, { axiosLogError } from '../logger';
 import { ValidatedRequest } from '../middleware/token-validation';
 import config from '../config';
 import axios, { AxiosError } from 'axios';
-import { v4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { requestTexasAzureM2MToken } from '../auth/texas';
 import { TokenResult } from '@navikt/oasis/dist/token-result';
 
@@ -25,7 +25,7 @@ export const createOppgaveRoutes = (requestAzureClientCredentialsToken: (scope: 
             return async (req: Request, res: Response) => {
                 try {
                     const azureAdToken = await getAzureAdToken();
-                    const correlationId = v4();
+                    const correlationId = uuidv4();
                     logger.info(
                         { x_callId: req.header('Nav-Call-Id') },
                         `Kaller oppgave api med X-Correlation-Id=${correlationId}`,

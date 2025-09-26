@@ -35,7 +35,7 @@
     "swagger-jsdoc": "6.2.8",
     "swagger-ui-express": "5.0.1",
     "unleash-client": "6.7.0",
-    "uuid": "11.0.0"
+    "uuid": "11.1.0"
   },
   "devDependencies": {
     "@eslint/js": "9.36.0",
@@ -78,7 +78,7 @@
     "*.{js,jsx,json,md,ts,tsx}": "prettier --write"
   },
   "engines": {
-    "node": ">=20.17.0"
+    "node": ">=22.20.0"
   },
   "license": "MIT"
 }

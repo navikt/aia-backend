@@ -4,7 +4,7 @@ Backend for AiA
 
 ## Utvikling
 
-Bruk Node.js 20.
+Bruk Node.js 22.
 
 Du kan bruke [NVM](https://github.com/nvm-sh/nvm) for å sette versjon `nvm use`
 
