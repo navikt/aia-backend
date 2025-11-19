@@ -4,8 +4,7 @@ import { ValidatedRequest } from '../middleware/token-validation';
 import config from '../config';
 import axios, { AxiosError } from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import { requestTexasAzureM2MToken } from '../auth/texas';
-import { TokenResult } from '@navikt/oasis/dist/token-result';
+import { requestAzureClientCredentialsToken, TokenResult } from '@navikt/oasis';
 
 export const createOppgaveRoutes = (requestAzureClientCredentialsToken: (scope: string) => Promise<TokenResult>) => {
     return (scope: string, oppgaveUrl = config.OPPGAVE_URL) => {
@@ -109,5 +108,5 @@ export const createOppgaveRoutes = (requestAzureClientCredentialsToken: (scope: 
     };
 };
 
-const oppgaveRoutes = createOppgaveRoutes(requestTexasAzureM2MToken);
+const oppgaveRoutes = createOppgaveRoutes(requestAzureClientCredentialsToken);
 export default oppgaveRoutes;

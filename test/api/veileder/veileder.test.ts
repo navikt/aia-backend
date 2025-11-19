@@ -1,13 +1,12 @@
+import { describe, expect, it, vi, beforeEach } from 'vitest';
 import express, { Request } from 'express';
 import request from 'supertest';
 import veilederApi from '../../../src/api/veileder';
 import bodyParser from 'body-parser';
 import { BehovRepository } from '../../../src/db/behovForVeiledningRepository';
-import { TokenResult } from '@navikt/oasis/dist/token-result';
-import { AzurePayload } from '@navikt/oasis/dist/validate';
-import { ParseResult } from '@navikt/oasis/dist/parse-token';
+import { ParseResult, TokenResult } from '@navikt/oasis';
 
-jest.mock('unleash-client', () => {
+vi.mock('unleash-client', () => {
     return {
         isEnabled() {
             return true;
@@ -19,13 +18,13 @@ describe('veileder api', () => {
         let behovRepository: BehovRepository,
             app: any,
             getOboTokenStub: (req: Request) => Promise<TokenResult>,
-            parseAzureUserTokenStub: (token: string) => ParseResult<AzurePayload>;
+            parseAzureUserTokenStub: (token: string) => ParseResult<any>;
         beforeEach(() => {
             app = express();
             app.use(bodyParser.json());
             behovRepository = {
-                lagreBehov: jest.fn(),
-                hentBehov: jest.fn().mockReturnValue(
+                lagreBehov: vi.fn(),
+                hentBehov: vi.fn().mockReturnValue(
                     Promise.resolve({
                         oppfolging: 'SITUASJONSBESTEMT_INNSATS',
                         created_at: 'test-dato',
@@ -58,7 +57,7 @@ describe('veileder api', () => {
         it('returnerer 403 hvis ingen tilgang', async () => {
             const proxyServer = express();
             proxyServer.use(bodyParser.json());
-            const spy = jest.fn();
+            const spy = vi.fn();
 
             proxyServer.post('/api/v1/tilgang', (req, res) => {
                 spy(req.body);
@@ -131,7 +130,7 @@ describe('veileder api', () => {
             const port = 6175;
             const proxy = proxyServer.listen(port);
 
-            behovRepository.hentBehov = jest.fn().mockReturnValue(Promise.resolve(null));
+            behovRepository.hentBehov = vi.fn().mockReturnValue(Promise.resolve(null));
 
             app.use(veilederApi(behovRepository, `http://localhost:${port}`, getOboTokenStub, parseAzureUserTokenStub));
             try {

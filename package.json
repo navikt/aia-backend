@@ -19,7 +19,7 @@
   "dependencies": {
     "@alheimsins/uker-fra-dato": "1.0.4",
     "@elastic/ecs-pino-format": "1.5.0",
-    "@navikt/oasis": "3.8.0",
+    "@navikt/oasis": "4.1.1",
     "@prisma/client": "6.19.0",
     "axios": "1.13.2",
     "body-parser": "2.2.0",
