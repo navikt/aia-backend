@@ -1,5 +1,6 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import { PrismaClient } from '@prisma/client';
-import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
+import { DeepMockProxy, mockDeep } from 'vitest-mock-extended';
 import createRepository, { AutomatiskReaktiveringRepository } from '../../src/db/automatiskReaktiveringRepository';
 
 describe('automatiskReaktiveringRepository', () => {

@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from 'vitest';
 import express from 'express';
 import request from 'supertest';
 import { proxyHttpCall, proxyTokenXCall } from '../../src/http';
@@ -5,7 +6,7 @@ import { proxyHttpCall, proxyTokenXCall } from '../../src/http';
 describe('proxyHttpCall', () => {
     it('kaller feilede requester på nytt angitte ganger', async () => {
         const proxyServer = express();
-        const spy = jest.fn();
+        const spy = vi.fn();
 
         proxyServer.get('/test-retry', (req, res) => {
             spy();
@@ -29,7 +30,7 @@ describe('proxyHttpCall', () => {
 
     it('kaller ikke feilede requester på nytt når man opter ut', async () => {
         const proxyServer = express();
-        const spy = jest.fn();
+        const spy = vi.fn();
 
         proxyServer.get('/test-retry', (req, res) => {
             spy();
@@ -55,7 +56,7 @@ describe('proxyHttpCall', () => {
 describe('proxyTokenXCall', () => {
     it('returnere 500 hvis getTokenXHeaders-kall feiler', async () => {
         const proxyServer = express();
-        const spy = jest.fn();
+        const spy = vi.fn();
         proxyServer.get('/test-server', (req, res) => {
             spy();
             res.status(200).end();
@@ -65,7 +66,7 @@ describe('proxyTokenXCall', () => {
         const proxy = proxyServer.listen(port);
         const app = express();
 
-        const getTokenXHeaders = jest.fn().mockRejectedValueOnce('feil');
+        const getTokenXHeaders = vi.fn().mockRejectedValueOnce('feil');
         app.get(
             '/test',
             proxyTokenXCall(`http://localhost:${port}/test-server`, getTokenXHeaders, { skipRetry: true }),

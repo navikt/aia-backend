@@ -6,14 +6,15 @@ import bodyParser from 'body-parser';
 import { ValidatedRequest } from '../../src/middleware/token-validation';
 import { MicrofrontendToggler } from '../../src/microfrontendToggler';
 import { BehovRepository } from '../../src/db/behovForVeiledningRepository';
+import { describe, expect, it, vi, beforeEach } from 'vitest';
 
-let isEnabledMock: jest.Mock;
+let isEnabledMock: any;
 
 function isEnabled() {
     return isEnabledMock();
 }
 
-jest.mock('unleash-client', () => {
+vi.mock('unleash-client', () => {
     return {
         isEnabled,
     };
@@ -36,16 +37,16 @@ describe('behovForVeiledning API', () => {
         app.use(cookieParser());
         app.use(bodyParser.json());
         microfrontendToggler = {
-            toggle: jest.fn().mockReturnValue(Promise.resolve()),
+            toggle: vi.fn().mockReturnValue(Promise.resolve()),
         };
-        isEnabledMock = jest.fn().mockReturnValue(false);
+        isEnabledMock = vi.fn().mockReturnValue(false);
     });
 
     describe('GET', () => {
         it('returnerer {oppfolging, dato, dialogId}', async () => {
             const behovRepository = {
-                lagreBehov: jest.fn(),
-                hentBehov: jest.fn().mockReturnValue(
+                lagreBehov: vi.fn(),
+                hentBehov: vi.fn().mockReturnValue(
                     Promise.resolve({
                         oppfolging: 'SITUASJONSBESTEMT_INNSATS',
                         created_at: 'test-dato',
@@ -73,8 +74,8 @@ describe('behovForVeiledning API', () => {
 
         it('returnerer 204 når ingen treff i db', async () => {
             const behovRepository = {
-                lagreBehov: jest.fn(),
-                hentBehov: jest.fn().mockReturnValue(Promise.resolve(null)),
+                lagreBehov: vi.fn(),
+                hentBehov: vi.fn().mockReturnValue(Promise.resolve(null)),
             };
 
             app.use(mockAuthMiddleware);
@@ -91,10 +92,10 @@ describe('behovForVeiledning API', () => {
     describe('POST', () => {
         let behovRepository: BehovRepository;
         beforeEach(() => {
-            jest.resetAllMocks();
+            vi.resetAllMocks();
             behovRepository = {
-                hentBehov: jest.fn(),
-                lagreBehov: jest.fn().mockReturnValue(
+                hentBehov: vi.fn(),
+                lagreBehov: vi.fn().mockReturnValue(
                     Promise.resolve({
                         oppfolging: 'SITUASJONSBESTEMT_INNSATS',
                         created_at: 'test-dato',

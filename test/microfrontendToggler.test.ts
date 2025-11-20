@@ -1,16 +1,17 @@
 import createMicrofrontendToggler from '../src/microfrontendToggler';
 import express from 'express';
 import bodyParser from 'body-parser';
+import { describe, expect, it, vi } from 'vitest';
 
-jest.mock('../src/config', () => {
-    const config = jest.requireActual('../src/config');
+vi.mock('../src/config', async () => {
     return {
-        ...config.default,
-        NAIS_CLUSTER_NAME: 'test-gcp',
+        default: {
+            NAIS_CLUSTER_NAME: 'test-gcp',
+        },
     };
 });
 
-const createApi = (spyFn: jest.Mock, statusCode = 204) => {
+const createApi = (spyFn: any, statusCode = 204) => {
     const server = express();
     server.use(bodyParser.json());
 
@@ -25,9 +26,9 @@ const createApi = (spyFn: jest.Mock, statusCode = 204) => {
 describe('microfrontendToggler', () => {
     it('kjører token-x', async () => {
         const tokenDings = {
-            exchangeIDPortenToken: jest.fn().mockReturnValue(Promise.resolve({ access_token: `tokenX` })),
+            exchangeIDPortenToken: vi.fn().mockReturnValue(Promise.resolve({ access_token: `tokenX` })),
         };
-        const api = createApi(jest.fn());
+        const api = createApi(vi.fn());
         const server = api.listen(9812);
         const toggler = await createMicrofrontendToggler(Promise.resolve(tokenDings), 'http://localhost:9812');
 
@@ -44,9 +45,9 @@ describe('microfrontendToggler', () => {
 
     it('poster action og microfrontendId', async () => {
         const tokenDings = {
-            exchangeIDPortenToken: jest.fn().mockReturnValue(Promise.resolve({ access_token: `tokenX` })),
+            exchangeIDPortenToken: vi.fn().mockReturnValue(Promise.resolve({ access_token: `tokenX` })),
         };
-        const spy = jest.fn();
+        const spy = vi.fn();
         const api = createApi(spy);
         const server = api.listen(9813);
         const toggler = await createMicrofrontendToggler(Promise.resolve(tokenDings), 'http://localhost:9813');
@@ -62,9 +63,9 @@ describe('microfrontendToggler', () => {
 
     it('kaster feil ved feil fra api', async () => {
         const tokenDings = {
-            exchangeIDPortenToken: jest.fn().mockReturnValue(Promise.resolve({ access_token: `tokenX` })),
+            exchangeIDPortenToken: vi.fn().mockReturnValue(Promise.resolve({ access_token: `tokenX` })),
         };
-        const api = createApi(jest.fn(), 500);
+        const api = createApi(vi.fn(), 500);
 
         const server = api.listen(9814);
         const toggler = await createMicrofrontendToggler(Promise.resolve(tokenDings), 'http://localhost:9814');

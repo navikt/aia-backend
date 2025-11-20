@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from 'vitest';
 import express from 'express';
 import bodyParser from 'body-parser';
 import { mockAuthMiddleware } from './behovForVeiledning.test';
@@ -6,7 +7,7 @@ import request from 'supertest';
 
 describe('oppgave api', () => {
     it('poster til oppgave api', async () => {
-        const bodySpy = jest.fn();
+        const bodySpy = vi.fn();
         const oppgaveServer = express();
         oppgaveServer.use(bodyParser.json());
         oppgaveServer.post('/api/v1/oppgaver', (req, res) => {
@@ -16,7 +17,7 @@ describe('oppgave api', () => {
 
         const oppgaveMock = oppgaveServer.listen(9898);
 
-        const getAzureAdToken = jest.fn().mockReturnValue(Promise.resolve({ ok: true, token: 'token-123' }));
+        const getAzureAdToken = vi.fn().mockReturnValue(Promise.resolve({ ok: true, token: 'token-123' }));
         const oppgaveUrl = 'http://localhost:9898';
 
         const app = express();
@@ -45,7 +46,7 @@ describe('oppgave api', () => {
     });
 
     it('poster til oppgave api med høy prioritet og korrekt type', async () => {
-        const bodySpy = jest.fn();
+        const bodySpy = vi.fn();
         const oppgaveServer = express();
         oppgaveServer.use(bodyParser.json());
         oppgaveServer.post('/api/v1/oppgaver', (req, res) => {
@@ -55,7 +56,7 @@ describe('oppgave api', () => {
 
         const oppgaveMock = oppgaveServer.listen(9898);
 
-        const getAzureAdToken = jest.fn().mockReturnValue(Promise.resolve({ ok: true, token: 'token-123' }));
+        const getAzureAdToken = vi.fn().mockReturnValue(Promise.resolve({ ok: true, token: 'token-123' }));
         const oppgaveUrl = 'http://localhost:9898';
 
         const app = express();
@@ -86,7 +87,7 @@ describe('oppgave api', () => {
     });
 
     it('poster til oppgave api til annet kontor ved KONKURS', async () => {
-        const bodySpy = jest.fn();
+        const bodySpy = vi.fn();
         const oppgaveServer = express();
         oppgaveServer.use(bodyParser.json());
         oppgaveServer.post('/api/v1/oppgaver', (req, res) => {
@@ -96,7 +97,7 @@ describe('oppgave api', () => {
 
         const oppgaveMock = oppgaveServer.listen(9898);
 
-        const getAzureAdToken = jest.fn().mockReturnValue(Promise.resolve({ ok: true, token: 'token-123' }));
+        const getAzureAdToken = vi.fn().mockReturnValue(Promise.resolve({ ok: true, token: 'token-123' }));
         const oppgaveUrl = 'http://localhost:9898';
 
         const app = express();
@@ -127,7 +128,7 @@ describe('oppgave api', () => {
     });
 
     it('poster med azure ad token og correlation-id i header', async () => {
-        const headersSpy = jest.fn();
+        const headersSpy = vi.fn();
         const oppgaveServer = express();
         oppgaveServer.use(bodyParser.json());
         oppgaveServer.post('/api/v1/oppgaver', (req, res) => {
@@ -137,7 +138,7 @@ describe('oppgave api', () => {
 
         const oppgaveMock = oppgaveServer.listen(9897);
 
-        const getAzureAdToken = jest.fn().mockReturnValue(Promise.resolve({ ok: true, token: 'ad-token' }));
+        const getAzureAdToken = vi.fn().mockReturnValue(Promise.resolve({ ok: true, token: 'ad-token' }));
         const oppgaveUrl = 'http://localhost:9897';
 
         const app = express();
@@ -166,7 +167,7 @@ describe('oppgave api', () => {
             res.status(500).end();
         });
         const oppgaveMock = oppgaveServer.listen(9896);
-        const getAzureAdToken = jest.fn().mockReturnValue(Promise.resolve({ ok: true, token: 'token-123' }));
+        const getAzureAdToken = vi.fn().mockReturnValue(Promise.resolve({ ok: true, token: 'token-123' }));
         const oppgaveUrl = 'http://localhost:9896';
 
         const app = express();
