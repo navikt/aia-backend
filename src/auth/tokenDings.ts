@@ -1,7 +1,7 @@
 import type { Request } from 'express';
 import logger from '../logger';
 import config from '../config';
-import { requestTexasOboToken } from './texas';
+import { requestTokenxOboToken } from '@navikt/oasis';
 
 interface TokenSet {
     access_token: string;
@@ -43,7 +43,7 @@ const createTokenDings = async (): Promise<Auth> => {
     return {
         async exchangeIDPortenToken(idPortenToken: string, targetApp: string) {
             try {
-                const result = await requestTexasOboToken(idPortenToken, targetApp);
+                const result = await requestTokenxOboToken(idPortenToken, targetApp);
 
                 if (!result.ok) {
                     throw result.error;

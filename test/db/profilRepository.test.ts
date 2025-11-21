@@ -1,5 +1,6 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import { PrismaClient } from '@prisma/client';
-import { mockDeep, DeepMockProxy } from 'jest-mock-extended';
+import { mockDeep, DeepMockProxy } from 'vitest-mock-extended';
 import createProfilRepository, { ProfilRepository } from '../../src/db/profilRepository';
 
 describe('profilRepository', () => {

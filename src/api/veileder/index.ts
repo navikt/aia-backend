@@ -4,17 +4,15 @@ import { getDefaultHeaders } from '../../http';
 import axios, { AxiosError } from 'axios';
 import { BehovRepository } from '../../db/behovForVeiledningRepository';
 import logger from '../../logger';
-import { parseAzureUserToken as parseAzureUserTokenFn } from '@navikt/oasis';
+import { parseAzureUserToken as parseAzureUserTokenFn, requestAzureOboToken, TokenResult } from '@navikt/oasis';
 import { getTokenFromRequest } from '../../auth/tokenDings';
-import { TokenResult } from '@navikt/oasis/dist/token-result';
-import { requestTexasAzureOboToken } from '../../auth/texas';
 
 const PAW_TILGANGSKONTROLL_SCOPE = `api://${config.NAIS_CLUSTER_NAME}.paw.paw-tilgangskontroll/.default`;
 
 type GetOboToken = (req: Request, clientId: string) => Promise<TokenResult>;
 
 const getOboTokenFn = async (req: Request, clientId: string): Promise<TokenResult> => {
-    return await requestTexasAzureOboToken(getTokenFromRequest(req), clientId);
+    return await requestAzureOboToken(getTokenFromRequest(req), clientId);
 };
 
 function veilederApi(

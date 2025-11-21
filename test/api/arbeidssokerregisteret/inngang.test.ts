@@ -1,3 +1,5 @@
+import { beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import express from 'express';
 import bodyParser from 'body-parser';
 import { ValidatedRequest } from '../../../src/middleware/token-validation';
@@ -44,7 +46,7 @@ describe('arbeidssøkerregisteret/inngangs-api', () => {
 
     describe('POST opplysninger', () => {
         it('proxyer kall og legger til identitetsnummer fra request i body', async () => {
-            const spy = jest.fn();
+            const spy = vi.fn();
             const proxyServer = getProxyServer(spy);
             const proxy = proxyServer.listen(7666);
 
@@ -86,7 +88,7 @@ describe('arbeidssøkerregisteret/inngangs-api', () => {
         });
 
         it('håndterer feil', async () => {
-            const proxyServer = getProxyServer(jest.fn(), 400, { test: 'noe gikk galt' });
+            const proxyServer = getProxyServer(vi.fn(), 400, { test: 'noe gikk galt' });
             const proxy = proxyServer.listen(8666);
 
             const app = express();
