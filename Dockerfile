@@ -1,6 +1,6 @@
-FROM node:22-alpine as builder
+FROM node:24-alpine as builder
 
-RUN apk add --update --no-cache openssl # nødvendig for prisma generate i node:22-alpine
+RUN apk add --update --no-cache openssl # nødvendig for prisma generate i node:24-alpine
 
 ADD / /src
 ENV CI=true
@@ -10,7 +10,7 @@ RUN chmod +x /src/entrypoint.sh
 
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
     NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN) \
-    npm ci
+    npm ci --ignore-scripts
 RUN npm run build
 
 USER node
