@@ -10,7 +10,7 @@ RUN chmod +x /src/entrypoint.sh
 
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
     NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN) \
-    npm ci --ignore-scripts
+    npm ci
 RUN npm run build
 
 USER node
