@@ -7,7 +7,6 @@ import healhApi from './api/health';
 import unleashApi from './api/unleash';
 import vedtakinfoApi from './api/vedtakinfo';
 import dialogRoutes from './api/dialog';
-import profilApi from './api/profil';
 import behovForVeiledningApi from './api/behovForVeiledning';
 import arbeidssokerApi from './api/arbeidssoker';
 import swaggerDocs from './api/swagger';
@@ -39,7 +38,7 @@ app.disable('x-powered-by');
 const httpServer = http.createServer(app);
 
 async function setUpRoutes() {
-    const { tokenDings, profilRepository, behovRepository } = createDependencies();
+    const { tokenDings, behovRepository } = createDependencies();
 
     // Public routes
     router.use(swaggerDocs());
@@ -63,7 +62,6 @@ async function setUpRoutes() {
     router.use(nivaa4Authentication);
     router.use(vedtakinfoApi(await tokenDings));
     router.use(dialogRoutes(await tokenDings));
-    router.use(profilApi(profilRepository));
     router.use(oppgaveApi(config.OPPGAVE_API_SCOPE));
 
     router.use('/arbeidssokerregisteret/inngang', inngangRoutes(await tokenDings));
