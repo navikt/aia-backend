@@ -1,6 +1,4 @@
 import dotenv from 'dotenv';
-dotenv.config();
-
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
@@ -27,6 +25,8 @@ import inngangRoutes from './api/arbeidssokerregisteret/inngang';
 import http from 'http';
 import tilgjengeligeBekreftelserApi from './api/arbeidssokerregisteret/tilgjengelige-bekreftelser';
 
+dotenv.config();
+
 const PORT = 3000;
 const app = express();
 const router = express.Router();
@@ -39,7 +39,7 @@ app.disable('x-powered-by');
 const httpServer = http.createServer(app);
 
 async function setUpRoutes() {
-    const { tokenDings, profilRepository, behovRepository, microfrontendToggler } = createDependencies();
+    const { tokenDings, profilRepository, behovRepository } = createDependencies();
 
     // Public routes
     router.use(swaggerDocs());
@@ -57,7 +57,7 @@ async function setUpRoutes() {
     router.use('/arbeidssokerregisteret', arbeidssokerregisteretApi(await tokenDings));
     router.use('/arbeidssokerregisteret-v2', arbeidssokerregisteretApiV2(await tokenDings));
     router.use(tilgjengeligeBekreftelserApi(await tokenDings));
-    router.use(behovForVeiledningApi(behovRepository, await microfrontendToggler));
+    router.use(behovForVeiledningApi(behovRepository));
 
     // level4
     router.use(nivaa4Authentication);
