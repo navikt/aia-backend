@@ -85,7 +85,6 @@ spec:
       rules:
         - application: arbeidssokerregistrering
         - application: arbeidssokerregistrering-for-veileder
-        - application: arbeidssoekerregisteret-for-personbruker
         - application: veilarbvedtaksstotte
           namespace: pto
           cluster: prod-fss
