@@ -84,7 +84,6 @@ spec:
     inbound:
       rules:
         - application: arbeidssokerregistrering
-        - application: arbeidssokerregistrering-for-veileder
         - application: veilarbvedtaksstotte
           namespace: pto
           cluster: prod-fss

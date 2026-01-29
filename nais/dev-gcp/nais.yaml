@@ -83,7 +83,6 @@ spec:
     inbound:
       rules:
         - application: arbeidssokerregistrering
-        - application: arbeidssokerregistrering-for-veileder
         - application: veilarbvedtaksstotte
           namespace: obo
         - application: tokenx-token-generator
