@@ -1,6 +1,4 @@
 import dotenv from 'dotenv';
-dotenv.config();
-
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
@@ -9,7 +7,6 @@ import healhApi from './api/health';
 import unleashApi from './api/unleash';
 import vedtakinfoApi from './api/vedtakinfo';
 import dialogRoutes from './api/dialog';
-import profilApi from './api/profil';
 import behovForVeiledningApi from './api/behovForVeiledning';
 import arbeidssokerApi from './api/arbeidssoker';
 import swaggerDocs from './api/swagger';
@@ -27,6 +24,8 @@ import inngangRoutes from './api/arbeidssokerregisteret/inngang';
 import http from 'http';
 import tilgjengeligeBekreftelserApi from './api/arbeidssokerregisteret/tilgjengelige-bekreftelser';
 
+dotenv.config();
+
 const PORT = 3000;
 const app = express();
 const router = express.Router();
@@ -39,7 +38,7 @@ app.disable('x-powered-by');
 const httpServer = http.createServer(app);
 
 async function setUpRoutes() {
-    const { tokenDings, profilRepository, behovRepository, microfrontendToggler } = createDependencies();
+    const { tokenDings, behovRepository } = createDependencies();
 
     // Public routes
     router.use(swaggerDocs());
@@ -57,13 +56,12 @@ async function setUpRoutes() {
     router.use('/arbeidssokerregisteret', arbeidssokerregisteretApi(await tokenDings));
     router.use('/arbeidssokerregisteret-v2', arbeidssokerregisteretApiV2(await tokenDings));
     router.use(tilgjengeligeBekreftelserApi(await tokenDings));
-    router.use(behovForVeiledningApi(behovRepository, await microfrontendToggler));
+    router.use(behovForVeiledningApi(behovRepository));
 
     // level4
     router.use(nivaa4Authentication);
     router.use(vedtakinfoApi(await tokenDings));
     router.use(dialogRoutes(await tokenDings));
-    router.use(profilApi(profilRepository));
     router.use(oppgaveApi(config.OPPGAVE_API_SCOPE));
 
     router.use('/arbeidssokerregisteret/inngang', inngangRoutes(await tokenDings));

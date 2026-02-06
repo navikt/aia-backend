@@ -2,14 +2,8 @@ import { Router } from 'express';
 import logger from '../logger';
 import { BehovRepository } from '../db/behovForVeiledningRepository';
 import { ValidatedRequest } from '../middleware/token-validation';
-import { isEnabled } from 'unleash-client';
-import { MicrofrontendToggler } from '../microfrontendToggler';
-import { getTokenFromRequest } from '../auth/tokenDings';
 
-function behovForVeiledningRoutes(
-    behovForVeiledningRepository: BehovRepository,
-    microfrontendToggler: MicrofrontendToggler,
-) {
+function behovForVeiledningRoutes(behovForVeiledningRepository: BehovRepository) {
     const router = Router();
 
     /**
@@ -80,45 +74,6 @@ function behovForVeiledningRoutes(
         } catch (err) {
             logger.error(`Feil ved henting av behov for veiledning: ${err}`);
             res.status(500).send((err as Error)?.message);
-        }
-    });
-
-    router.post('/behov-for-veiledning', async (req, res) => {
-        const { oppfolging, dialogId, profileringId } = req.body;
-
-        if (!oppfolging) {
-            logger.error('mangler "oppfolging" i request body');
-            res.status(400).end();
-            return;
-        }
-
-        try {
-            const { ident, fnr } = (req as ValidatedRequest).user;
-            const result = await behovForVeiledningRepository.lagreBehov({
-                bruker: ident,
-                foedselsnummer: fnr,
-                oppfolging: oppfolging,
-                dialogId,
-                profileringId,
-            });
-
-            if (isEnabled('aia.bruk-opplysninger-om-arbeidssoker-api')) {
-                try {
-                    await microfrontendToggler.toggle('disable', 'aia-behovsvurdering', getTokenFromRequest(req));
-                } catch (ignoreErr) {
-                    // feil er allerede logget. Returner OK for bruker
-                }
-            }
-
-            res.status(201).send({
-                oppfolging: result.oppfolging,
-                dato: result.created_at,
-                dialogId: result.dialog_id,
-                profileringId: result.profilering_id,
-            });
-        } catch (err) {
-            logger.error(`Feil ved oppretting av behov for veiledning ${err}`);
-            res.status(500).send(`${(err as Error).message}`);
         }
     });
 

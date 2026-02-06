@@ -69,8 +69,6 @@ spec:
       value: http://paw-arbeidssoekerregisteret-api-oppslag-v2
     - name: ARBEIDSSOKERREGISTERET_INNGANG_API_URL
       value: http://paw-arbeidssokerregisteret-api-inngang
-    - name: PAW_MICROFRONTEND_TOGGLER_URL
-      value: http://paw-microfrontend-toggler
     - name: BEKREFTELSE_API_URL
       value: http://paw-arbeidssoekerregisteret-api-bekreftelse
     - name: PAW_TILGANGSKONTROLL_API_URL
@@ -86,8 +84,6 @@ spec:
     inbound:
       rules:
         - application: arbeidssokerregistrering
-        - application: arbeidssokerregistrering-for-veileder
-        - application: arbeidssoekerregisteret-for-personbruker
         - application: veilarbvedtaksstotte
           namespace: pto
           cluster: prod-fss
@@ -107,7 +103,6 @@ spec:
         - application: paw-arbeidssoekerregisteret-api-oppslag
         - application: paw-arbeidssoekerregisteret-api-oppslag-v2
         - application: paw-arbeidssokerregisteret-api-inngang
-        - application: paw-microfrontend-toggler
         - application: paw-arbeidssoekerregisteret-api-bekreftelse
         - application: paw-tilgangskontroll
         - application: veilarbdialog
