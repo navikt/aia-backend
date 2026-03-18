@@ -48,7 +48,7 @@ spec:
     - name: CORS_ALLOWED_SCHEMES
       value: https
     - name: MELDEKORT_APP_NAME
-      value: meldekort-api-q1
+      value: meldekort-api-q2
     - name: MELDEKORT_URL
       value: http://meldekort-api-q2.meldekort.svc.cluster.local/meldekort/meldekort-api/api/person
     - name: VEILARBDIALOG_API_URL
