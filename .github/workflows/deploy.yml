@@ -30,24 +30,24 @@ jobs:
           image: ${{ steps.docker-build-push.outputs.image }}
 
 
-    deploy-dev:
-        if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/dev')
-        name: Deploy til dev
-        permissions:
-          contents: "read"
-          id-token: "write"
-        needs: [build]
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v5
-
-            - name: Deploy
-              uses: nais/deploy/actions/deploy@v2
-              env:
-                  CLUSTER: dev-gcp
-                  IMAGE: ${{ needs.build.outputs.image }}
-                  RESOURCE: nais/dev-gcp/nais.yaml
+#    deploy-dev:
+#        if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/dev')
+#        name: Deploy til dev
+#        permissions:
+#          contents: "read"
+#          id-token: "write"
+#        needs: [build]
+#        runs-on: ubuntu-latest
+#        steps:
+#            - name: Checkout
+#              uses: actions/checkout@v5
+#
+#            - name: Deploy
+#              uses: nais/deploy/actions/deploy@v2
+#              env:
+#                  CLUSTER: dev-gcp
+#                  IMAGE: ${{ needs.build.outputs.image }}
+#                  RESOURCE: nais/dev-gcp/nais.yaml
 
     deploy-prod:
         if: github.ref == 'refs/heads/main'
@@ -55,7 +55,7 @@ jobs:
         permissions:
           contents: "read"
           id-token: "write"
-        needs: [build, deploy-dev]
+        needs: [build]
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -79,11 +79,11 @@ jobs:
       steps:
         - name: Checkout code
           uses: actions/checkout@v5
-        - name: deploy to dev
-          uses: nais/deploy/actions/deploy@v2
-          env:
-            CLUSTER: dev-gcp
-            RESOURCE: nais/dev-gcp/unleash-apitoken.yaml
+#        - name: deploy to dev
+#          uses: nais/deploy/actions/deploy@v2
+#          env:
+#            CLUSTER: dev-gcp
+#            RESOURCE: nais/dev-gcp/unleash-apitoken.yaml
         - name: deploy to prod
           uses: nais/deploy/actions/deploy@v2
           env:
