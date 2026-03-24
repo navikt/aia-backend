@@ -120,5 +120,6 @@ spec:
         tier: db-custom-1-3840
         databases:
           - name: aia-backend
+        cascadingDelete: true
   kafka:
     pool: nav-prod
