@@ -110,12 +110,5 @@ spec:
         - application: veilarbvedtakinfo
           namespace: pto
           cluster: dev-fss
-  gcp:
-    sqlInstances:
-      - type: POSTGRES_14
-        tier: db-f1-micro
-        databases:
-          - name: aia-backend
-        cascadingDelete: true
   kafka:
     pool: nav-dev
