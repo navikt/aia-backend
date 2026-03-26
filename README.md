@@ -1,5 +1,7 @@
 # aia-backend
 
+**DEPRECATED** aia-backend er ikke lenger i bruk.
+
 Backend for AiA
 
 ## Utvikling
